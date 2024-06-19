@@ -1,28 +1,38 @@
-import React, {useEffect, useState} from 'react';
-import {Alert, Avatar, Box, Container, Grid, TextField, Typography} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import {
+  Alert,
+  Avatar,
+  Box,
+  Container,
+  FormControl, IconButton, InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+  Typography
+} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {signIn} from "../../features/userThunk";
-import {Link, useNavigate} from "react-router-dom";
-import {LoadingButton} from "@mui/lab";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { signIn } from "../../features/userThunk";
+import { useNavigate } from "react-router-dom";
+import { LoadingButton } from "@mui/lab";
 import './sign-in.css';
+import { setCurrentPage } from "../../features/dataSlice";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const SignIn = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const userToken = useAppSelector((state) => state.userState.user);
   const authError = useAppSelector((state) => state.userState.authorizationError);
   const authLoading = useAppSelector((state) => state.userState.signInLoading);
   const [state, setState] = useState({
     username: '',
     password: '',
   });
-
+  const [showPassword, setShowPassword] = React.useState(false);
+  
   useEffect(() => {
-    if (userToken) {
-      navigate('/');
-    }
-  }, [navigate, userToken]);
+    dispatch(setCurrentPage('Логин'))
+  }, [dispatch]);
 
   const inputChangeHandler = (event) => {
     const {name, value} = event.target;
@@ -31,11 +41,14 @@ const SignIn = () => {
       [name]: value,
     }));
   };
+  
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const submitFormHandler = async (e) => {
     e.preventDefault();
     try {
-      dispatch(signIn(state));
+      await dispatch(signIn(state));
+      navigate('/home');
     } catch (e) {
       console.log(e);
     }
@@ -56,7 +69,7 @@ const SignIn = () => {
         <Typography component="h1" variant="h5">
           Вход в систему
         </Typography>
-        <Box component="form" onSubmit={submitFormHandler} sx={{mt: 3}}>
+        <Box className="sign-in-form" component="form" onSubmit={submitFormHandler} sx={{mt: 3}}>
           <TextField
             label="Имя"
             name="username"
@@ -64,14 +77,29 @@ const SignIn = () => {
             onChange={inputChangeHandler}
             required
           />
-          <TextField
-            name="password"
-            label="Пароль"
-            type="password"
-            value={state.password}
-            onChange={inputChangeHandler}
-            required
-          />
+          <FormControl variant="outlined">
+            <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-password"
+              type={showPassword ? 'text' : 'password'}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={(e) => e.preventDefault()}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Пароль"
+              onChange={inputChangeHandler}
+              value={state.password}
+              name="password"
+            />
+          </FormControl>
           {authError && <Alert severity="error">{authError}</Alert>}
           <LoadingButton
             type="submit" fullWidth variant="contained" sx={{mt: 3, mb: 2}}
