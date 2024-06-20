@@ -15,9 +15,9 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { signIn } from "../../features/userThunk";
 import { useNavigate } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
-import './sign-in.css';
 import { setCurrentPage } from "../../features/dataSlice";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import './sign-in.css';
 
 const SignIn = () => {
   const dispatch = useAppDispatch();
@@ -71,13 +71,14 @@ const SignIn = () => {
         </Typography>
         <Box className="sign-in-form" component="form" onSubmit={submitFormHandler} sx={{mt: 3}}>
           <TextField
-            label="Имя"
+            label="Имя пользователя"
             name="username"
             value={state.username}
             onChange={inputChangeHandler}
             required
+            autoComplete={''}
           />
-          <FormControl variant="outlined">
+          <FormControl variant="outlined" required>
             <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"

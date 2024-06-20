@@ -7,7 +7,7 @@ const Home = () => {
   const dispatch = useAppDispatch();
   
   useEffect(() => {
-    dispatch(setCurrentPage('Логин'))
+    dispatch(setCurrentPage('Главная'));
   }, [dispatch]);
   
   return (

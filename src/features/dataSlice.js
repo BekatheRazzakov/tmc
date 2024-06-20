@@ -2,14 +2,18 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   currentPage: '',
+  currentDrawer: '',
 };
 
-const UsersSlice = createSlice({
+const DataSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     setCurrentPage: (state, action) => {
       state.currentPage = action.payload;
+    },
+    setDrawer: (state, action) => {
+      state.currentDrawer = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -22,5 +26,5 @@ const UsersSlice = createSlice({
   },
 });
 
-export const dataReducer = UsersSlice.reducer;
-export const {setCurrentPage} = UsersSlice.actions;
+export const dataReducer = DataSlice.reducer;
+export const {setCurrentPage, setDrawer} = DataSlice.actions;
