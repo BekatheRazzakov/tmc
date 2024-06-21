@@ -13,7 +13,7 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { signIn } from "../../features/userThunk";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
 import { setCurrentPage } from "../../features/dataSlice";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -22,6 +22,8 @@ import './sign-in.css';
 const SignIn = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const userToken = useAppSelector((state) => state.userState.user);
   const authError = useAppSelector((state) => state.userState.authorizationError);
   const authLoading = useAppSelector((state) => state.userState.signInLoading);
   const [state, setState] = useState({
@@ -33,6 +35,10 @@ const SignIn = () => {
   useEffect(() => {
     dispatch(setCurrentPage('Логин'))
   }, [dispatch]);
+  
+  useEffect(() => {
+    if (userToken) navigate('/goods');
+  }, [navigate, userToken, location.pathname]);
 
   const inputChangeHandler = (event) => {
     const {name, value} = event.target;
@@ -47,8 +53,7 @@ const SignIn = () => {
   const submitFormHandler = async (e) => {
     e.preventDefault();
     try {
-      await dispatch(signIn(state));
-      navigate('/home');
+      dispatch(signIn(state));
     } catch (e) {
       console.log(e);
     }

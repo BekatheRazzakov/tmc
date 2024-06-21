@@ -16,7 +16,7 @@ export const signIn = createAsyncThunk("user/signIn", async (userData, {rejectWi
   try {
     if (userData.username === 'admin' && userData.password === 'skynet') {
       return userData.username;
-    } else return '';
+    } else return rejectWithValue('Произошла ошибка. Попробуйте позже');
   } catch (e) {
     console.log(e);
   }

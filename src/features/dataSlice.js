@@ -1,8 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getGoods } from "./dataThunk";
 
 const initialState = {
   currentPage: '',
   currentDrawer: '',
+  goods: [],
+  goodsLoading: false,
+  goodsError: '',
 };
 
 const DataSlice = createSlice({
@@ -17,12 +21,17 @@ const DataSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // builder.addCase(signIn.pending, (state) => {
-    // });
-    // builder.addCase(signIn.fulfilled, (state, {payload: res}) => {
-    // });
-    // builder.addCase(signIn.rejected, (state, {payload: error}) => {
-    // });
+    builder.addCase(getGoods.pending, (state) => {
+      state.goodsLoading = true;
+    });
+    builder.addCase(getGoods.fulfilled, (state, {payload: res}) => {
+      state.goodsLoading = false;
+      state.goods = res || [];
+    });
+    builder.addCase(getGoods.rejected, (state, {payload: error}) => {
+      state.goodsLoading = false;
+      state.authorizationError = error?.error || 'Что-то пошло не так';
+    });
   },
 });
 

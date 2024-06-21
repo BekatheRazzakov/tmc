@@ -1,35 +1,62 @@
 import React from 'react';
-import { Button, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography
+} from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setDrawer } from "../../features/dataSlice";
 import { logout } from "../../features/usersSlice";
-import HomeIcon from '@mui/icons-material/Home';
 import CategoryIcon from '@mui/icons-material/Category';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
+import { useNavigate } from "react-router-dom";
+import PersonIcon from '@mui/icons-material/Person';
+import { deepPurple } from '@mui/material/colors';
 import './rightDrawer.css';
 
 const RightDrawer = () => {
-  const rightDrawerOpen = useAppSelector(state => state.dataState.currentDrawer);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const {currentDrawer} = useAppSelector(state => state.dataState);
+  const {user} = useAppSelector(state => state.userState);
   
-  return (
-    <Drawer
+  const onNavItemClick = (tabName) => {
+    dispatch(setDrawer(''));
+    navigate(tabName);
+  };
+  
+  return (<Drawer
       anchor='right'
-      open={rightDrawerOpen === 'right'}
+      open={currentDrawer === 'right'}
       onClose={() => dispatch(setDrawer(''))}
     >
-      <List className="right-drawer-list">
-        <ListItem disablePadding onClick={() => dispatch(setDrawer(''))}>
+      {
+        user &&
+        <ListItem sx={{p: '0'}}>
           <ListItemButton>
-            <ListItemIcon style={{minWidth: '45px'}}>
-              <HomeIcon/>
-            </ListItemIcon>
-            <ListItemText primary="Главная"/>
+            <Box sx={{display: 'flex', alignItems: 'center', gap: '15px'}}>
+              <Avatar
+                alt={user}
+                src={PersonIcon}
+                sx={{ bgcolor: deepPurple[500], width: 46, height: 46, }}
+              />
+              <Typography variant="h6" component="h6">
+                {user}
+              </Typography>
+            </Box>
           </ListItemButton>
         </ListItem>
-        
-        <ListItem disablePadding onClick={() => dispatch(setDrawer(''))}>
+      }
+      <List className="right-drawer-list">
+        <ListItem disablePadding onClick={() => onNavItemClick('/goods')}>
           <ListItemButton>
             <ListItemIcon style={{minWidth: '45px'}}>
               <CategoryIcon/>
@@ -38,7 +65,7 @@ const RightDrawer = () => {
           </ListItemButton>
         </ListItem>
         
-        <ListItem disablePadding onClick={() => dispatch(setDrawer(''))}>
+        <ListItem disablePadding onClick={() => onNavItemClick('/users')}>
           <ListItemButton>
             <ListItemIcon style={{minWidth: '45px'}}>
               <GroupsIcon/>
@@ -47,7 +74,7 @@ const RightDrawer = () => {
           </ListItemButton>
         </ListItem>
         
-        <ListItem disablePadding onClick={() => dispatch(setDrawer(''))}>
+        <ListItem disablePadding onClick={() => onNavItemClick('/trade')}>
           <ListItemButton>
             <ListItemIcon style={{minWidth: '45px'}}>
               <SwapVertIcon/>
