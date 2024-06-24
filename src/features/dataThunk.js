@@ -50,7 +50,7 @@ const goodsList = [
     "id": 43214708972137,
     "user_id": 4,
     "manufacture": "Asus",
-    "model": "Asus RT-AC68U",
+    "model": "RT-AC68U",
     "cost": 2000,
     "barcode": "678461276",
     "good_status_id": 1
@@ -86,7 +86,7 @@ const goodsList = [
     "id": 43214708972141,
     "user_id": 8,
     "manufacture": "Asus",
-    "model": "Asus RT-AC86U",
+    "model": "RT-AC86U",
     "cost": 2600,
     "barcode": "678461280",
     "good_status_id": 2
@@ -122,7 +122,7 @@ const goodsList = [
     "id": 43214708972145,
     "user_id": 3,
     "manufacture": "Asus",
-    "model": "Asus RT-AX88U",
+    "model": "RT-AX88U",
     "cost": 3500,
     "barcode": "678461284",
     "good_status_id": 3
@@ -158,7 +158,7 @@ const goodsList = [
     "id": 43214708972149,
     "user_id": 7,
     "manufacture": "Asus",
-    "model": "Asus RT-AX58U",
+    "model": "RT-AX58U",
     "cost": 4500,
     "barcode": "678461288",
     "good_status_id": 1
@@ -194,7 +194,7 @@ const goodsList = [
     "id": 43214708972153,
     "user_id": 2,
     "manufacture": "Asus",
-    "model": "Asus RT-AX92U",
+    "model": "RT-AX92U",
     "cost": 6000,
     "barcode": "678461292",
     "good_status_id": 2
@@ -230,7 +230,7 @@ const goodsList = [
     "id": 43214708972157,
     "user_id": 6,
     "manufacture": "Asus",
-    "model": "Asus RT-AX82U",
+    "model": "RT-AX82U",
     "cost": 7000,
     "barcode": "678461296",
     "good_status_id": 3
@@ -266,7 +266,7 @@ const goodsList = [
     "id": 43214708972161,
     "user_id": 1,
     "manufacture": "Asus",
-    "model": "Asus ROG Rapture GT-AX11000",
+    "model": "ROG Rapture GT-AX11000",
     "cost": 8500,
     "barcode": "678461300",
     "good_status_id": 1
@@ -302,7 +302,7 @@ const goodsList = [
     "id": 43214708972165,
     "user_id": 5,
     "manufacture": "Asus",
-    "model": "Asus RT-AC5300",
+    "model": "RT-AC5300",
     "cost": 11000,
     "barcode": "678461304",
     "good_status_id": 1
@@ -338,7 +338,7 @@ const goodsList = [
     "id": 43214708972169,
     "user_id": 9,
     "manufacture": "Asus",
-    "model": "Asus RT-AX3000",
+    "model": "RT-AX3000",
     "cost": 15000,
     "barcode": "678461308",
     "good_status_id": 3
@@ -374,7 +374,7 @@ const goodsList = [
     "id": 43214708972173,
     "user_id": 4,
     "manufacture": "Asus",
-    "model": "Asus RT-AX88U",
+    "model": "RT-AX88U",
     "cost": 19000,
     "barcode": "678461312",
     "good_status_id": 1
@@ -410,7 +410,7 @@ const goodsList = [
     "id": 43214708972177,
     "user_id": 8,
     "manufacture": "Asus",
-    "model": "Asus RT-AC58U",
+    "model": "RT-AC58U",
     "cost": 23000,
     "barcode": "678461316",
     "good_status_id": 2
@@ -446,7 +446,7 @@ const goodsList = [
     "id": 43214708972181,
     "user_id": 3,
     "manufacture": "Asus",
-    "model": "Asus RT-AC88U",
+    "model": "RT-AC88U",
     "cost": 27000,
     "barcode": "678461320",
     "good_status_id": 3
@@ -482,7 +482,7 @@ const goodsList = [
     "id": 43214708972185,
     "user_id": 7,
     "manufacture": "Asus",
-    "model": "Asus RT-AC67P",
+    "model": "RT-AC67P",
     "cost": 31000,
     "barcode": "678461324",
     "good_status_id": 1
@@ -518,7 +518,7 @@ const goodsList = [
     "id": 43214708972189,
     "user_id": 2,
     "manufacture": "Asus",
-    "model": "Asus RT-AX55",
+    "model": "RT-AX55",
     "cost": 35000,
     "barcode": "678461328",
     "good_status_id": 1
@@ -554,7 +554,7 @@ const goodsList = [
     "id": 43214708972193,
     "user_id": 6,
     "manufacture": "Asus",
-    "model": "Asus RT-ACRH13",
+    "model": "RT-ACRH13",
     "cost": 39000,
     "barcode": "678461332",
     "good_status_id": 1
@@ -590,7 +590,7 @@ const goodsList = [
     "id": 43214708972197,
     "user_id": 1,
     "manufacture": "Asus",
-    "model": "Asus RT-AX86U",
+    "model": "RT-AX86U",
     "cost": 43000,
     "barcode": "678461336",
     "good_status_id": 1

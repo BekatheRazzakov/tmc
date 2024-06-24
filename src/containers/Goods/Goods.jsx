@@ -32,7 +32,7 @@ const Goods = () => {
         itemPaperStatus={itemPaperStatus}
         onPaperStatusChange={onPaperStatusChange}
       />
-      <GoodsList goods={goods || []}/>
+      <GoodsList goods={[...goods] || []}/>
     </div>
   );
 };

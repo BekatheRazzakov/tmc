@@ -61,7 +61,7 @@ const RightDrawer = () => {
             <ListItemIcon style={{minWidth: '45px'}}>
               <CategoryIcon/>
             </ListItemIcon>
-            <ListItemText primary="Список ТМЦ"/>
+            <ListItemText primary="ТМЦ"/>
           </ListItemButton>
         </ListItem>
         

@@ -6,13 +6,15 @@ import WarehouseIcon from "@mui/icons-material/Warehouse";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 
-const GoodsStatusPapers = ({
-                             totalGoodsCost,
-                             getGoodsAmount,
-                             getGoodsAmountByStatus,
-                             itemPaperStatus,
-                             onPaperStatusChange
-                           }) => {
+const GoodsStatusPapers = (
+  {
+    totalGoodsCost,
+    getGoodsAmount,
+    getGoodsAmountByStatus,
+    itemPaperStatus,
+    onPaperStatusChange
+  }
+) => {
   return (
     <div className="goods-statuses">
       <Paper className="goods-status-paper" elevation={3} sx={{bgcolor: '#eee6ff', color: '#6c39d2',}}>
