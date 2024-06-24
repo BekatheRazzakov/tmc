@@ -21,6 +21,7 @@ import { alpha, styled } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAllGoodsSelected, setGoodSelected } from "../../features/dataSlice";
+import Skeleton from '@mui/material/Skeleton';
 
 const Search = styled('div')(({theme}) => ({
   position: 'relative',
@@ -124,7 +125,7 @@ const GoodsList = ({goods}) => {
         color="primary"
         checked={filteredGoodsList()?.length ? allChecked : false}
         onChange={() => {
-          if (!goods) return;
+          if (!goods && !goodsLoading) return;
           dispatch(setAllGoodsSelected({status: allChecked ? 0 : 1}));
         }}
         inputProps={{
@@ -141,12 +142,13 @@ const GoodsList = ({goods}) => {
         }}
       />,
     };
-  }, [dispatch, filteredGoodsList, goods]);
-
+  }, [dispatch, filteredGoodsList, goods, goodsLoading]);
+  
   return (
     <Paper elevation={4} sx={{m: '30px 10px 0', borderRadius: '10px', overflow: 'hidden'}}>
       <Box sx={{flexGrow: 1}}>
-        <AppBar className="goods-list-toolbar" position="static" sx={{flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', p: '10px 0'}}>
+        <AppBar className="goods-list-toolbar" position="static"
+                sx={{flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', p: '10px 0'}}>
           <Toolbar>
             <Search>
               <SearchIconWrapper>
@@ -194,22 +196,43 @@ const GoodsList = ({goods}) => {
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {(filteredGoodsList() || []).map((row) => {
-              return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                  {[checkBoxColumn(row.id), ...columns].map((column) => {
-                    const value = row[column.id];
+          {
+            goodsLoading ?
+              <>
+                {
+                  ['', '', ''].map(() => (
+                    <TableRow>
+                      {
+                        ['', '', '', '', '', ''].map(() => (
+                          <TableCell>
+                            <Skeleton variant="text" sx={{fontSize: '1rem'}}/>
+                          </TableCell>
+                        ))
+                      }
+                    </TableRow>
+                  ))
+                }
+              </>
+              :
+              <TableBody>
+                {
+                  (filteredGoodsList() || []).map((row) => {
                     return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.format ? column.format(value) : value}
-                      </TableCell>
+                      <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                        {[checkBoxColumn(row.id), ...columns].map((column) => {
+                          const value = row[column.id];
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              {column.format ? column.format(value) : value}
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
                     );
-                  })}
-                </TableRow>
-              );
-            })}
-          </TableBody>
+                  })
+                }
+              </TableBody>
+          }
         </Table>
       </TableContainer>
     </Paper>

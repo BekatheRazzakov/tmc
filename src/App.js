@@ -1,10 +1,11 @@
 import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector } from "./app/hooks";
 import SignIn from "./containers/signIn/SignIn";
-import './App.css';
 import UserToolbar from "./components/toolbar/UserToolbar";
 import { useEffect } from "react";
 import Goods from "./containers/Goods/Goods";
+import SingleGood from "./containers/SingleGood/SingleGood";
+import './App.css';
 
 function App() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ function App() {
         <Route path='*' element={userToken ? <Navigate to="/goods" replace/> : <Navigate to="/sign-in" replace/>}/>
         <Route path='sign-in' element={<SignIn/>}/>
         <Route path='goods' element={<Goods/>}/>
+        <Route path='good' element={<SingleGood/>}/>
       </Routes>
     </div>
   );
