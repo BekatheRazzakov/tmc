@@ -20,9 +20,9 @@ const SingleGood = () => {
   return (<div className="single-good-page">
     <Paper className="single-good-outer-paper" elevation={3}>
       {goodLoading ? <>
-        <Skeleton variant="text" sx={{fontSize: '12rem'}}/>
-        <Skeleton variant="text" sx={{fontSize: '3rem'}}/>
-        <Skeleton variant="text" sx={{fontSize: '2rem'}}/>
+        <Skeleton variant="text" sx={{fontSize: '8rem', minWidth: '200px', transform: 'unset', }}/>
+        <Skeleton variant="text" sx={{fontSize: '1.2rem', minWidth: '200px', transform: 'unset'}}/>
+        <Skeleton variant="text" sx={{fontSize: '1rem', minWidth: '200px', transform: 'unset'}}/>
       </> : <>
         <img
           className="single-good-img"
@@ -41,19 +41,23 @@ const SingleGood = () => {
       <div className="single-good-info">
         {goodLoading ? <>
           <div className="single-good-info-row">
-            <Skeleton variant="text" sx={{fontSize: '3rem'}}/>
+            <Typography component="span" variant="body1"><strong>производитель</strong></Typography>
+            <Skeleton variant="text" sx={{fontSize: '1rem', width: '80px'}}/>
           </div>
           <div className="single-good-info-divider"></div>
           <div className="single-good-info-row">
-            <Skeleton variant="text" sx={{fontSize: '3rem'}}/>
+            <Typography component="span" variant="body1"><strong>Модель</strong></Typography>
+            <Skeleton variant="text" sx={{fontSize: '1rem', width: '80px'}}/>
           </div>
           <div className="single-good-info-divider"></div>
           <div className="single-good-info-row">
-            <Skeleton variant="text" sx={{fontSize: '3rem'}}/>
+            <Typography component="span" variant="body1"><strong>Цена</strong></Typography>
+            <Skeleton variant="text" sx={{fontSize: '1rem', width: '80px'}}/>
           </div>
           <div className="single-good-info-divider"></div>
           <div className="single-good-info-row">
-            <Skeleton variant="text" sx={{fontSize: '3rem'}}/>
+            <Typography component="span" variant="body1"><strong>Штрих код</strong></Typography>
+            <Skeleton variant="text" sx={{fontSize: '1rem', width: '80px'}}/>
           </div>
           <div className="single-good-info-divider"></div>
         </> : <>
