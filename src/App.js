@@ -23,7 +23,7 @@ function App() {
         <Route path='*' element={userToken ? <Navigate to="/goods" replace/> : <Navigate to="/sign-in" replace/>}/>
         <Route path='sign-in' element={<SignIn/>}/>
         <Route path='goods' element={<Goods/>}/>
-        <Route path='good' element={<SingleGood/>}/>
+        <Route path='good/:id' element={<SingleGood/>}/>
       </Routes>
     </div>
   );

@@ -22,6 +22,7 @@ import InputBase from '@mui/material/InputBase';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAllGoodsSelected, setGoodSelected } from "../../features/dataSlice";
 import Skeleton from '@mui/material/Skeleton';
+import { useNavigate } from "react-router-dom";
 
 const Search = styled('div')(({theme}) => ({
   position: 'relative',
@@ -80,6 +81,7 @@ const columns = [{
 
 const GoodsList = ({goods}) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   
   const [searchWord, setSearchWord] = useState('');
   const [sortBy, setSortBy] = useState('manufacture');
@@ -132,6 +134,7 @@ const GoodsList = ({goods}) => {
           'aria-label': 'Выбрать все',
         }}
       />, minWidth: 70, align: 'center', format: (value) => <Checkbox
+        onClick={(e) => e.stopPropagation()}
         color="primary"
         checked={value === 1}
         onChange={() => {
@@ -218,7 +221,11 @@ const GoodsList = ({goods}) => {
                 {
                   (filteredGoodsList() || []).map((row) => {
                     return (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                      <TableRow
+                        hover role="checkbox"
+                        tabIndex={-1} key={row.code}
+                        onClick={() => navigate(`/good/${row?.id}`)}
+                      >
                         {[checkBoxColumn(row.id), ...columns].map((column) => {
                           const value = row[column.id];
                           return (
