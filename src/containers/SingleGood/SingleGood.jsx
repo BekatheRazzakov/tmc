@@ -2,10 +2,11 @@ import React, { useEffect } from 'react';
 import { setCurrentPage } from "../../features/dataSlice";
 import { getGood } from "../../features/dataThunk";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import './singleGood.css';
 import { useParams } from "react-router-dom";
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Chip, Paper, Typography } from "@mui/material";
 import Skeleton from "@mui/material/Skeleton";
+import notFoundImage from '../../assets/not-found-img.png';
+import './singleGood.css';
 
 const SingleGood = () => {
   const params = useParams();
@@ -20,13 +21,13 @@ const SingleGood = () => {
   return (<div className="single-good-page">
     <Paper className="single-good-outer-paper" elevation={3}>
       {goodLoading ? <>
-        <Skeleton variant="text" sx={{fontSize: '8rem', minWidth: '200px', transform: 'unset', }}/>
+        <Skeleton variant="text" sx={{fontSize: '8rem', minWidth: '200px', transform: 'unset',}}/>
         <Skeleton variant="text" sx={{fontSize: '1.2rem', minWidth: '200px', transform: 'unset'}}/>
         <Skeleton variant="text" sx={{fontSize: '1rem', minWidth: '200px', transform: 'unset'}}/>
       </> : <>
         <img
           className="single-good-img"
-          src={`https://images.unsplash.com/photo-1522770179533-24471fcdba45?w=121&h=121&fit=crop&auto=format&dpr=2`}
+          src={good?.img || notFoundImage}
           alt={'image'}
           loading="lazy"
         />
@@ -80,6 +81,22 @@ const SingleGood = () => {
             <Typography component="span" variant="body2">{good?.barcode}</Typography>
           </div>
           <div className="single-good-info-divider"></div>
+          <div className="single-good-info-row">
+            <Typography component="span" variant="body1"><strong>Статус</strong></Typography>
+            <Typography component="span" variant="body2">
+              {<Chip
+                color={
+                  good?.good_status_id === 1 ? 'primary' : good?.good_status_id === 2 ? 'secondary' :
+                    good?.good_status_id === 3 ? 'warning' : good?.good_status_id === 4 ? 'success' : 'default'}
+                label={
+                  good?.good_status_id === 1 ? 'на складе' : good?.good_status_id === 2 ? 'у начальника участка' :
+                    good?.good_status_id === 3 ? 'у сервис инженера' : good?.good_status_id === 4 ? 'у абонента' : '-'
+                }
+                size="small"
+              />}
+            </Typography>
+          </div>
+          <div className="single-good-info-divider" style={{marginTop: '5px'}}></div>
         </>}
       </div>
     </Paper>

@@ -27,6 +27,8 @@
 .single-good-img {
   width: 100%;
   max-width: 220px;
+  max-height: 220px;
+  object-fit: cover;
 }
 
 .single-good-title {

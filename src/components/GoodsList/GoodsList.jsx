@@ -73,8 +73,8 @@ const columns = [{
   format: (value) => <span>{value} <span style={{textDecoration: 'underline'}}>c</span></span>,
 }, {
   id: 'good_status_id', label: 'Статус', minWidth: 200, align: 'center', format: (value) => <Chip
-    label={value === 1 ? 'На складе' : value === 2 ? 'У начальника участка' : 'У СИ'}
-    color={value === 1 ? 'warning' : value === 2 ? 'primary' : 'secondary'}
+    label={value === 1 ? 'На складе' : value === 2 ? 'У начальника участка' : value === 3 ? 'У СИ' : value === 4 ? 'У абонента' : '-'}
+    color={value === 1 ? 'primary' : value === 2 ? 'secondary' : value === 3 ? 'warning' : value === 4 ? 'success' : 'default'}
     sx={{height: '22px', fontSize: '12px', lineHeight: '12px',}}
   />,
 }, {id: 'barcode', label: 'Штрих код', minWidth: 120, align: 'center',},];
