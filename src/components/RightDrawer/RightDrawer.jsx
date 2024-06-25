@@ -34,6 +34,7 @@ const RightDrawer = () => {
   };
   
   return (<Drawer
+      className="right-drawer"
       anchor='right'
       open={currentDrawer === 'right'}
       onClose={() => dispatch(setDrawer(''))}
@@ -44,9 +45,10 @@ const RightDrawer = () => {
           <ListItemButton>
             <Box sx={{display: 'flex', alignItems: 'center', gap: '15px'}}>
               <Avatar
+                className="right-drawer-avatar"
                 alt={user}
                 src={PersonIcon}
-                sx={{ bgcolor: deepPurple[500], width: 46, height: 46, }}
+                sx={{ bgcolor: deepPurple[500], }}
               />
               <Typography variant="h6" component="h6">
                 {user}
@@ -83,7 +85,7 @@ const RightDrawer = () => {
           </ListItemButton>
         </ListItem>
         
-        <ListItem disablePadding sx={{marginTop: '20px'}} onClick={() => dispatch(setDrawer(''))}>
+        <ListItem className="right-drawer-logout-btn" disablePadding onClick={() => dispatch(setDrawer(''))}>
           <Button
             sx={{width: '100%'}}
             color="error" onClick={() => dispatch(logout())}>
