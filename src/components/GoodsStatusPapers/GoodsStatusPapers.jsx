@@ -5,6 +5,8 @@ import CategoryIcon from "@mui/icons-material/Category";
 import WarehouseIcon from "@mui/icons-material/Warehouse";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import EngineeringIcon from "@mui/icons-material/Engineering";
+import { useAppSelector } from "../../app/hooks";
+import Skeleton from "@mui/material/Skeleton";
 
 const GoodsStatusPapers = (
   {
@@ -15,26 +17,67 @@ const GoodsStatusPapers = (
     onPaperStatusChange
   }
 ) => {
+  const {goodsLoading} = useAppSelector(state => state.dataState);
+  
   return (
     <div className="goods-statuses">
-      <Paper className="goods-status-paper" elevation={3} sx={{bgcolor: '#eee6ff', color: '#6c39d2',}}>
+      <Paper
+        className="goods-status-paper"
+        elevation={3}
+        sx={{
+          bgcolor: '#eee6ff',
+          color: '#6c39d2',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between'
+        }}
+      >
         <Box className="goods-paper-title">
           <Typography variant="body1" component="span">Общая стоимость</Typography>
           <AttachMoneyIcon/>
         </Box>
-        <Typography className="goods-paper-value" variant="h5"
-                    component="h5">{totalGoodsCost}<strong>c</strong></Typography>
+        {
+          goodsLoading ?
+            <Skeleton variant="text" sx={{fontSize: '1rem', maxWidth: '120px', transform: 'unset', mt: '20px'}}/> :
+            <Typography
+              className="goods-paper-value" variant="h5"
+              component="h5"
+            >
+              {totalGoodsCost}<strong>c</strong>
+            </Typography>
+        }
       </Paper>
-      <Paper className="goods-status-paper" elevation={3}
-             sx={{bgcolor: 'rgba(92, 125, 252, 0.15)', color: '#485fb3',}}>
+      <Paper
+        className="goods-status-paper"
+        elevation={3}
+        sx={{
+          bgcolor: 'rgba(92, 125, 252, 0.15)', color: '#485fb3',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between'
+        }}
+      >
         <Box className="goods-paper-title">
           <Typography variant="body1" component="span">Всего ТМЦ</Typography>
           <CategoryIcon/>
         </Box>
-        <Typography className="goods-paper-value" variant="h5" component="h5">
-          {getGoodsAmount()} <span>тмц</span></Typography>
+        {
+          goodsLoading ?
+            <Skeleton variant="text" sx={{fontSize: '1rem', maxWidth: '120px', transform: 'unset', mt: '20px'}}/> :
+            <Typography className="goods-paper-value" variant="h5" component="h5">
+              {getGoodsAmount()} <span>тмц</span></Typography>
+        }
       </Paper>
-      <Paper className="goods-status-paper" elevation={3} sx={{bgcolor: '#fff4de', color: '#feaf19',}}>
+      <Paper
+        className="goods-status-paper"
+        elevation={3}
+        sx={{
+          bgcolor: '#fff4de', color: '#feaf19',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between'
+        }}
+      >
         <Box className="goods-paper-title">
           <FormControl variant="standard" sx={{minWidth: 200}}>
             <Select
@@ -55,9 +98,13 @@ const GoodsStatusPapers = (
               itemPaperStatus === 2 ? <ManageAccountsIcon/> : <EngineeringIcon/>
           }
         </Box>
-        <Typography className="goods-paper-value" variant="h5" component="h5">
-          {getGoodsAmountByStatus()} <span>тмц</span>
-        </Typography>
+        {
+          goodsLoading ?
+            <Skeleton variant="text" sx={{fontSize: '1rem', maxWidth: '120px', transform: 'unset', mt: '20px'}}/> :
+            <Typography className="goods-paper-value" variant="h5" component="h5">
+              {getGoodsAmountByStatus()} <span>тмц</span>
+            </Typography>
+        }
       </Paper>
     </div>
   );

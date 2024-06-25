@@ -26,7 +26,6 @@ const SingleGood = () => {
       </> : <>
         <img
           className="single-good-img"
-          srcSet={`https://images.unsplash.com/photo-1522770179533-24471fcdba45?w=121&h=121&fit=crop&auto=format&dpr=2`}
           src={`https://images.unsplash.com/photo-1522770179533-24471fcdba45?w=121&h=121&fit=crop&auto=format&dpr=2`}
           alt={'image'}
           loading="lazy"
