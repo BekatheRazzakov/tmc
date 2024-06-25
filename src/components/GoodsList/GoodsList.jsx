@@ -1,18 +1,14 @@
-import React, { useCallback, useState } from 'react';
+import React, { lazy, Suspense, useCallback, useState, memo } from 'react';
 import {
   AppBar,
   Box,
   Checkbox,
   Chip,
+  IconButton,
   MenuItem,
   Paper,
   Select,
-  Table,
-  TableBody,
-  TableCell,
   TableContainer,
-  TableHead,
-  TableRow,
   Toolbar,
   Typography
 } from "@mui/material";
@@ -21,8 +17,9 @@ import { alpha, styled } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAllGoodsSelected, setGoodSelected } from "../../features/dataSlice";
-import Skeleton from '@mui/material/Skeleton';
-import { useNavigate } from "react-router-dom";
+import AddIcon from '@mui/icons-material/Add';
+
+const GoodsListTable = lazy(() => import('../GoodListTable/GoodsListTable'));
 
 const Search = styled('div')(({theme}) => ({
   position: 'relative',
@@ -79,10 +76,16 @@ const columns = [{
   />,
 }, {id: 'barcode', label: 'Штрих код', minWidth: 120, align: 'center',},];
 
-const GoodsList = ({goods}) => {
+const CustomIconButton = styled(IconButton)({
+  color: 'white',
+  '&:hover': {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  }
+});
+
+const GoodsList = memo(({goods}) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  
+
   const [searchWord, setSearchWord] = useState('');
   const [sortBy, setSortBy] = useState('manufacture');
   const {goodsLoading} = useSelector(state => state.dataState);
@@ -150,10 +153,13 @@ const GoodsList = ({goods}) => {
   return (
     <Paper elevation={4} sx={{m: '30px 10px 0', borderRadius: '10px', overflow: 'hidden'}}>
       <Box sx={{flexGrow: 1}}>
-        <AppBar className="goods-list-toolbar" position="static"
-                sx={{flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', p: '10px 0'}}>
-          <Toolbar>
-            <Search>
+        <AppBar
+          className="goods-list-toolbar" position="static"
+          sx={{
+            flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', p: '10px 0', gap: '10px',
+          }}>
+          <Toolbar className="goods-search-toolbar" sx={{p: '0px!important', minHeight: 'unset!important'}}>
+            <Search sx={{m: '0!important'}}>
               <SearchIconWrapper>
                 <SearchIcon/>
               </SearchIconWrapper>
@@ -164,7 +170,7 @@ const GoodsList = ({goods}) => {
               />
             </Search>
           </Toolbar>
-          <Box sx={{m: '0 20px 0 auto', display: "flex", alignItems: 'center', flexWrap: 'no-wrap'}}>
+          <Box sx={{m: '0 0 0 auto', display: "flex", alignItems: 'center', flexWrap: 'no-wrap'}}>
             <Typography variant="body1" component="span" sx={{mr: '10px'}}>Сортировка по:</Typography>
             <Select
               labelId="demo-simple-select-filled-label"
@@ -182,68 +188,25 @@ const GoodsList = ({goods}) => {
               <MenuItem value="status-si">статус: у СИ</MenuItem>
             </Select>
           </Box>
+          <Box className="goods-list-tools">
+            <CustomIconButton size="large">
+              <AddIcon/>
+            </CustomIconButton>
+          </Box>
         </AppBar>
       </Box>
       <TableContainer sx={{maxHeight: 530}}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {[checkBoxColumn(), ...columns].map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{minWidth: column.minWidth}}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          {
-            goodsLoading ?
-              <>
-                {
-                  ['', '', ''].map(() => (
-                    <TableRow>
-                      {
-                        ['', '', '', '', '', ''].map(() => (
-                          <TableCell>
-                            <Skeleton variant="text" sx={{fontSize: '1rem'}}/>
-                          </TableCell>
-                        ))
-                      }
-                    </TableRow>
-                  ))
-                }
-              </>
-              :
-              <TableBody>
-                {
-                  (filteredGoodsList() || []).map((row) => {
-                    return (
-                      <TableRow
-                        hover role="checkbox"
-                        tabIndex={-1} key={row.code}
-                        onClick={() => navigate(`/good/${row?.id}`)}
-                      >
-                        {[checkBoxColumn(row.id), ...columns].map((column) => {
-                          const value = row[column.id];
-                          return (
-                            <TableCell key={column.id} align={column.align}>
-                              {column.format ? column.format(value) : value}
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
-                    );
-                  })
-                }
-              </TableBody>
-          }
-        </Table>
+        <Suspense fallback={<></>}>
+          <GoodsListTable
+            filteredGoodsList={filteredGoodsList}
+            checkBoxColumn={checkBoxColumn}
+            columns={columns}
+            goodsLoading={goodsLoading}
+          />
+        </Suspense>
       </TableContainer>
     </Paper>
   );
-};
+});
 
 export default GoodsList;

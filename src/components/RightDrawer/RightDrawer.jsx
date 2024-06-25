@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   Avatar,
   Box,
@@ -22,7 +22,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import { deepPurple } from '@mui/material/colors';
 import './rightDrawer.css';
 
-const RightDrawer = () => {
+const RightDrawer = memo(() => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const {currentDrawer} = useAppSelector(state => state.dataState);
@@ -95,6 +95,6 @@ const RightDrawer = () => {
       </List>
     </Drawer>
   );
-};
+});
 
 export default RightDrawer;

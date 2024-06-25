@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Box, FormControl, MenuItem, Paper, Select, Typography } from "@mui/material";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -8,7 +8,7 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import { useAppSelector } from "../../app/hooks";
 import Skeleton from "@mui/material/Skeleton";
 
-const GoodsStatusPapers = (
+const GoodsStatusPapers = memo((
   {
     totalGoodsCost,
     getGoodsAmount,
@@ -108,6 +108,6 @@ const GoodsStatusPapers = (
       </Paper>
     </div>
   );
-};
+});
 
 export default GoodsStatusPapers;
