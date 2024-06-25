@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { setCurrentPage } from "../../features/dataSlice";
 import { getGood } from "../../features/dataThunk";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useParams } from "react-router-dom";
-import { Box, Chip, Paper, Typography } from "@mui/material";
+import { Box, Chip, Paper, Snackbar, Typography } from "@mui/material";
 import Skeleton from "@mui/material/Skeleton";
 import notFoundImage from '../../assets/not-found-img.png';
 import './singleGood.css';
@@ -11,12 +11,19 @@ import './singleGood.css';
 const SingleGood = () => {
   const params = useParams();
   const dispatch = useAppDispatch();
-  const {good, goodLoading} = useAppSelector(state => state.dataState);
+  const {good, goodLoading, goodError} = useAppSelector(state => state.dataState);
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
   
   useEffect(() => {
     dispatch(setCurrentPage('Просмотр товара'));
     dispatch(getGood(params?.id));
   }, [dispatch, params.id]);
+  
+  useEffect(() => {
+    if (goodError) setSnackBarOpen(true);
+  }, [goodError]);
+  
+  const handleClose = () => setSnackBarOpen(false);
   
   return (<div className="single-good-page">
     <Paper className="single-good-outer-paper" elevation={3}>
@@ -99,6 +106,12 @@ const SingleGood = () => {
           <div className="single-good-info-divider" style={{marginTop: '5px'}}></div>
         </>}
       </div>
+      <Snackbar
+        anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+        open={snackBarOpen}
+        onClose={handleClose}
+        message={goodError}
+      />
     </Paper>
   </div>);
 };

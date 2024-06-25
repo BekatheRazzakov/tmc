@@ -6,11 +6,13 @@ import { useAppSelector } from "../../app/hooks";
 import GoodsStatusPapers from "../../components/GoodsStatusPapers/GoodsStatusPapers";
 import GoodsList from "../../components/GoodsList/GoodsList";
 import './goods.css';
+import { Snackbar } from "@mui/material";
 
 const Goods = () => {
   const dispatch = useDispatch();
-  const {goods} = useAppSelector(state => state.dataState);
+  const {goods, goodsError} = useAppSelector(state => state.dataState);
   const [itemPaperStatus, setItemPaperStatus] = useState(1);
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
   const totalGoodsCost = goods?.reduce((acc, value) => acc + value?.cost, 0) || 0;
   
   const getGoodsAmountByStatus = useCallback(() => goods?.filter(good => good?.good_status_id === itemPaperStatus)?.length, [goods, itemPaperStatus]);
@@ -23,6 +25,12 @@ const Goods = () => {
   
   const onPaperStatusChange = (value) => setItemPaperStatus(value);
   
+  useEffect(() => {
+    if (goodsError) setSnackBarOpen(true);
+  }, [goodsError]);
+  
+  const handleClose = () => setSnackBarOpen(false);
+  
   return (
     <div className="goods">
       <GoodsStatusPapers
@@ -33,6 +41,12 @@ const Goods = () => {
         onPaperStatusChange={onPaperStatusChange}
       />
       <GoodsList goods={[...goods] || []}/>
+      <Snackbar
+        anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+        open={snackBarOpen}
+        onClose={handleClose}
+        message={goodsError}
+      />
     </div>
   );
 };
