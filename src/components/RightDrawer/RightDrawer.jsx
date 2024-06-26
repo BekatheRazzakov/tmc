@@ -34,7 +34,7 @@ const RightDrawer = memo(() => {
   };
   
   return (<Drawer
-      className="right-drawer"
+      className='right-drawer'
       anchor='right'
       open={currentDrawer === 'right'}
       onClose={() => dispatch(setDrawer(''))}
@@ -45,50 +45,49 @@ const RightDrawer = memo(() => {
           <ListItemButton>
             <Box sx={{display: 'flex', alignItems: 'center', gap: '15px'}}>
               <Avatar
-                className="right-drawer-avatar"
+                className='right-drawer-avatar'
                 alt={user}
                 src={PersonIcon}
-                sx={{ bgcolor: deepPurple[500], }}
+                sx={{bgcolor: deepPurple[500],}}
               />
-              <Typography variant="h6" component="h6">
+              <Typography variant='h6' component='h6'>
                 {user}
               </Typography>
             </Box>
           </ListItemButton>
         </ListItem>
       }
-      <List className="right-drawer-list">
+      <List className='right-drawer-list'>
         <ListItem disablePadding onClick={() => onNavItemClick('/goods')}>
           <ListItemButton>
             <ListItemIcon style={{minWidth: '45px'}}>
               <CategoryIcon/>
             </ListItemIcon>
-            <ListItemText primary="ТМЦ"/>
+            <ListItemText primary='ТМЦ'/>
           </ListItemButton>
         </ListItem>
-        
         <ListItem disablePadding onClick={() => onNavItemClick('/users')}>
           <ListItemButton>
             <ListItemIcon style={{minWidth: '45px'}}>
               <GroupsIcon/>
             </ListItemIcon>
-            <ListItemText primary="Пользователи"/>
+            <ListItemText primary='Пользователи'/>
           </ListItemButton>
         </ListItem>
-        
         <ListItem disablePadding onClick={() => onNavItemClick('/trade')}>
           <ListItemButton>
             <ListItemIcon style={{minWidth: '45px'}}>
               <SwapVertIcon/>
             </ListItemIcon>
-            <ListItemText primary="Обмен товарами"/>
+            <ListItemText primary='Обмен товарами'/>
           </ListItemButton>
         </ListItem>
-        
-        <ListItem className="right-drawer-logout-btn" disablePadding onClick={() => dispatch(setDrawer(''))}>
+        <ListItem className='right-drawer-logout-btn'
+          disablePadding
+          onClick={() => dispatch(setDrawer(''))}>
           <Button
             sx={{width: '100%'}}
-            color="error" onClick={() => dispatch(logout())}>
+            color='error' onClick={() => dispatch(logout())}>
             Выйти из аккаунта
           </Button>
         </ListItem>

@@ -11,7 +11,9 @@ const GoodInfoTab = lazy(() => import('../../components/GoodInfoTab/GoodInfoTab'
 const SingleGood = () => {
   const params = useParams();
   const dispatch = useAppDispatch();
-  const {good, goodLoading, goodError} = useAppSelector(state => state.dataState);
+  const {
+    good, goodLoading, goodError
+  } = useAppSelector(state => state.dataState);
   const [snackBarOpen, setSnackBarOpen] = useState(false);
   const [value, setValue] = React.useState(0);
   
@@ -30,19 +32,20 @@ const SingleGood = () => {
     setValue(newValue);
   };
   
-  return (<div className="single-good-page">
+  return (<div className='single-good-page'>
     <Box>
       <Tabs
         value={value} onChange={handleTabChange}
-        aria-label="basic tabs example"
-        variant="scrollable"
+        aria-label='basic tabs example'
+        variant='scrollable'
       >
-        <Tab className="single-good-tab-btn" label="Информация"/>
-        <Tab className="single-good-tab-btn" label="Редактировать"/>
-        <Tab className="single-good-tab-btn" label="Удалить"/>
+        <Tab className='single-good-tab-btn' label='Информация'/>
+        <Tab className='single-good-tab-btn' label='Редактировать'/>
+        <Tab className='single-good-tab-btn' label='Удалить'/>
       </Tabs>
     </Box>
-    <div className="single-good-page-papers" style={{display: value === 0 ? 'flex' : 'none'}}>
+    <div className='single-good-page-papers'
+      style={{display: value === 0 ? 'flex' : 'none'}}>
       <Suspense fallback={<></>}>
         <GoodInfoTab
           good={good}
@@ -53,8 +56,10 @@ const SingleGood = () => {
         />
       </Suspense>
     </div>
-    <Paper sx={{p: '40px', display: value === 1 ? 'block' : 'none'}} elevation={3}>hello1</Paper>
-    <Paper sx={{p: '40px', display: value === 2 ? 'block' : 'none'}} elevation={3}>Hello2</Paper>
+    <Paper sx={{p: '40px', display: value === 1 ? 'block' : 'none'}}
+      elevation={3}>hello1</Paper>
+    <Paper sx={{p: '40px', display: value === 2 ? 'block' : 'none'}}
+      elevation={3}>Hello2</Paper>
   </div>);
 };
 

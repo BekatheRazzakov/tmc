@@ -16,16 +16,16 @@ const UserToolbar = () => {
   
   return (
     <Box sx={{flexGrow: 1}}>
-      <AppBar position="static">
+      <AppBar position='static'>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+          <Typography variant='h6' component='div' sx={{flexGrow: 1}}>
             {currentPage}
           </Typography>
           {user && <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
+            size='large'
+            edge='start'
+            color='inherit'
+            aria-label='menu'
             onClick={() => dispatch(setDrawer('right'))}
           >
             <MenuIcon/>

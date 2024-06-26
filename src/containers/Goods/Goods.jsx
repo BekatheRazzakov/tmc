@@ -3,7 +3,8 @@ import { useDispatch } from "react-redux";
 import { setCurrentPage } from "../../features/dataSlice";
 import { getGoods } from "../../features/dataThunk";
 import { useAppSelector } from "../../app/hooks";
-import GoodsStatusPapers from "../../components/GoodsStatusPapers/GoodsStatusPapers";
+import GoodsStatusPapers
+  from "../../components/GoodsStatusPapers/GoodsStatusPapers";
 import GoodsList from "../../components/GoodsList/GoodsList";
 import './goods.css';
 import { Snackbar } from "@mui/material";
@@ -31,8 +32,7 @@ const Goods = () => {
   
   const handleClose = () => setSnackBarOpen(false);
   
-  return (
-    <div className="goods">
+  return (<div className='goods'>
       <GoodsStatusPapers
         totalGoodsCost={totalGoodsCost}
         getGoodsAmount={getGoodsAmount}
@@ -47,8 +47,7 @@ const Goods = () => {
         onClose={handleClose}
         message={goodsError}
       />
-    </div>
-  );
+    </div>);
 };
 
 export default Goods;

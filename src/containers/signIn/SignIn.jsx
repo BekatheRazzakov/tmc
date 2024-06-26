@@ -39,7 +39,7 @@ const SignIn = () => {
   useEffect(() => {
     if (userToken) navigate('/goods');
   }, [navigate, userToken, location.pathname]);
-
+  
   const inputChangeHandler = (event) => {
     const {name, value} = event.target;
     setState((prevState) => ({
@@ -49,7 +49,7 @@ const SignIn = () => {
   };
   
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-
+  
   const submitFormHandler = async (e) => {
     e.preventDefault();
     try {
@@ -58,9 +58,9 @@ const SignIn = () => {
       console.log(e);
     }
   };
-
+  
   return (
-    <Container component="main" maxWidth="xs" style={{paddingTop: '5%'}}>
+    <Container component='main' maxWidth='xs' style={{paddingTop: '5%'}}>
       <Box
         style={{
           display: 'flex',
@@ -71,44 +71,47 @@ const SignIn = () => {
         <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
           <LockOutlinedIcon/>
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component='h1' variant='h5'>
           Вход в систему
         </Typography>
-        <Box className="sign-in-form" component="form" onSubmit={submitFormHandler} sx={{mt: 3}}>
+        <Box className='sign-in-form'
+          component='form'
+          onSubmit={submitFormHandler}
+          sx={{mt: 3}}>
           <TextField
-            label="Имя пользователя"
-            name="username"
+            label='Имя пользователя'
+            name='username'
             value={state.username}
             onChange={inputChangeHandler}
             required
             autoComplete={''}
           />
-          <FormControl variant="outlined" required>
-            <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
+          <FormControl variant='outlined' required>
+            <InputLabel htmlFor='outlined-adornment-password'>Пароль</InputLabel>
             <OutlinedInput
-              id="outlined-adornment-password"
+              id='outlined-adornment-password'
               type={showPassword ? 'text' : 'password'}
               endAdornment={
-                <InputAdornment position="end">
+                <InputAdornment position='end'>
                   <IconButton
-                    aria-label="toggle password visibility"
+                    aria-label='toggle password visibility'
                     onClick={handleClickShowPassword}
                     onMouseDown={(e) => e.preventDefault()}
-                    edge="end"
+                    edge='end'
                   >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                    {showPassword ? <VisibilityOff/> : <Visibility/>}
                   </IconButton>
                 </InputAdornment>
               }
-              label="Пароль"
+              label='Пароль'
               onChange={inputChangeHandler}
               value={state.password}
-              name="password"
+              name='password'
             />
           </FormControl>
-          {authError && <Alert severity="error">{authError}</Alert>}
+          {authError && <Alert severity='error'>{authError}</Alert>}
           <LoadingButton
-            type="submit" fullWidth variant="contained" sx={{mt: 3, mb: 2}}
+            type='submit' fullWidth variant='contained' sx={{mt: 3, mb: 2}}
             disabled={
               !state.username ||
               !state.password

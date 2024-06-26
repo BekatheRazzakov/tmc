@@ -67,9 +67,14 @@ const columns = [{
   label: 'Цена',
   minWidth: 100,
   align: 'center',
-  format: (value) => <span>{value} <span style={{textDecoration: 'underline'}}>c</span></span>,
+  format: (value) => <span>{value}
+    <span style={{textDecoration: 'underline'}}>c</span></span>,
 }, {
-  id: 'good_status_id', label: 'Статус', minWidth: 200, align: 'center', format: (value) => <Chip
+  id: 'good_status_id',
+  label: 'Статус',
+  minWidth: 200,
+  align: 'center',
+  format: (value) => <Chip
     label={value === 1 ? 'На складе' : value === 2 ? 'У начальника участка' : value === 3 ? 'У СИ' : value === 4 ? 'У абонента' : '-'}
     color={value === 1 ? 'primary' : value === 2 ? 'secondary' : value === 3 ? 'warning' : value === 4 ? 'success' : 'default'}
     sx={{height: '22px', fontSize: '12px', lineHeight: '12px',}}
@@ -77,15 +82,14 @@ const columns = [{
 }, {id: 'barcode', label: 'Штрих код', minWidth: 120, align: 'center',},];
 
 const CustomIconButton = styled(IconButton)({
-  color: 'white',
-  '&:hover': {
+  color: 'white', '&:hover': {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
   }
 });
 
 const GoodsList = memo(({goods}) => {
   const dispatch = useDispatch();
-
+  
   const [searchWord, setSearchWord] = useState('');
   const [sortBy, setSortBy] = useState('manufacture');
   const {goodsLoading} = useSelector(state => state.dataState);
@@ -95,11 +99,11 @@ const GoodsList = memo(({goods}) => {
   };
   
   const sortedByManufacture = useCallback(() => {
-    return (goods || []).sort((a, b) => a?.manufacture.localeCompare(b?.manufacture));
+    return (goods || []).sort((a, b) => a?.manufacture?.localeCompare(b?.manufacture));
   }, [goods]);
   
   const sortedByModel = useCallback(() => {
-    return (goods || []).sort((a, b) => a?.model.localeCompare(b?.model));
+    return (goods || []).sort((a, b) => a?.model?.localeCompare(b?.model));
   }, [goods]);
   
   const sortedByCost = useCallback(() => {
@@ -120,14 +124,14 @@ const GoodsList = memo(({goods}) => {
   
   const filteredGoodsList = useCallback(() => {
     const sortedGoods = (sortBy === 'manufacture' ? sortedByManufacture() : sortBy === 'model' ? sortedByModel() : sortBy === 'cost-increase' ? sortedByCost() : sortBy === 'cost-decrease' ? sortedByCost().reverse() : sortBy === 'status-in-storage' ? sortedByStatusInStorage() : sortBy === 'status-nu' ? sortedByStatusNU() : sortBy === 'status-si' ? sortedByStatusSI() : []);
-    return sortedGoods.filter(good => good?.manufacture.toLowerCase().includes(searchWord.toLowerCase()) || good?.model.toLowerCase().includes(searchWord.toLowerCase()) || good?.cost.toString().includes(searchWord));
+    return sortedGoods.filter(good => good?.manufacture?.toLowerCase().includes(searchWord?.toLowerCase()) || good?.model?.toLowerCase().includes(searchWord?.toLowerCase()) || good?.cost?.toString().includes(searchWord));
   }, [searchWord, sortBy, sortedByCost, sortedByManufacture, sortedByModel, sortedByStatusInStorage, sortedByStatusNU, sortedByStatusSI]);
   
   const checkBoxColumn = useCallback(id => {
     const allChecked = filteredGoodsList().filter(good => good.selected === 1).length === filteredGoodsList().length;
     return {
       id: 'selected', label: <Checkbox
-        color="primary"
+        color='primary'
         checked={filteredGoodsList()?.length ? allChecked : false}
         onChange={() => {
           if (!goods && !goodsLoading) return;
@@ -138,7 +142,7 @@ const GoodsList = memo(({goods}) => {
         }}
       />, minWidth: 70, align: 'center', format: (value) => <Checkbox
         onClick={(e) => e.stopPropagation()}
-        color="primary"
+        color='primary'
         checked={value === 1}
         onChange={() => {
           dispatch(setGoodSelected({id, status: value === 1 ? 0 : 1}));
@@ -150,63 +154,74 @@ const GoodsList = memo(({goods}) => {
     };
   }, [dispatch, filteredGoodsList, goods, goodsLoading]);
   
-  return (
-    <Paper elevation={4} sx={{m: '30px 10px 0', borderRadius: '10px', overflow: 'hidden'}}>
-      <Box sx={{flexGrow: 1}}>
-        <AppBar
-          className="goods-list-toolbar" position="static"
-          sx={{
-            flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', p: '10px 0', gap: '10px',
-          }}>
-          <Toolbar className="goods-search-toolbar" sx={{p: '0px!important', minHeight: 'unset!important'}}>
-            <Search sx={{m: '0!important'}}>
-              <SearchIconWrapper>
-                <SearchIcon/>
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Найти товар…"
-                inputProps={{'aria-label': 'search'}}
-                onChange={e => setSearchWord(e.target.value)}
-              />
-            </Search>
-          </Toolbar>
-          <Box sx={{m: '0 0 0 auto', display: "flex", alignItems: 'center', flexWrap: 'no-wrap'}}>
-            <Typography variant="body1" component="span" sx={{mr: '10px'}}>Сортировка по:</Typography>
-            <Select
-              labelId="demo-simple-select-filled-label"
-              id="demo-simple-select-filled"
-              value={sortBy}
-              onChange={handleSortByChange}
-              sx={{color: '#FFFFFF', minWidth: '175px'}}
-            >
-              <MenuItem value="manufacture">производитель (А-Я)</MenuItem>
-              <MenuItem value="model">модель (А-Я)</MenuItem>
-              <MenuItem value="cost-increase">цена (по возрастанию)</MenuItem>
-              <MenuItem value="cost-decrease">цена (по убыванию)</MenuItem>
-              <MenuItem value="status-in-storage">статус: на складе</MenuItem>
-              <MenuItem value="status-nu">статус: у НУ</MenuItem>
-              <MenuItem value="status-si">статус: у СИ</MenuItem>
-            </Select>
-          </Box>
-          <Box className="goods-list-tools">
-            <CustomIconButton size="large">
-              <AddIcon/>
-            </CustomIconButton>
-          </Box>
-        </AppBar>
-      </Box>
-      <TableContainer sx={{maxHeight: 530}}>
-        <Suspense fallback={<></>}>
-          <GoodsListTable
-            filteredGoodsList={filteredGoodsList}
-            checkBoxColumn={checkBoxColumn}
-            columns={columns}
-            goodsLoading={goodsLoading}
-          />
-        </Suspense>
-      </TableContainer>
-    </Paper>
-  );
+  return (<Paper elevation={4}
+    sx={{m: '30px 10px 0', borderRadius: '10px', overflow: 'hidden'}}>
+    <Box sx={{flexGrow: 1}}>
+      <AppBar
+        className='goods-list-toolbar' position='static'
+        sx={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          p: '10px 0',
+          gap: '10px',
+        }}>
+        <Toolbar className='goods-search-toolbar'
+          sx={{p: '0px!important', minHeight: 'unset!important'}}>
+          <Search sx={{m: '0!important'}}>
+            <SearchIconWrapper>
+              <SearchIcon/>
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder='Найти товар…'
+              inputProps={{'aria-label': 'search'}}
+              onChange={e => setSearchWord(e.target.value)}
+            />
+          </Search>
+        </Toolbar>
+        <Box sx={{
+          m: '0 0 0 auto',
+          display: "flex",
+          alignItems: 'center',
+          flexWrap: 'no-wrap'
+        }}>
+          <Typography variant='body1'
+            component='span'
+            sx={{mr: '10px'}}>Сортировка по:</Typography>
+          <Select
+            labelId='demo-simple-select-filled-label'
+            id='demo-simple-select-filled'
+            value={sortBy}
+            onChange={handleSortByChange}
+            sx={{color: '#FFFFFF', minWidth: '175px'}}
+          >
+            <MenuItem value='manufacture'>производитель (А-Я)</MenuItem>
+            <MenuItem value='model'>модель (А-Я)</MenuItem>
+            <MenuItem value='cost-increase'>цена (по возрастанию)</MenuItem>
+            <MenuItem value='cost-decrease'>цена (по убыванию)</MenuItem>
+            <MenuItem value='status-in-storage'>статус: на складе</MenuItem>
+            <MenuItem value='status-nu'>статус: у НУ</MenuItem>
+            <MenuItem value='status-si'>статус: у СИ</MenuItem>
+          </Select>
+        </Box>
+        <Box className='goods-list-tools'>
+          <CustomIconButton size='large'>
+            <AddIcon/>
+          </CustomIconButton>
+        </Box>
+      </AppBar>
+    </Box>
+    <TableContainer sx={{maxHeight: 530}}>
+      <Suspense fallback={<></>}>
+        <GoodsListTable
+          filteredGoodsList={filteredGoodsList}
+          checkBoxColumn={checkBoxColumn}
+          columns={columns}
+          goodsLoading={goodsLoading}
+        />
+      </Suspense>
+    </TableContainer>
+  </Paper>);
 });
 
 export default GoodsList;
