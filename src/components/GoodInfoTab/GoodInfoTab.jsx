@@ -10,11 +10,17 @@ const GoodInfoTab = ({
     <Paper className='single-good-outer-paper' elevation={3}>
       {goodLoading ? <>
         <Skeleton variant='text'
-          sx={{fontSize: '8rem', maxWidth: '200px', transform: 'unset',}}/>
+          className='single-good-info-skeleton'
+          sx={{fontSize: '8rem',}}
+        />
         <Skeleton variant='text'
-          sx={{fontSize: '1.2rem', maxWidth: '200px', transform: 'unset'}}/>
+          className='single-good-info-skeleton'
+          sx={{fontSize: '1.2rem',}}
+        />
         <Skeleton variant='text'
-          sx={{fontSize: '1rem', maxWidth: '200px', transform: 'unset'}}/>
+          className='single-good-info-skeleton'
+          sx={{fontSize: '1rem',}}
+        />
       </> : <>
         <img
           className='single-good-img'
@@ -25,10 +31,10 @@ const GoodInfoTab = ({
         <Box sx={{mt: 1}}>
           <Typography className='single-good-title'
             component='h5'
-            variant='h5'>{good?.manufacture}</Typography>
+            variant='h5'>{good?.product?.manufacture?.name}</Typography>
           <Typography className='single-good-value'
-            component='body2'
-            variant='body2'>{good?.model}</Typography>
+            component='span'
+            variant='body2'>{good?.product?.model?.name}</Typography>
         </Box>
       </>}
     </Paper>
@@ -64,21 +70,21 @@ const GoodInfoTab = ({
             <Typography component='span'
               variant='body1'><strong>производитель</strong></Typography>
             <Typography component='span'
-              variant='body2'>{good?.manufacture}</Typography>
+              variant='body2'>{good?.product?.manufacture?.name}</Typography>
           </div>
           <div className='single-good-info-divider'></div>
           <div className='single-good-info-row'>
             <Typography component='span'
               variant='body1'><strong>Модель</strong></Typography>
             <Typography component='span'
-              variant='body2'>{good?.model}</Typography>
+              variant='body2'>{good?.product?.model?.name}</Typography>
           </div>
           <div className='single-good-info-divider'></div>
           <div className='single-good-info-row'>
             <Typography component='span'
               variant='body1'><strong>Цена</strong></Typography>
             <Typography component='span'
-              variant='body2'>{good?.cost}</Typography>
+              variant='body2'>{good?.product?.cost}</Typography>
           </div>
           <div className='single-good-info-divider'></div>
           <div className='single-good-info-row'>

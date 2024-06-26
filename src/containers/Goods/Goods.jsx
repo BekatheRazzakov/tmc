@@ -6,8 +6,8 @@ import { useAppSelector } from "../../app/hooks";
 import GoodsStatusPapers
   from "../../components/GoodsStatusPapers/GoodsStatusPapers";
 import GoodsList from "../../components/GoodsList/GoodsList";
-import './goods.css';
 import { Snackbar } from "@mui/material";
+import './goods.css';
 
 const Goods = () => {
   const dispatch = useDispatch();

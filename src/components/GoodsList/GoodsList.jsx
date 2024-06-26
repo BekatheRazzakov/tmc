@@ -59,15 +59,23 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
 }));
 
 const columns = [{
-  id: 'manufacture', label: 'Производитель', minWidth: 70, align: 'center',
+  id: 'product',
+  label: 'Производитель',
+  minWidth: 70,
+  align: 'center',
+  format: (value) => value?.manufacture?.name,
 }, {
-  id: 'model', label: 'Модель', minWidth: 170, align: 'center',
+  id: 'product',
+  label: 'Модель',
+  minWidth: 170,
+  align: 'center',
+  format: (value) => value?.model?.name,
 }, {
-  id: 'cost',
+  id: 'product',
   label: 'Цена',
   minWidth: 100,
   align: 'center',
-  format: (value) => <span>{value}
+  format: (value) => <span>{value?.cost}
     <span style={{textDecoration: 'underline'}}>c</span></span>,
 }, {
   id: 'good_status_id',
@@ -99,15 +107,15 @@ const GoodsList = memo(({goods}) => {
   };
   
   const sortedByManufacture = useCallback(() => {
-    return (goods || []).sort((a, b) => a?.manufacture?.localeCompare(b?.manufacture));
+    return (goods || []).sort((a, b) => a?.product?.manufacture?.name?.localeCompare(b?.product?.manufacture?.name));
   }, [goods]);
   
   const sortedByModel = useCallback(() => {
-    return (goods || []).sort((a, b) => a?.model?.localeCompare(b?.model));
+    return (goods || []).sort((a, b) => a?.product?.model?.name?.localeCompare(b?.product?.model?.name));
   }, [goods]);
   
   const sortedByCost = useCallback(() => {
-    return (goods || []).sort((a, b) => a.cost - b.cost);
+    return (goods || []).sort((a, b) => a?.product?.cost - b?.product?.cost);
   }, [goods]);
   
   const sortedByStatusInStorage = useCallback(() => {
@@ -124,7 +132,7 @@ const GoodsList = memo(({goods}) => {
   
   const filteredGoodsList = useCallback(() => {
     const sortedGoods = (sortBy === 'manufacture' ? sortedByManufacture() : sortBy === 'model' ? sortedByModel() : sortBy === 'cost-increase' ? sortedByCost() : sortBy === 'cost-decrease' ? sortedByCost().reverse() : sortBy === 'status-in-storage' ? sortedByStatusInStorage() : sortBy === 'status-nu' ? sortedByStatusNU() : sortBy === 'status-si' ? sortedByStatusSI() : []);
-    return sortedGoods.filter(good => good?.manufacture?.toLowerCase().includes(searchWord?.toLowerCase()) || good?.model?.toLowerCase().includes(searchWord?.toLowerCase()) || good?.cost?.toString().includes(searchWord));
+    return sortedGoods.filter(good => good?.product?.manufacture?.name.toLowerCase().includes(searchWord?.toLowerCase()) || good?.product?.model?.name.toLowerCase().includes(searchWord?.toLowerCase()) || good?.product?.cost?.toString().includes(searchWord));
   }, [searchWord, sortBy, sortedByCost, sortedByManufacture, sortedByModel, sortedByStatusInStorage, sortedByStatusNU, sortedByStatusSI]);
   
   const checkBoxColumn = useCallback(id => {

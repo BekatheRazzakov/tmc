@@ -5,6 +5,8 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useParams } from "react-router-dom";
 import { Box, Paper, Tab, Tabs } from "@mui/material";
 import './singleGood.css';
+import SingleGoodDeleteTab
+  from "../../components/SingleGoodDeleteTab/SingleGoodDeleteTab";
 
 const GoodInfoTab = lazy(() => import('../../components/GoodInfoTab/GoodInfoTab'));
 
@@ -57,9 +59,9 @@ const SingleGood = () => {
       </Suspense>
     </div>
     <Paper sx={{p: '40px', display: value === 1 ? 'block' : 'none'}}
-      elevation={3}>hello1</Paper>
-    <Paper sx={{p: '40px', display: value === 2 ? 'block' : 'none'}}
-      elevation={3}>Hello2</Paper>
+      elevation={3}>Tab 2</Paper>
+    <Paper className="single-good-delete-warning-paper" sx={{p: '40px', display: value === 2 ? 'block' : 'none'}}
+      elevation={3}><SingleGoodDeleteTab/></Paper>
   </div>);
 };
 
