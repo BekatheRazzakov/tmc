@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import Goods from "./containers/Goods/Goods";
 import SingleGood from "./containers/SingleGood/SingleGood";
 import './App.css';
+import NewGood from "./containers/NewGood/NewGood";
 
 function App() {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ function App() {
         <Route path='sign-in' element={<SignIn/>}/>
         <Route path='goods' element={<Goods/>}/>
         <Route path='good/:id' element={<SingleGood/>}/>
+        <Route path='create-good' element={<NewGood/>}/>
       </Routes>
     </div>
   );
