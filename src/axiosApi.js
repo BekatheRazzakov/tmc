@@ -7,7 +7,7 @@ export const addInterceptors = (store) => {
     const isSignUp = url?.includes("/register");
     const isSignIn = url?.includes("/login");
     if (!isSignUp && !isSignIn) {
-      const token = store.getState().userState?.user;
+      const {token} = store.getState().userState?.user;
       const headers = config.headers;
       headers.set('Authorization', `Token ${token}`);
     }

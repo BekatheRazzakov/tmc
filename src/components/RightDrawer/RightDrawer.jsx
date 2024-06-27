@@ -45,12 +45,12 @@ const RightDrawer = memo(() => {
         <Box sx={{display: 'flex', alignItems: 'center', gap: '15px'}}>
           <Avatar
             className='right-drawer-avatar'
-            alt={user}
+            alt={user.username}
             src={PersonIcon}
             sx={{bgcolor: deepPurple[500],}}
           />
           <Typography variant='h6' component='h6'>
-            {user}
+            {user.username}
           </Typography>
         </Box>
       </ListItemButton>

@@ -3,21 +3,21 @@ import axiosApi from "../axiosApi";
 import { isAxiosError } from "axios";
 
 export const getGoods = createAsyncThunk("data/getGoods", async (data, {rejectWithValue}) => {
-  //try {
-  //const response = await axiosApi("goods/", data);
-  //return response.data;
-  //} catch (e) {
-  //  if (isAxiosError(e) && e.response && e.response.status === 400) {
-  //    return rejectWithValue(e.response.data);
-  //  }
-  //  throw e;
-  //}
-  const getData = new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(goodsList);
-    }, 2000);
-  });
-  return await getData;
+  try {
+  const response = await axiosApi("goods/", data);
+  return response.data;
+  } catch (e) {
+    if (isAxiosError(e) && e.response && e.response.status === 400) {
+      return rejectWithValue(e.response.data);
+    }
+    throw e;
+  }
+  //const getData = new Promise((resolve) => {
+  //  setTimeout(() => {
+  //    resolve(goodsList);
+  //  }, 2000);
+  //});
+  //return await getData;
 });
 
 export const getGood = createAsyncThunk("data/getGood", async (id, {rejectWithValue}) => {

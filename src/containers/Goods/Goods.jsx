@@ -14,9 +14,9 @@ const Goods = () => {
   const {goods, goodsError} = useAppSelector(state => state.dataState);
   const [itemPaperStatus, setItemPaperStatus] = useState(1);
   const [snackBarOpen, setSnackBarOpen] = useState(false);
-  const totalGoodsCost = goods?.reduce((acc, value) => acc + value?.cost, 0) || 0;
   
-  const getGoodsAmountByStatus = useCallback(() => goods?.filter(good => good?.good_status_id === itemPaperStatus)?.length, [goods, itemPaperStatus]);
+  const totalGoodsCost = goods?.reduce((acc, value) => acc + value?.cost, 0) || 0;
+  const getGoodsAmountByStatus = useCallback(() => goods?.filter(good => good?.good_status?.id === itemPaperStatus)?.length, [goods, itemPaperStatus]);
   const getGoodsAmount = useCallback(() => goods?.length, [goods]);
   
   useEffect(() => {
@@ -33,21 +33,21 @@ const Goods = () => {
   const handleClose = () => setSnackBarOpen(false);
   
   return (<div className='goods'>
-      <GoodsStatusPapers
-        totalGoodsCost={totalGoodsCost}
-        getGoodsAmount={getGoodsAmount}
-        getGoodsAmountByStatus={getGoodsAmountByStatus}
-        itemPaperStatus={itemPaperStatus}
-        onPaperStatusChange={onPaperStatusChange}
-      />
-      <GoodsList goods={[...goods] || []}/>
-      <Snackbar
-        anchorOrigin={{vertical: 'top', horizontal: 'center'}}
-        open={snackBarOpen}
-        onClose={handleClose}
-        message={goodsError}
-      />
-    </div>);
+    <GoodsStatusPapers
+      totalGoodsCost={totalGoodsCost}
+      getGoodsAmount={getGoodsAmount}
+      getGoodsAmountByStatus={getGoodsAmountByStatus}
+      itemPaperStatus={itemPaperStatus}
+      onPaperStatusChange={onPaperStatusChange}
+    />
+    <GoodsList goods={[...goods] || []}/>
+    <Snackbar
+      anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+      open={snackBarOpen}
+      onClose={handleClose}
+      message={goodsError}
+    />
+  </div>);
 };
 
 export default Goods;

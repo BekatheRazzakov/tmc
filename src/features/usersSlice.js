@@ -18,14 +18,14 @@ const UsersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(signIn.pending, (state) => {
-      state.user = '';
+      state.user = null;
       state.authorizationError = '';
       state.authorizationMessage = '';
       state.signInLoading = true;
     });
     builder.addCase(signIn.fulfilled, (state, {payload: res}) => {
       state.signInLoading = false;
-      state.user = res?.token || '' || res;
+      state.user = res || null;
       state.authorizationMessage = res?.message || 'Вы вошли в аккаунт';
     });
     builder.addCase(signIn.rejected, (state, {payload: error}) => {

@@ -17,18 +17,18 @@ import NewGood from "./containers/NewGood/NewGood";
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
-  const userToken = useAppSelector((state) => state.userState.user);
+  const user = useAppSelector((state) => state.userState.user);
   
   useEffect(() => {
-    if (!userToken) navigate('/sign-in');
-  }, [navigate, userToken, location.pathname]);
+    if (!user) navigate('/sign-in');
+  }, [navigate, user, location.pathname]);
   
   return (
     <div className='App'>
       <UserToolbar/>
       <Routes>
         <Route path='*'
-          element={userToken ? <Navigate to='/goods' replace/> :
+          element={user ? <Navigate to='/goods' replace/> :
             <Navigate to='/sign-in' replace/>}/>
         <Route path='sign-in' element={<SignIn/>}/>
         <Route path='goods' element={<Goods/>}/>

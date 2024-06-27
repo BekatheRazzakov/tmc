@@ -23,7 +23,7 @@ const SignIn = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const userToken = useAppSelector((state) => state.userState.user);
+  const user = useAppSelector((state) => state.userState.user);
   const authError = useAppSelector((state) => state.userState.authorizationError);
   const authLoading = useAppSelector((state) => state.userState.signInLoading);
   const [state, setState] = useState({
@@ -37,8 +37,8 @@ const SignIn = () => {
   }, [dispatch]);
   
   useEffect(() => {
-    if (userToken) navigate('/goods');
-  }, [navigate, userToken, location.pathname]);
+    if (user) navigate('/goods');
+  }, [navigate, user, location.pathname]);
   
   const inputChangeHandler = (event) => {
     const {name, value} = event.target;
