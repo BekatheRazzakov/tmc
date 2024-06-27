@@ -15,7 +15,7 @@ const Goods = () => {
   const [itemPaperStatus, setItemPaperStatus] = useState(1);
   const [snackBarOpen, setSnackBarOpen] = useState(false);
   
-  const totalGoodsCost = goods?.reduce((acc, value) => acc + value?.cost, 0) || 0;
+  const totalGoodsCost = goods?.reduce((acc, value) => acc + value?.product?.cost, 0) || 0;
   const getGoodsAmountByStatus = useCallback(() => goods?.filter(good => good?.good_status?.id === itemPaperStatus)?.length, [goods, itemPaperStatus]);
   const getGoodsAmount = useCallback(() => goods?.length, [goods]);
   

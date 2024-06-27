@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Chip, Paper, Snackbar, Typography } from "@mui/material";
 import Skeleton from "@mui/material/Skeleton";
 import notFoundImage from "../../assets/not-found-img.png";
+import { goodStatuses } from "../../constants";
 
 const GoodInfoTab = ({
                        good, goodLoading, goodError, snackBarOpen, handleClose
@@ -99,8 +100,8 @@ const GoodInfoTab = ({
               variant='body1'><strong>Статус</strong></Typography>
             <Typography component='span' variant='body2'>
               {<Chip
-                color={good?.good_status_id === 1 ? 'primary' : good?.good_status_id === 2 ? 'secondary' : good?.good_status_id === 3 ? 'warning' : good?.good_status_id === 4 ? 'success' : 'default'}
-                label={good?.good_status_id === 1 ? 'на складе' : good?.good_status_id === 2 ? 'у начальника участка' : good?.good_status_id === 3 ? 'у сервис инженера' : good?.good_status_id === 4 ? 'у абонента' : '-'}
+                color={goodStatuses[good?.good_status?.id - 1].color || 'default'}
+                label={goodStatuses[good?.good_status?.id - 1].value ||  '-'}
                 size='small'
               />}
             </Typography>

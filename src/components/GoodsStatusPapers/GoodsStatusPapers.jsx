@@ -112,7 +112,7 @@ const GoodsStatusPapers = memo((
               label='Статус'
             >
               {
-                goodStatuses.map(status => (
+                goodStatuses.filter(status => status.isAvailable).map(status => (
                   <MenuItem value={status.name}>{status.value}</MenuItem>
                 ))
               }

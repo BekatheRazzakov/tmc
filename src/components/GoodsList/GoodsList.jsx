@@ -18,6 +18,7 @@ import InputBase from '@mui/material/InputBase';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAllGoodsSelected, setGoodSelected } from "../../features/dataSlice";
 import AddIcon from '@mui/icons-material/Add';
+import { goodStatuses } from "../../constants";
 
 const GoodsListTable = lazy(() => import('../GoodListTable/GoodsListTable'));
 
@@ -58,36 +59,38 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
   },
 }));
 
-const columns = [{
-  id: 'product',
-  label: 'Производитель',
-  minWidth: 70,
-  align: 'center',
-  format: (value) => value?.manufacture?.name,
-}, {
-  id: 'product',
-  label: 'Модель',
-  minWidth: 170,
-  align: 'center',
-  format: (value) => value?.model?.name,
-}, {
-  id: 'product',
-  label: 'Цена',
-  minWidth: 100,
-  align: 'center',
-  format: (value) => <span>{value?.cost}
-    <span style={{textDecoration: 'underline'}}>c</span></span>,
-}, {
-  id: 'good_status_id',
-  label: 'Статус',
-  minWidth: 200,
-  align: 'center',
-  format: (value) => <Chip
-    label={value === 1 ? 'На складе' : value === 2 ? 'У начальника участка' : value === 3 ? 'У СИ' : value === 4 ? 'У абонента' : '-'}
-    color={value === 1 ? 'primary' : value === 2 ? 'secondary' : value === 3 ? 'warning' : value === 4 ? 'success' : 'default'}
-    sx={{height: '22px', fontSize: '12px', lineHeight: '12px',}}
-  />,
-}, {id: 'barcode', label: 'Штрих код', minWidth: 120, align: 'center',},];
+const columns = [
+  {
+    id: 'product',
+    label: 'Производитель',
+    minWidth: 70,
+    align: 'center',
+    format: (value) => value?.manufacture?.name,
+  }, {
+    id: 'product',
+    label: 'Модель',
+    minWidth: 170,
+    align: 'center',
+    format: (value) => value?.model?.name,
+  }, {
+    id: 'product',
+    label: 'Цена',
+    minWidth: 100,
+    align: 'center',
+    format: (value) => <span>{value?.cost}
+      <span style={{textDecoration: 'underline'}}>c</span></span>,
+  }, {
+    id: 'good_status',
+    label: 'Статус',
+    minWidth: 200,
+    align: 'center',
+    format: (value) => <Chip
+      label={goodStatuses[value?.id - 1].value || ''}
+      color={goodStatuses[value?.id - 1].color || 'default'}
+      sx={{height: '22px', fontSize: '12px', lineHeight: '12px',}}
+    />,
+  }, {id: 'barcode', label: 'Штрих код', minWidth: 120, align: 'center',},
+];
 
 const CustomIconButton = styled(IconButton)({
   color: 'white', '&:hover': {
@@ -99,7 +102,7 @@ const GoodsList = memo(({goods}) => {
   const dispatch = useDispatch();
   
   const [searchWord, setSearchWord] = useState('');
-  const [sortBy, setSortBy] = useState('manufacture');
+  const [sortBy, setSortBy] = useState('none');
   const {goodsLoading} = useSelector(state => state.dataState);
   
   const handleSortByChange = (e) => {
@@ -119,21 +122,25 @@ const GoodsList = memo(({goods}) => {
   }, [goods]);
   
   const sortedByStatusInStorage = useCallback(() => {
-    return (goods || []).filter(good => good.good_status_id === 1);
+    return (goods || []).filter(good => good?.good_status?.id === 1);
   }, [goods]);
   
   const sortedByStatusNU = useCallback(() => {
-    return (goods || []).filter(good => good.good_status_id === 2);
+    return (goods || []).filter(good => good?.good_status?.id === 2);
   }, [goods]);
   
   const sortedByStatusSI = useCallback(() => {
-    return (goods || []).filter(good => good.good_status_id === 3);
+    return (goods || []).filter(good => good?.good_status?.id === 3);
+  }, [goods]);
+  
+  const sortedByStatusAtAbon = useCallback(() => {
+    return (goods || []).filter(good => good?.good_status?.id === 4);
   }, [goods]);
   
   const filteredGoodsList = useCallback(() => {
-    const sortedGoods = (sortBy === 'manufacture' ? sortedByManufacture() : sortBy === 'model' ? sortedByModel() : sortBy === 'cost-increase' ? sortedByCost() : sortBy === 'cost-decrease' ? sortedByCost().reverse() : sortBy === 'status-in-storage' ? sortedByStatusInStorage() : sortBy === 'status-nu' ? sortedByStatusNU() : sortBy === 'status-si' ? sortedByStatusSI() : []);
+    const sortedGoods = (sortBy === 'manufacture' ? sortedByManufacture() : sortBy === 'model' ? sortedByModel() : sortBy === 'cost-increase' ? sortedByCost() : sortBy === 'cost-decrease' ? sortedByCost().reverse() : sortBy === 'status-in-storage' ? sortedByStatusInStorage() : sortBy === 'status-nu' ? sortedByStatusNU() : sortBy === 'status-si' ? sortedByStatusSI() : sortBy === 'status-at-abon' ? sortedByStatusAtAbon() : sortBy === 'none' ? goods : []);
     return sortedGoods.filter(good => good?.product?.manufacture?.name.toLowerCase().includes(searchWord?.toLowerCase()) || good?.product?.model?.name.toLowerCase().includes(searchWord?.toLowerCase()) || good?.product?.cost?.toString().includes(searchWord));
-  }, [searchWord, sortBy, sortedByCost, sortedByManufacture, sortedByModel, sortedByStatusInStorage, sortedByStatusNU, sortedByStatusSI]);
+  }, [goods, searchWord, sortBy, sortedByCost, sortedByManufacture, sortedByModel, sortedByStatusAtAbon, sortedByStatusInStorage, sortedByStatusNU, sortedByStatusSI]);
   
   const checkBoxColumn = useCallback(id => {
     const allChecked = filteredGoodsList().filter(good => good.selected === 1).length === filteredGoodsList().length;
@@ -203,13 +210,14 @@ const GoodsList = memo(({goods}) => {
             onChange={handleSortByChange}
             sx={{color: '#FFFFFF', minWidth: '175px'}}
           >
+            <MenuItem value='none'>без сортировки</MenuItem>
             <MenuItem value='manufacture'>производитель (А-Я)</MenuItem>
             <MenuItem value='model'>модель (А-Я)</MenuItem>
             <MenuItem value='cost-increase'>цена (по возрастанию)</MenuItem>
             <MenuItem value='cost-decrease'>цена (по убыванию)</MenuItem>
-            <MenuItem value='status-in-storage'>статус: на складе</MenuItem>
-            <MenuItem value='status-nu'>статус: у НУ</MenuItem>
-            <MenuItem value='status-si'>статус: у СИ</MenuItem>
+            {goodStatuses.filter(status => status.isAvailable).map(status => (
+              <MenuItem value={status.className}>статус: {status.value}</MenuItem>))
+            }
           </Select>
         </Box>
         <Box className='goods-list-tools'>

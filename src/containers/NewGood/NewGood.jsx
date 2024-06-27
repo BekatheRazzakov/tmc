@@ -1,18 +1,12 @@
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import {
-  Box,
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  TextField
+  Box, Button, FormControl, InputLabel, MenuItem, Paper, Select, TextField
 } from "@mui/material";
 import { useAppDispatch } from "../../app/hooks";
 import { setCurrentPage } from "../../features/dataSlice";
 import { categories } from "../../constants";
 import './newGood.css';
+import { createGood } from "../../features/dataThunk";
 
 const FileUpload = lazy(() => import("../../components/FileUpload/FileUpload"));
 
@@ -39,31 +33,30 @@ const NewGood = () => {
   };
   
   const onSubmit = (e) => {
-    e.target.preventDefault();
+    e.preventDefault();
+    dispatch(createGood(state))
   };
   
   return (<div className='new-good-form-container'>
     <Paper className='new-good-form-paper' elevation={3}>
       <Box className='new-good-form'
         component='form'
-        onSubmit={handleChange}>
+        onSubmit={onSubmit}>
         <FormControl required>
-          <InputLabel id="demo-simple-select-required-label">Категорий</InputLabel>
+          <InputLabel id='demo-simple-select-required-label'>Категорий</InputLabel>
           <Select
-            labelId="demo-simple-select-required-label"
-            id="demo-simple-select-required"
+            labelId='demo-simple-select-required-label'
+            id='demo-simple-select-required'
             value={state.product_type}
-            label="Категорий"
+            label='Категорий'
+            name="product_type"
             onChange={handleChange}
           >
-            <MenuItem value="">
+            <MenuItem value=''>
               <em>Выберите категорий</em>
             </MenuItem>
-            {
-              categories.map(category => (
-                <MenuItem value={category.name}>{category.value}</MenuItem>
-              ))
-            }
+            {categories.map(category => (
+              <MenuItem value={category.name}>{category.value}</MenuItem>))}
           </Select>
         </FormControl>
         <TextField

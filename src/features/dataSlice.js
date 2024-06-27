@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getGood, getGoods } from "./dataThunk";
+import { createGood, getGood, getGoods } from "./dataThunk";
 
 const initialState = {
   currentPage: '',
@@ -14,7 +14,7 @@ const initialState = {
 };
 
 const DataSlice = createSlice({
-  name: "user",
+  name: "data",
   initialState,
   reducers: {
     setCurrentPage: (state, action) => {
@@ -66,6 +66,13 @@ const DataSlice = createSlice({
     builder.addCase(getGood.rejected, (state, {payload: error}) => {
       state.goodLoading = false;
       state.goodError = error?.error || 'Что-то пошло не так';
+    });
+    
+    builder.addCase(createGood.pending, (state) => {
+    });
+    builder.addCase(createGood.fulfilled, (state, {payload: res}) => {
+    });
+    builder.addCase(createGood.rejected, (state, {payload: error}) => {
     });
   },
 });
