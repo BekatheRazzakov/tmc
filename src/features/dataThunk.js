@@ -40,13 +40,25 @@ export const getGood = createAsyncThunk("data/getGood", async (id, {rejectWithVa
 
 export const createGood = createAsyncThunk('data/createGood', async (data, {rejectValue}) => {
   try {
-    const formData = new FormData();
-    console.log(data);
+    const createItemForm = {
+      product_manufacture_id: data?.product_manufacture_id,
+      product_model_id: data?.product_model_id,
+      cost: Number(data?.cost),
+    };
+    const createGoodForm = new FormData();
+
+    const reqToModel = await axiosApi.post(`${data.product_type}/`, createItemForm);
+    const resFromModel = await reqToModel.data;
+
+    createGoodForm.append('nazvanie_id', resFromModel?.id);
+    createGoodForm.append('barcode', data?.barcode);
+    createGoodForm.append('good_status_id', data?.good_status_id);
+    createGoodForm.append('product_type', data?.product_type);
+    createGoodForm.append('photo_path', null);
+    createGoodForm.append('deleted', null);
     
-    formData.append('', '');
-    const req = await axiosApi.post(`${data.product_type}/`);
-    const res = await req.data;
-    console.log(res);
+    const reqToGoods = await axiosApi.post(`goods/`, createGoodForm);
+    const resFromGoods = await reqToGoods.data;
   } catch (e) {
     throw e;
   }

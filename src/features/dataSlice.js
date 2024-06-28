@@ -8,8 +8,10 @@ const initialState = {
   good: null,
   goodsLoading: false,
   goodLoading: false,
+  createGoodLoading: false,
   goodsError: '',
   goodError: '',
+  createGoodError: false,
   goodNotFound: false,
 };
 
@@ -69,10 +71,13 @@ const DataSlice = createSlice({
     });
     
     builder.addCase(createGood.pending, (state) => {
+      state.createGoodLoading = true;
     });
     builder.addCase(createGood.fulfilled, (state, {payload: res}) => {
+      state.createGoodLoading = false;
     });
     builder.addCase(createGood.rejected, (state, {payload: error}) => {
+      state.createGoodLoading = false;
     });
   },
 });

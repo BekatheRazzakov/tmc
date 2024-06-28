@@ -6,11 +6,8 @@ import Skeleton from "@mui/material/Skeleton";
 import { useNavigate } from "react-router-dom";
 
 const GoodsListTable = memo(({
-                               checkBoxColumn,
-                               columns,
-                               goodsLoading,
-                               filteredGoodsList
-                             }) => {
+  checkBoxColumn, columns, goodsLoading, filteredGoodsList
+}) => {
   const navigate = useNavigate();
   
   return (<Table stickyHeader aria-label='sticky table'>
