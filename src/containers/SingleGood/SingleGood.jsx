@@ -8,6 +8,7 @@ import './singleGood.css';
 import SingleGoodDeleteTab
   from "../../components/SingleGoodDeleteTab/SingleGoodDeleteTab";
 
+const CreateEditGoodForm = lazy(() => import("../../components/CreateEditGoodForm/CreateEditGoodForm"));
 const GoodInfoTab = lazy(() => import('../../components/GoodInfoTab/GoodInfoTab'));
 
 const SingleGood = () => {
@@ -46,8 +47,7 @@ const SingleGood = () => {
         <Tab className='single-good-tab-btn' label='Удалить'/>
       </Tabs>
     </Box>
-    <div className='single-good-page-papers'
-      style={{display: value === 0 ? 'flex' : 'none'}}>
+    {value === 0 ? <div className='single-good-page-papers'>
       <Suspense fallback={<></>}>
         <GoodInfoTab
           good={good}
@@ -57,11 +57,17 @@ const SingleGood = () => {
           handleClose={handleSnackBarClose}
         />
       </Suspense>
-    </div>
-    <Paper sx={{p: '40px', display: value === 1 ? 'block' : 'none'}}
-      elevation={3}>Tab 2</Paper>
-    <Paper className="single-good-delete-warning-paper" sx={{p: '40px', display: value === 2 ? 'block' : 'none'}}
-      elevation={3}><SingleGoodDeleteTab/></Paper>
+    </div> : value === 1 ? <Paper
+      className='single-good-edit-paper'
+      elevation={3}>
+      <Suspense fallback={<></>}>
+        <CreateEditGoodForm isEdit/>
+      </Suspense>
+    </Paper> : value === 2 ? <Paper className='single-good-delete-warning-paper'
+      sx={{p: '40px',}}
+      elevation={3}>
+      <SingleGoodDeleteTab/>
+    </Paper> : null}
   </div>);
 };
 

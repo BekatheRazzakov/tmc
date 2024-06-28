@@ -1,27 +1,32 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 import {
-  Box, FormControl, InputLabel, MenuItem, Select, TextField
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField
 } from "@mui/material";
 import {
-  categories, goodStatuses, manufactures, models
+  categories,
+  goodStatuses,
+  manufactures,
+  models
 } from "../../constants";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { setCurrentPage } from "../../features/dataSlice";
 import { createGood } from "../../features/dataThunk";
 import { useParams } from "react-router-dom";
 
 const FileUpload = lazy(() => import("../../components/FileUpload/FileUpload"));
 
-const CreateEditGoodForm = () => {
+const CreateEditGoodForm = ({isEdit}) => {
   const params = useParams();
   const dispatch = useAppDispatch();
-  const [state, setState] = useState({});
+  const [state, setState] = useState({
+    id: params?.id || null,
+  });
   const {createGoodLoading} = useAppSelector(state => state.dataState);
-  
-  useEffect(() => {
-    dispatch(setCurrentPage('Создать товар'));
-  }, [dispatch]);
   
   const handleChange = (e) => {
     const {name, value} = e.target;
@@ -37,13 +42,19 @@ const CreateEditGoodForm = () => {
     }));
   };
   
-  const onSubmit = (e) => {
-    e.preventDefault();
-    if (!state.product_type || !state.product_manufacture_id || !state.product_model_id || !state.good_status_id || !state.cost || !state.barcode) return;
-    dispatch(createGood(state));
+  const removeImage = () => {
+    setState((prevState) => ({
+      ...prevState, photo_path: null,
+    }));
   };
   
-  console.log(params?.id);
+  const onSubmit = (e) => {
+    e.preventDefault();
+    //if (!state.product_type || !state.product_manufacture_id || !state.product_model_id || !state.good_status_id || !state.cost || !state.barcode) return;
+    //if (isEdit) {
+    //  dispatch(createGood(state));
+    //} else dispatch(createGood(state));
+  };
   
   return (<Box className='new-good-form'
     component='form'
@@ -128,14 +139,16 @@ const CreateEditGoodForm = () => {
     <Suspense fallback={<></>}>
       <FileUpload label='фото товара'
         file={state?.photo_path}
-        handleFileChange={handleFileChange}/>
+        handleFileChange={handleFileChange}
+        removeImage={removeImage}
+      />
     </Suspense>
     <LoadingButton
       type='submit' fullWidth variant='contained' sx={{mt: 3, mb: 2}}
       disabled={!state.product_type || !state.product_manufacture_id || !state.product_model_id || !state.good_status_id || !state.cost || !state.barcode}
       loading={createGoodLoading}
     >
-      Создать
+      {isEdit ? 'Сохранить' : 'Создать'}
     </LoadingButton>
   </Box>);
 };

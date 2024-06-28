@@ -18,11 +18,8 @@
   max-height: 120px;
 }
 
-.new-good-img-preview-box {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
+.good-form-delete-image span {
+  margin: 0;
 }
 
 @media (max-width: 540px) {
