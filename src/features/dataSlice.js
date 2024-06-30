@@ -5,7 +5,7 @@ import {
   getGood,
   getGoods,
   getManufactures,
-  getModels,
+  getModels, deleteGood,
 } from "./dataThunk";
 
 const initialState = {
@@ -18,18 +18,21 @@ const initialState = {
   goodsLoading: false,
   goodLoading: false,
   createGoodLoading: false,
-  createGoodError: false,
-  goodIsCreated: false,
-  goodIsUpdated: false,
-  updateGoodLoading: false,
-  updateGoodError: false,
-  goodNotFound: false,
   modelsLoading: false,
   manufacturesLoading: false,
+  deleteGoodLoading: false,
+  createGoodError: false,
+  updateGoodLoading: false,
+  updateGoodError: false,
+  deleteGoodError: false,
   goodsError: '',
   goodError: '',
   createGoodErrorMessage: '',
   updateGoodErrorMessage: '',
+  deleteGoodErrorMessage: '',
+  goodIsCreated: false,
+  goodIsUpdated: false,
+  goodNotFound: false,
 };
 
 const DataSlice = createSlice({
@@ -48,9 +51,6 @@ const DataSlice = createSlice({
     }, resetCreateGoodData: (state) => {
       state.createGoodError = false;
       state.createGoodErrorMessage = '';
-    },
-    resetSingleGoodData: (state) => {
-      state.good = null;
     },
     setGoodIsCreated: (state, action) => {
       state.goodIsCreated = action.payload;
@@ -146,6 +146,20 @@ const DataSlice = createSlice({
     builder.addCase(getManufactures.rejected, (state, {payload: error}) => {
       state.manufacturesLoading = false;
     });
+    
+    builder.addCase(deleteGood.pending, (state) => {
+      state.deleteGoodLoading = true;
+      state.deleteGoodError = false;
+      state.deleteGoodErrorMessage = '';
+    });
+    builder.addCase(deleteGood.fulfilled, (state, {payload: res}) => {
+      state.deleteGoodLoading = false;
+    });
+    builder.addCase(deleteGood.rejected, (state, {payload: error}) => {
+      state.deleteGoodLoading = false;
+      state.deleteGoodError = true;
+      state.deleteGoodErrorMessage = error || 'Что-то пошло не так. Попробуйте позже';
+    });
   },
 });
 
@@ -156,7 +170,6 @@ export const {
   setGoodSelected,
   setAllGoodsSelected,
   resetCreateGoodData,
-  resetSingleGoodData,
   setGoodIsCreated,
   setGoodIsUpdated,
 } = DataSlice.actions;

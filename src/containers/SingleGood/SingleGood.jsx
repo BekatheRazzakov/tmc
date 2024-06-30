@@ -15,7 +15,7 @@ const SingleGood = () => {
   const params = useParams();
   const dispatch = useAppDispatch();
   const {
-    good, goodLoading, goodError
+    good, goodLoading, goodError, deleteGoodError, deleteGoodErrorMessage,
   } = useAppSelector(state => state.dataState);
   const [snackBarOpen, setSnackBarOpen] = useState(false);
   const [value, setValue] = React.useState(0);
@@ -26,8 +26,8 @@ const SingleGood = () => {
   }, [dispatch, params.id]);
   
   useEffect(() => {
-    if (goodError) setSnackBarOpen(true);
-  }, [goodError]);
+    if (goodError || deleteGoodError) setSnackBarOpen(true);
+  }, [goodError, deleteGoodError]);
   
   const handleSnackBarClose = () => setSnackBarOpen(false);
   
@@ -63,13 +63,13 @@ const SingleGood = () => {
     </Paper> : value === 2 ? <Paper className='single-good-delete-warning-paper'
       sx={{p: '40px',}}
       elevation={3}>
-      <SingleGoodDeleteTab/>
+      <SingleGoodDeleteTab goodId={good?.id}/>
     </Paper> : null}
     <Snackbar
       anchorOrigin={{vertical: 'top', horizontal: 'center'}}
       open={snackBarOpen}
       onClose={handleSnackBarClose}
-      message={goodError}
+      message={goodError || deleteGoodErrorMessage}
     />
   </div>);
 };
