@@ -4,7 +4,7 @@ import { isAxiosError } from "axios";
 
 export const getGoods = createAsyncThunk("data/getGoods", async (data, {rejectWithValue}) => {
   try {
-    const response = await axiosApi("goods/", data);
+    const response = await axiosApi(`goods/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}`, data);
     return response.data;
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 400) {

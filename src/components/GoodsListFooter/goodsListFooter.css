@@ -1,0 +1,12 @@
+.goods-list-footer {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+}
+
+.goods-list-footer-page-size {
+  min-width: 130px!important;
+}

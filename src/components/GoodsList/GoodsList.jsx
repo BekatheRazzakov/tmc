@@ -20,6 +20,7 @@ import { setAllGoodsSelected, setGoodSelected } from "../../features/dataSlice";
 import AddIcon from '@mui/icons-material/Add';
 import { goodStatuses } from "../../constants";
 import { useNavigate } from "react-router-dom";
+import GoodsListFooter from "../GoodsListFooter/GoodsListFooter";
 
 const GoodsListTable = lazy(() => import('../GoodListTable/GoodsListTable'));
 
@@ -222,7 +223,8 @@ const GoodsList = memo(({goods}) => {
           </Select>
         </Box>
         <Box className='goods-list-tools'>
-          <CustomIconButton size='large' onClick={() => navigate('/create-good')}>
+          <CustomIconButton size='large'
+            onClick={() => navigate('/create-good')}>
             <AddIcon/>
           </CustomIconButton>
         </Box>
@@ -238,6 +240,7 @@ const GoodsList = memo(({goods}) => {
         />
       </Suspense>
     </TableContainer>
+    <GoodsListFooter/>
   </Paper>);
 });
 
