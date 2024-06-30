@@ -1,12 +1,12 @@
 import React from 'react';
-import { Box, Chip, Paper, Snackbar, Typography } from "@mui/material";
+import { Box, Chip, Paper, Typography } from "@mui/material";
 import Skeleton from "@mui/material/Skeleton";
 import notFoundImage from "../../assets/not-found-img.png";
 import { goodStatuses } from "../../constants";
 
 const GoodInfoTab = ({
-                       good, goodLoading, goodError, snackBarOpen, handleClose
-                     }) => {
+  good, goodLoading
+}) => {
   return (<>
     <Paper className='single-good-outer-paper' elevation={3}>
       {goodLoading ? <>
@@ -100,8 +100,8 @@ const GoodInfoTab = ({
               variant='body1'><strong>Статус</strong></Typography>
             <Typography component='span' variant='body2'>
               {<Chip
-                color={goodStatuses[good?.good_status?.id - 1].color || 'default'}
-                label={goodStatuses[good?.good_status?.id - 1].value ||  '-'}
+                color={goodStatuses[good?.good_status?.id - 1]?.color || 'default'}
+                label={goodStatuses[good?.good_status?.id - 1]?.value || '-'}
                 size='small'
               />}
             </Typography>
@@ -110,12 +110,6 @@ const GoodInfoTab = ({
             style={{marginTop: '5px'}}></div>
         </>}
       </div>
-      <Snackbar
-        anchorOrigin={{vertical: 'top', horizontal: 'center'}}
-        open={snackBarOpen}
-        onClose={handleClose}
-        message={goodError}
-      />
     </Paper>
   </>);
 };

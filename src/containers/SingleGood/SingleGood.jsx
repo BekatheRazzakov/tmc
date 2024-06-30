@@ -1,9 +1,9 @@
-import React, { useEffect, useState, lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { setCurrentPage } from "../../features/dataSlice";
 import { getGood } from "../../features/dataThunk";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useParams } from "react-router-dom";
-import { Box, Paper, Tab, Tabs } from "@mui/material";
+import { Box, Paper, Snackbar, Tab, Tabs } from "@mui/material";
 import './singleGood.css';
 import SingleGoodDeleteTab
   from "../../components/SingleGoodDeleteTab/SingleGoodDeleteTab";
@@ -43,8 +43,8 @@ const SingleGood = () => {
         variant='scrollable'
       >
         <Tab className='single-good-tab-btn' label='Информация'/>
-        <Tab className='single-good-tab-btn' label='Редактировать'/>
-        <Tab className='single-good-tab-btn' label='Удалить'/>
+        <Tab className='single-good-tab-btn' label='Редактировать' disabled={!good?.product}/>
+        <Tab className='single-good-tab-btn' label='Удалить' disabled={!good?.product}/>
       </Tabs>
     </Box>
     {value === 0 ? <div className='single-good-page-papers'>
@@ -52,22 +52,25 @@ const SingleGood = () => {
         <GoodInfoTab
           good={good}
           goodLoading={goodLoading}
-          goodError={goodError}
-          snackBarOpen={snackBarOpen}
-          handleClose={handleSnackBarClose}
         />
       </Suspense>
     </div> : value === 1 ? <Paper
       className='single-good-edit-paper'
       elevation={3}>
       <Suspense fallback={<></>}>
-        <CreateEditGoodForm isEdit/>
+        <CreateEditGoodForm isEdit editingGood={good} changeTab={handleTabChange}/>
       </Suspense>
     </Paper> : value === 2 ? <Paper className='single-good-delete-warning-paper'
       sx={{p: '40px',}}
       elevation={3}>
       <SingleGoodDeleteTab/>
     </Paper> : null}
+    <Snackbar
+      anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+      open={snackBarOpen}
+      onClose={handleSnackBarClose}
+      message={goodError}
+    />
   </div>);
 };
 

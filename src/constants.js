@@ -12,7 +12,7 @@ export const categories = [
   }, {name: 'sfp_module', value: 'модуль SFP'}, {
     name: 'splitter', value: 'разделитель'
   }, {name: 'straight_bracket', value: 'кронштейн'}, {
-    name: 'utp_cable', value: 'UTP модель'
+    name: 'utp_cable', value: 'UTP кабель'
   },
 ];
 
@@ -41,17 +41,5 @@ export const goodStatuses = [
     color: 'success',
     isAvailable: false,
     className: 'status-at-abon',
-  },
-];
-
-export const manufactures = [
-  {
-    name: "000000000000000000 new cable manufactures", id: 1,
-  },
-];
-
-export const models = [
-  {
-    name: "2 new cable model", id: 1
   },
 ];

@@ -33,7 +33,7 @@ const GoodsListTable = memo(({
         return (<TableRow
           hover role='checkbox'
           tabIndex={-1} key={row.code}
-          onClick={() => navigate(`/good/${row?.id}`)}
+          onClick={() => navigate(`/goods/${row?.id}`)}
         >
           {[checkBoxColumn(row.id), ...columns].map((column) => {
             const value = row[column.id];

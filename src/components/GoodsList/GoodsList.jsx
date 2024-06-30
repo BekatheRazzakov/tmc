@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAllGoodsSelected, setGoodSelected } from "../../features/dataSlice";
 import AddIcon from '@mui/icons-material/Add';
 import { goodStatuses } from "../../constants";
+import { useNavigate } from "react-router-dom";
 
 const GoodsListTable = lazy(() => import('../GoodListTable/GoodsListTable'));
 
@@ -100,7 +101,7 @@ const CustomIconButton = styled(IconButton)({
 
 const GoodsList = memo(({goods}) => {
   const dispatch = useDispatch();
-  
+  const navigate = useNavigate();
   const [searchWord, setSearchWord] = useState('');
   const [sortBy, setSortBy] = useState('none');
   const {goodsLoading} = useSelector(state => state.dataState);
@@ -221,7 +222,7 @@ const GoodsList = memo(({goods}) => {
           </Select>
         </Box>
         <Box className='goods-list-tools'>
-          <CustomIconButton size='large'>
+          <CustomIconButton size='large' onClick={() => navigate('/create-good')}>
             <AddIcon/>
           </CustomIconButton>
         </Box>

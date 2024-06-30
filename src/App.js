@@ -32,7 +32,7 @@ function App() {
             <Navigate to='/sign-in' replace/>}/>
         <Route path='sign-in' element={<SignIn/>}/>
         <Route path='goods' element={<Goods/>}/>
-        <Route path='good/:id' element={<SingleGood/>}/>
+        <Route path='goods/:id' element={<SingleGood/>}/>
         <Route path='create-good' element={<NewGood/>}/>
       </Routes>
     </div>

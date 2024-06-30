@@ -1,32 +1,87 @@
-import React, { lazy, Suspense, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import {
   Box,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
+  Snackbar,
   TextField
 } from "@mui/material";
-import {
-  categories,
-  goodStatuses,
-  manufactures,
-  models
-} from "../../constants";
+import { categories, goodStatuses } from "../../constants";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { createGood } from "../../features/dataThunk";
-import { useParams } from "react-router-dom";
+import {
+  createGood,
+  getManufactures,
+  getModels, updateGood
+} from "../../features/dataThunk";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  resetCreateGoodData,
+  setGoodIsCreated, setGoodIsUpdated
+} from "../../features/dataSlice";
 
 const FileUpload = lazy(() => import("../../components/FileUpload/FileUpload"));
 
-const CreateEditGoodForm = ({isEdit}) => {
+const CreateEditGoodForm = ({isEdit, editingGood, changeTab}) => {
   const params = useParams();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [state, setState] = useState({
     id: params?.id || null,
+    nazvanie_id: editingGood?.nazvanie_id,
+    barcode: editingGood?.barcode,
+    product_type: editingGood?.product_type,
+    product_manufacture_id: editingGood?.product?.product_manufacture_id,
+    product_model_id: editingGood?.product?.product_model_id,
+    good_status_id: editingGood?.good_status?.id,
+    cost: editingGood?.product?.cost,
   });
-  const {createGoodLoading} = useAppSelector(state => state.dataState);
+  const {
+    good,
+    createGoodLoading,
+    createGoodErrorMessage,
+    createGoodError,
+    models,
+    manufactures,
+    updateGoodLoading,
+    updateGoodError,
+    updateGoodErrorMessage,
+    manufacturesLoading,
+    modelsLoading,
+    goodIsCreated,
+    goodIsUpdated,
+  } = useAppSelector(state => state.dataState);
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
+  
+  useEffect(() => {
+    if (createGoodError || updateGoodError) {
+      setSnackBarOpen(true);
+    }
+  }, [createGoodError, updateGoodError]);
+  
+  useEffect(() => {
+    if (state.product_type) {
+      dispatch(getModels(state?.product_type));
+      dispatch(getManufactures(state?.product_type));
+    }
+  }, [dispatch, state.product_type]);
+  
+  useEffect(() => {
+    if (goodIsCreated) {
+      navigate(`/goods/${good?.id}`);
+      dispatch(resetCreateGoodData());
+      dispatch(setGoodIsCreated(false));
+    }
+  }, [dispatch, good?.id, goodIsCreated, navigate]);
+  
+  useEffect(() => {
+    if (goodIsUpdated) {
+      changeTab(null, 0);
+      dispatch(setGoodIsUpdated(false));
+    }
+  }, [changeTab, dispatch, goodIsUpdated]);
   
   const handleChange = (e) => {
     const {name, value} = e.target;
@@ -35,7 +90,7 @@ const CreateEditGoodForm = ({isEdit}) => {
       ...prevState, [name]: value,
     }));
   };
-  
+
   const handleFileChange = (e) => {
     setState((prevState) => ({
       ...prevState, photo_path: e.target.files[0],
@@ -48,13 +103,18 @@ const CreateEditGoodForm = ({isEdit}) => {
     }));
   };
   
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    //if (!state.product_type || !state.product_manufacture_id || !state.product_model_id || !state.good_status_id || !state.cost || !state.barcode) return;
-    //if (isEdit) {
-    //  dispatch(createGood(state));
-    //} else dispatch(createGood(state));
+    if (!state.product_type || !state.product_manufacture_id || !state.product_model_id || !state.good_status_id || !state.cost || !state.barcode) return;
+    if (isEdit) {
+      await dispatch(updateGood({
+        ...state,
+        product_type_has_changed: editingGood?.product_type !== state.product_type,
+      }));
+    } else dispatch(createGood(state));
   };
+  
+  const handleSnackBarClose = () => setSnackBarOpen(false);
   
   return (<Box className='new-good-form'
     component='form'
@@ -146,10 +206,16 @@ const CreateEditGoodForm = ({isEdit}) => {
     <LoadingButton
       type='submit' fullWidth variant='contained' sx={{mt: 3, mb: 2}}
       disabled={!state.product_type || !state.product_manufacture_id || !state.product_model_id || !state.good_status_id || !state.cost || !state.barcode}
-      loading={createGoodLoading}
+      loading={createGoodLoading || updateGoodLoading || modelsLoading || manufacturesLoading}
     >
       {isEdit ? 'Сохранить' : 'Создать'}
     </LoadingButton>
+    <Snackbar
+      anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+      open={snackBarOpen}
+      onClose={handleSnackBarClose}
+      message={isEdit ? updateGoodErrorMessage : createGoodErrorMessage}
+    />
   </Box>);
 };
 
