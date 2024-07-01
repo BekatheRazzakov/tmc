@@ -36,7 +36,7 @@ export const goodStatuses = [
     isAvailable: true,
     className: 'status-si',
   }, {
-    name: 3,
+    name: 4,
     value: 'у абонента',
     color: 'success',
     isAvailable: false,
