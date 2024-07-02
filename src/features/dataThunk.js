@@ -2,9 +2,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosApi from "../axiosApi";
 import { isAxiosError } from "axios";
 
+// получает список товаров. использует пагинацию
 export const getGoods = createAsyncThunk("data/getGoods", async (data, {rejectWithValue}) => {
   try {
-    const response = await axiosApi(`goods/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}`, data);
+    const response = await axiosApi(`goods/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}&product_type=${data?.sortByCategory || ''}`, data);
     return response.data;
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 400) {
@@ -43,7 +44,7 @@ export const createGood = createAsyncThunk('data/createGood', async (data, {reje
     createGoodForm.append('good_status_id', data?.good_status_id);
     createGoodForm.append('product_type', data?.product_type);
     if (data?.photo_path) {
-      createGoodForm.append('photo_path', data.photo_path);
+      createGoodForm.append('photo', data.photo_path);
     }
     
     const reqToGoods = await axiosApi.post(`goods/`, createGoodForm);
@@ -78,7 +79,7 @@ export const updateGood = createAsyncThunk('data/updateGood', async (data, {reje
     editGoodForm.append('good_status_id', data?.good_status_id);
     editGoodForm.append('product_type', data?.product_type);
     if (data?.photo_path) {
-      editGoodForm.append('photo_path', data.photo_path);
+      editGoodForm.append('photo', data.photo_path);
     }
     
     const reqToGoods = await axiosApi.put(`goods/${data?.id}`, editGoodForm);

@@ -1,31 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import './goodsListFooter.css';
-import { useAppDispatch } from "../../app/hooks";
-import { getGoods } from "../../features/dataThunk";
 
-const GoodsListFooter = () => {
-  const dispatch = useAppDispatch();
-  const [state, setState] = useState({
-    pageSize: 20,
-    pageNumber: 1,
-  });
-  
-  useEffect(() => {
-  }, []);
-  
-  const handleChange = (e) => {
-    const {name, value} = e.target;
-    setState(prevState => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-  
-  useEffect(() => {
-    dispatch(getGoods(state));
-  }, [dispatch, state]);
-  
+const GoodsListFooter = ({paginationData, handlePaginationDataChange}) => {
   return (
     <Box className='goods-list-footer'>
       <FormControl className='goods-list-footer-page-size'>
@@ -34,9 +11,9 @@ const GoodsListFooter = () => {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           name="pageNumber"
-          value={state.pageNumber}
+          value={paginationData.pageNumber}
           label="страница"
-          onChange={handleChange}
+          onChange={handlePaginationDataChange}
           variant="standard"
         >
           <MenuItem value={1}>1</MenuItem>
@@ -52,9 +29,9 @@ const GoodsListFooter = () => {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           name="pageSize"
-          value={state.pageSize}
+          value={paginationData.pageSize}
           label="товаров на страницу"
-          onChange={handleChange}
+          onChange={handlePaginationDataChange}
           variant="standard"
         >
           <MenuItem value={5}>5</MenuItem>

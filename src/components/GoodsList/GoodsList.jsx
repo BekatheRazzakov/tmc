@@ -1,4 +1,11 @@
-import React, { lazy, Suspense, useCallback, useState, memo } from 'react';
+import React, {
+  lazy,
+  Suspense,
+  useCallback,
+  useState,
+  memo,
+  useEffect
+} from 'react';
 import {
   AppBar,
   Box,
@@ -18,9 +25,10 @@ import InputBase from '@mui/material/InputBase';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAllGoodsSelected, setGoodSelected } from "../../features/dataSlice";
 import AddIcon from '@mui/icons-material/Add';
-import { goodStatuses } from "../../constants";
+import { categories, goodStatuses } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import GoodsListFooter from "../GoodsListFooter/GoodsListFooter";
+import { getGoods } from "../../features/dataThunk";
 
 const GoodsListTable = lazy(() => import('../GoodListTable/GoodsListTable'));
 
@@ -101,15 +109,32 @@ const CustomIconButton = styled(IconButton)({
 });
 
 const GoodsList = memo(({goods}) => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {goodsLoading} = useSelector(state => state.dataState);
   const [searchWord, setSearchWord] = useState('');
   const [sortBy, setSortBy] = useState('none');
-  const {goodsLoading} = useSelector(state => state.dataState);
+  const [paginationData, setPaginationData] = useState({
+    pageSize: 20,
+    pageNumber: 1,
+    sortByCategory: 0,
+  });
   
   const handleSortByChange = (e) => {
     setSortBy(e.target.value);
   };
+  
+  const handlePaginationDataChange = (e) => {
+    const {name, value} = e.target;
+    setPaginationData(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+  
+  useEffect(() => {
+    dispatch(getGoods(paginationData));
+  }, [dispatch, paginationData]);
   
   const sortedByManufacture = useCallback(() => {
     return (goods || []).sort((a, b) => a?.product?.manufacture?.name?.localeCompare(b?.product?.manufacture?.name));
@@ -178,13 +203,14 @@ const GoodsList = memo(({goods}) => {
         className='goods-list-toolbar' position='static'
         sx={{
           flexDirection: 'row',
+          justifyContent: 'flex-end',
           alignItems: 'center',
           flexWrap: 'wrap',
           p: '10px 0',
           gap: '10px',
         }}>
         <Toolbar className='goods-search-toolbar'
-          sx={{p: '0px!important', minHeight: 'unset!important'}}>
+          sx={{p: '0px!important', minHeight: 'unset!important', mr: 'auto'}}>
           <Search sx={{m: '0!important'}}>
             <SearchIconWrapper>
               <SearchIcon/>
@@ -197,7 +223,28 @@ const GoodsList = memo(({goods}) => {
           </Search>
         </Toolbar>
         <Box sx={{
-          m: '0 0 0 auto',
+          display: "flex",
+          alignItems: 'center',
+          flexWrap: 'no-wrap'
+        }}>
+          <Typography variant='body1'
+            component='span'
+            sx={{mr: '10px'}}>категории:</Typography>
+          <Select
+            labelId='demo-simple-select-filled-label'
+            id='demo-simple-select-filled'
+            name='sortByCategory'
+            value={paginationData.sortByCategory}
+            onChange={handlePaginationDataChange}
+            sx={{color: '#FFFFFF', minWidth: '175px'}}
+          >
+            <MenuItem value={0}>Все</MenuItem>
+            {categories.map(category => (
+              <MenuItem value={category.name}>статус: {category.value}</MenuItem>))
+            }
+          </Select>
+        </Box>
+        <Box sx={{
           display: "flex",
           alignItems: 'center',
           flexWrap: 'no-wrap'
@@ -222,9 +269,11 @@ const GoodsList = memo(({goods}) => {
             }
           </Select>
         </Box>
-        <Box className='goods-list-tools'>
+        <Box className='goods-list-tools' sx={{width: '100%'}}>
           <CustomIconButton size='large'
-            onClick={() => navigate('/create-good')}>
+            onClick={() => navigate('/create-good')}
+            sx={{ml: 'auto'}}
+          >
             <AddIcon/>
           </CustomIconButton>
         </Box>
@@ -240,7 +289,8 @@ const GoodsList = memo(({goods}) => {
         />
       </Suspense>
     </TableContainer>
-    <GoodsListFooter/>
+    <GoodsListFooter handlePaginationDataChange={handlePaginationDataChange}
+      paginationData={paginationData}/>
   </Paper>);
 });
 

@@ -1,25 +1,16 @@
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Snackbar,
-  TextField
+  Box, FormControl, InputLabel, MenuItem, Select, Snackbar, TextField
 } from "@mui/material";
 import { categories, goodStatuses } from "../../constants";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
-  createGood,
-  getManufactures,
-  getModels, updateGood
+  createGood, getManufactures, getModels, updateGood
 } from "../../features/dataThunk";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  resetCreateGoodData,
-  setGoodIsCreated, setGoodIsUpdated
+  resetCreateGoodData, setGoodIsCreated, setGoodIsUpdated
 } from "../../features/dataSlice";
 
 const FileUpload = lazy(() => import("../../components/FileUpload/FileUpload"));
@@ -109,11 +100,7 @@ const CreateEditGoodForm = ({isEdit, editingGood, changeTab}) => {
     if (isEdit) {
       await dispatch(updateGood({
         ...state,
-        product_type_has_changed:
-          editingGood?.product_type !== state.product_type ||
-          editingGood?.product?.product_manufacture_id !== state.product_manufacture_id ||
-          editingGood?.product?.product_model_id !== state.product_model_id ||
-          editingGood?.product?.cost !== state.cost,
+        product_type_has_changed: editingGood?.product_type !== state.product_type || editingGood?.product?.product_manufacture_id !== state.product_manufacture_id || editingGood?.product?.product_model_id !== state.product_model_id || editingGood?.product?.cost !== state.cost,
       }));
     } else dispatch(createGood(state));
   };

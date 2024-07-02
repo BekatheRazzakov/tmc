@@ -32,8 +32,6 @@ const Goods = () => {
   
   const handleClose = () => setSnackBarOpen(false);
   
-  console.log(goods[0]);
-  
   return (<div className='goods'>
     <GoodsStatusPapers
       totalGoodsCost={totalGoodsCost}
