@@ -240,7 +240,7 @@ const GoodsList = memo(({goods}) => {
           >
             <MenuItem value={0}>Все</MenuItem>
             {categories.map(category => (
-              <MenuItem value={category.name}>статус: {category.value}</MenuItem>))
+              <MenuItem value={category.name} key={category.name}>статус: {category.value}</MenuItem>))
             }
           </Select>
         </Box>
@@ -265,7 +265,7 @@ const GoodsList = memo(({goods}) => {
             <MenuItem value='cost-increase'>цена (по возрастанию)</MenuItem>
             <MenuItem value='cost-decrease'>цена (по убыванию)</MenuItem>
             {goodStatuses.filter(status => status.isAvailable).map(status => (
-              <MenuItem value={status.className}>статус: {status.value}</MenuItem>))
+              <MenuItem value={status.className} key={status.value}>статус: {status.value}</MenuItem>))
             }
           </Select>
         </Box>

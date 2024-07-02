@@ -58,6 +58,14 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
     modelsLoading,
     goodIsCreated,
     goodIsUpdated,
+    createManufactureLoading,
+    createModelLoading,
+    manufactureIsCreated,
+    modelIsCreated,
+    createManufactureError,
+    createModelError,
+    createManufactureErrorMessage,
+    createModelErrorMessage,
   } = useAppSelector(state => state.dataState);
   const [state, setState] = useState({
     id: params?.id || null,
@@ -76,10 +84,10 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
   const [newModelModalOpen, setNewModelModalOpen] = useState(false);
   
   useEffect(() => {
-    if (createGoodError || updateGoodError) {
+    if (createGoodError || updateGoodError || modelIsCreated || manufactureIsCreated || createManufactureError || createModelError) {
       setSnackBarOpen(true);
     }
-  }, [createGoodError, updateGoodError]);
+  }, [createGoodError, createManufactureError, createModelError, manufactureIsCreated, modelIsCreated, updateGoodError]);
   
   useEffect(() => {
     if (state.product_type) {
@@ -167,7 +175,11 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
   
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!state.product_type || !(state.product_manufacture_id >= 0) || !(state.product_model_id >= 0) || !state.good_status_id || !state.cost || !state.barcode) return;
+    if (!state.product_type || !(
+      state.product_manufacture_id >= 0
+    ) || !(
+      state.product_model_id >= 0
+    ) || !state.good_status_id || !state.cost || !state.barcode) return;
     if (isEdit) {
       await dispatch(updateGood({
         ...state,
@@ -294,7 +306,11 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
       </Suspense>
       <LoadingButton
         type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}
-        disabled={!state.product_type || !(state.product_manufacture_id >= 0) || !(state.product_model_id >= 0) || !state.good_status_id || !state.cost || !state.barcode}
+        disabled={!state.product_type || !(
+          state.product_manufacture_id >= 0
+        ) || !(
+          state.product_model_id >= 0
+        ) || !state.good_status_id || !state.cost || !state.barcode}
         loading={createGoodLoading || updateGoodLoading || modelsLoading || manufacturesLoading}
       >
         {isEdit ? 'Сохранить' : 'Создать'}
@@ -303,7 +319,10 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={snackBarOpen}
         onClose={handleSnackBarClose}
-        message={isEdit ? updateGoodErrorMessage : createGoodErrorMessage}
+        message={
+          isEdit ? updateGoodErrorMessage : manufactureIsCreated ? 'производитель товара создан' : modelIsCreated ? 'модель товара создана' :
+            createGoodErrorMessage || createManufactureErrorMessage || createModelErrorMessage
+        }
       />
       <Modal
         aria-labelledby='transition-modal-title'
@@ -362,11 +381,8 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
                 fullWidth
                 variant='contained'
                 sx={{ mt: 3, mb: 2 }}
-                //disabled={
-                //  newManufactureModalOpen ? !newManufactureData?.product_type
-                // || !newManufactureData?.name : newModelModalOpen ?
-                // !newModelModalOpen?.product_type || !newModelModalOpen?.name
-                // : false }
+                disabled={newManufactureModalOpen ? !newManufactureData?.product_type || !newManufactureData?.name : newModelModalOpen ? !newModelData?.product_type || !newModelData?.name : false}
+                loading={newManufactureModalOpen ? createManufactureLoading : newModelModalOpen ? createModelLoading : false}
               >
                 {'Создать'}
               </LoadingButton>

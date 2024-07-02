@@ -113,7 +113,7 @@ const GoodsStatusPapers = memo((
             >
               {
                 goodStatuses.filter(status => status.isAvailable).map(status => (
-                  <MenuItem value={status.name}>{status.value}</MenuItem>
+                  <MenuItem value={status.name} key={status.name}>{status.value}</MenuItem>
                 ))
               }
             </Select>

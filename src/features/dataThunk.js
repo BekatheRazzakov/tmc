@@ -52,6 +52,8 @@ export const createGood = createAsyncThunk('data/createGood', async (data, { rej
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 422) {
       return rejectWithValue('Ошибка при создании товара');
+    } else if (isAxiosError(e) && e.response && e.response.status === 401) {
+      return rejectWithValue('Неправильные учётные данные, авторизуйтесь снова');
     }
     throw e;
   }
@@ -97,6 +99,8 @@ export const updateGood = createAsyncThunk('data/updateGood', async (data, { rej
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 422) {
       return rejectWithValue('Ошибка при редактировании товара');
+    } else if (isAxiosError(e) && e.response && e.response.status === 401) {
+      return rejectWithValue('Неправильные учётные данные, авторизуйтесь снова');
     }
     throw e;
   }
@@ -111,20 +115,30 @@ export const getModels = createAsyncThunk('data/getModels', async (product_type,
   }
 });
 
-export const createManufacture = createAsyncThunk('data/createManufacture', async (data, { rejectValue }) => {
+export const createManufacture = createAsyncThunk('data/createManufacture', async (data, { rejectWithValue }) => {
   try {
     const req = await axiosApi.post(`http://10.1.2.75:8000/api/${data?.product_type}_manufactures/`, { name: data?.name });
     return await req.data;
   } catch (e) {
+    if (isAxiosError(e) && e.response && e.response.status === 401) {
+      return rejectWithValue('Неправильные учётные данные, авторизуйтесь снова');
+    } else if (isAxiosError(e) && e.response && e.response.status === 403) {
+      return rejectWithValue('Нет разрешения на создание производителя товара');
+    }
     throw e;
   }
 });
 
-export const createModel = createAsyncThunk('data/createModel', async (data, { rejectValue }) => {
+export const createModel = createAsyncThunk('data/createModel', async (data, { rejectWithValue }) => {
   try {
     const req = await axiosApi.post(`${data?.product_type}_models/`, { name: data?.name });
     return await req.data;
   } catch (e) {
+    if (isAxiosError(e) && e.response && e.response.status === 401) {
+      return rejectWithValue('Неправильные учётные данные, авторизуйтесь снова');
+    } else if (isAxiosError(e) && e.response && e.response.status === 403) {
+      return rejectWithValue('У вас нет разрешения на создание модели товара');
+    }
     throw e;
   }
 });

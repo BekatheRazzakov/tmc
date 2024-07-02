@@ -27,13 +27,18 @@ const initialState = {
   updateGoodLoading: false,
   updateGoodError: false,
   deleteGoodError: false,
+  createManufactureError: false,
+  createModelError: false,
   goodsError: '',
   goodError: '',
   createGoodErrorMessage: '',
   updateGoodErrorMessage: '',
   deleteGoodErrorMessage: '',
+  createManufactureErrorMessage: '',
+  createModelErrorMessage: '',
   goodIsCreated: false,
   goodIsUpdated: false,
+  goodIsDeleted: false,
   manufactureIsCreated: false,
   modelIsCreated: false,
   goodNotFound: false,
@@ -148,6 +153,8 @@ const DataSlice = createSlice({
     
     builder.addCase(createManufacture.pending, (state) => {
       state.createManufactureLoading = true;
+      state.createManufactureErrorMessage = '';
+      state.createManufactureError = false;
     });
     builder.addCase(createManufacture.fulfilled, (state, {payload: res}) => {
       state.createManufactureLoading = false;
@@ -158,10 +165,14 @@ const DataSlice = createSlice({
     });
     builder.addCase(createManufacture.rejected, (state, {payload: error}) => {
       state.createManufactureLoading = false;
+      state.createManufactureError = true;
+      state.createManufactureErrorMessage = error || 'Что-то пошло не так. Попробуйте позже';
     });
     
     builder.addCase(createModel.pending, (state) => {
       state.createModelLoading = true;
+      state.createModelErrorMessage = '';
+      state.createModelError = false;
     });
     builder.addCase(createModel.fulfilled, (state, {payload: res}) => {
       state.createModelLoading = false;
@@ -172,6 +183,8 @@ const DataSlice = createSlice({
     });
     builder.addCase(createModel.rejected, (state, {payload: error}) => {
       state.createModelLoading = false;
+      state.createModelError = true;
+      state.createModelErrorMessage = error || 'Что-то пошло не так. Попробуйте позже';
     });
     
     builder.addCase(getManufactures.pending, (state) => {
