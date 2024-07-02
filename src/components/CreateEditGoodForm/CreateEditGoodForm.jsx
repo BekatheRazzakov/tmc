@@ -180,10 +180,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
   const onNewManufactureCreate = async (e) => {
     e.preventDefault();
     if (!newManufactureData.product_type || !newManufactureData.name) return;
-    const categoryName = categories.filter(category => category.name === newManufactureData.product_type)?.[0]?.createManufactureName;
-    await dispatch(createManufacture({
-      ...newManufactureData, product_type: categoryName || '',
-    }));
+    await dispatch(createManufacture(newManufactureData));
     handleNewManufactureModalClose();
   };
   
@@ -192,10 +189,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
     if (newModelModalOpen && (
       !newModelData?.product_type || !newModelData?.name
     )) return;
-    const categoryName = categories.filter(category => category.name === newModelData.product_type)?.[0]?.createModelName;
-    await dispatch(createModel({
-      ...newModelData, product_type: categoryName || '',
-    }));
+    await dispatch(createModel(newModelData));
     handleNewModelModalClose();
   };
   

@@ -113,7 +113,7 @@ export const getModels = createAsyncThunk('data/getModels', async (product_type,
 
 export const createManufacture = createAsyncThunk('data/createManufacture', async (data, { rejectValue }) => {
   try {
-    const req = await axiosApi.post(`http://10.1.2.75:8000/api/${data?.product_type}/`, { name: data?.name });
+    const req = await axiosApi.post(`http://10.1.2.75:8000/api/${data?.product_type}_manufactures/`, { name: data?.name });
     return await req.data;
   } catch (e) {
     throw e;
@@ -122,7 +122,7 @@ export const createManufacture = createAsyncThunk('data/createManufacture', asyn
 
 export const createModel = createAsyncThunk('data/createModel', async (data, { rejectValue }) => {
   try {
-    const req = await axiosApi.post(`${data?.product_type}/`, { name: data?.name });
+    const req = await axiosApi.post(`${data?.product_type}_models/`, { name: data?.name });
     return await req.data;
   } catch (e) {
     throw e;

@@ -2,65 +2,29 @@ export const apiUrl = 'http://10.1.2.89:8000/api/';
 
 export const categories = [
   {
-    name: 'cable',
-    value: 'кабель',
-    createManufactureName: 'cable_manufactures',
-    createModelName: 'cable_models',
+    name: 'cable', value: 'кабель',
   }, {
-    name: 'adapter',
-    value: 'адаптер',
-    createManufactureName: 'adapters_manufactures',
-    createModelName: 'adapters_models',
+    name: 'adapter', value: 'адаптер',
   }, {
-    name: 'clamp',
-    value: 'зажим',
-    createManufactureName: 'clamps_manufactures',
-    createModelName: 'clamps_models',
+    name: 'clamp', value: 'зажим',
   }, {
-    name: 'media_converter',
-    value: 'медиа конвертер',
-    createManufactureName: 'media_converters_manufactures',
-    createModelName: 'media_converters_models',
+    name: 'media_converter', value: 'медиа конвертер',
   }, {
-    name: 'odf',
-    value: 'ODF',
-    createManufactureName: 'odf_manufactures',
-    createModelName: 'odf_models',
+    name: 'odf', value: 'ODF',
   }, {
-    name: 'onu',
-    value: 'ONU',
-    createManufactureName: 'onu_manufactures',
-    createModelName: 'onu_models',
+    name: 'onu', value: 'ONU',
   }, {
-    name: 'patch_cord',
-    value: 'пач корд',
-    createManufactureName: 'patch_cord_manufactures',
-    createModelName: 'patch_cord_models',
+    name: 'patch_cord', value: 'пач корд',
   }, {
-    name: 'set_top_box',
-    value: 'приставка',
-    createManufactureName: 'set_top_box_manufactures',
-    createModelName: 'set_top_box_models',
+    name: 'set_top_box', value: 'приставка',
   }, {
-    name: 'sfp_module',
-    value: 'модуль SFP',
-    createManufactureName: 'sfp_module_manufactures',
-    createModelName: 'sfp_module_models',
+    name: 'sfp_module', value: 'модуль SFP',
   }, {
-    name: 'splitter',
-    value: 'разделитель',
-    createManufactureName: 'splitter_manufactures',
-    createModelName: 'splitter_models',
+    name: 'splitter', value: 'разделитель',
   }, {
-    name: 'straight_bracket',
-    value: 'кронштейн',
-    createManufactureName: 'straight_bracket_manufactures',
-    createModelName: 'straight_bracket_models',
+    name: 'straight_bracket', value: 'кронштейн',
   }, {
-    name: 'utp_cable',
-    value: 'UTP кабель',
-    createManufactureName: 'utp_cable_manufactures',
-    createModelName: 'utp_cable_models',
+    name: 'utp_cable', value: 'UTP кабель',
   },
 ];
 
