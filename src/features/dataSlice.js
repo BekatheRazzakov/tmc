@@ -5,7 +5,7 @@ import {
   getGood,
   getGoods,
   getManufactures,
-  getModels, deleteGood,
+  getModels, deleteGood, createManufacture, createModel,
 } from "./dataThunk";
 
 const initialState = {
@@ -19,6 +19,8 @@ const initialState = {
   goodLoading: false,
   createGoodLoading: false,
   modelsLoading: false,
+  createManufactureLoading: false,
+  createModelLoading: false,
   manufacturesLoading: false,
   deleteGoodLoading: false,
   createGoodError: false,
@@ -32,6 +34,8 @@ const initialState = {
   deleteGoodErrorMessage: '',
   goodIsCreated: false,
   goodIsUpdated: false,
+  manufactureIsCreated: false,
+  modelIsCreated: false,
   goodNotFound: false,
 };
 
@@ -57,6 +61,12 @@ const DataSlice = createSlice({
     },
     setGoodIsUpdated: (state, action) => {
       state.goodIsUpdated = action.payload;
+    },
+    setManufactureIsCreated: (state, action) => {
+      state.manufactureIsCreated = action.payload;
+    },
+    setModelIsCreated: (state, action) => {
+      state.modelIsCreated = action.payload;
     },
   }, extraReducers: (builder) => {
     builder.addCase(getGoods.pending, (state) => {
@@ -136,6 +146,34 @@ const DataSlice = createSlice({
       state.modelsLoading = false;
     });
     
+    builder.addCase(createManufacture.pending, (state) => {
+      state.createManufactureLoading = true;
+    });
+    builder.addCase(createManufacture.fulfilled, (state, {payload: res}) => {
+      state.createManufactureLoading = false;
+      if (res) {
+        state.manufactures = [...state.manufactures, res] || [];
+      }
+      state.manufactureIsCreated = true;
+    });
+    builder.addCase(createManufacture.rejected, (state, {payload: error}) => {
+      state.createManufactureLoading = false;
+    });
+    
+    builder.addCase(createModel.pending, (state) => {
+      state.createModelLoading = true;
+    });
+    builder.addCase(createModel.fulfilled, (state, {payload: res}) => {
+      state.createModelLoading = false;
+      if (res) {
+        state.models = [...state.models, res] || [];
+      }
+      state.modelIsCreated = true;
+    });
+    builder.addCase(createModel.rejected, (state, {payload: error}) => {
+      state.createModelLoading = false;
+    });
+    
     builder.addCase(getManufactures.pending, (state) => {
       state.manufacturesLoading = true;
     });
@@ -172,4 +210,6 @@ export const {
   resetCreateGoodData,
   setGoodIsCreated,
   setGoodIsUpdated,
+  setManufactureIsCreated,
+  setModelIsCreated
 } = DataSlice.actions;

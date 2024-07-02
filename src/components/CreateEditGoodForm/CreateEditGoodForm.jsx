@@ -1,12 +1,27 @@
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import {
-  Box, FormControl, InputLabel, MenuItem, Select, Snackbar, TextField
+  Backdrop,
+  Box,
+  Fade,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Modal,
+  Select,
+  Snackbar,
+  TextField,
+  Typography
 } from "@mui/material";
 import { categories, goodStatuses } from "../../constants";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
-  createGood, getManufactures, getModels, updateGood
+  createGood,
+  createManufacture,
+  createModel,
+  getManufactures,
+  getModels,
+  updateGood
 } from "../../features/dataThunk";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -15,20 +30,20 @@ import {
 
 const FileUpload = lazy(() => import("../../components/FileUpload/FileUpload"));
 
-const CreateEditGoodForm = ({isEdit, editingGood, changeTab}) => {
+const modalStyle = {
+  position: 'absolute',
+  top: '40%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  backgroundColor: 'background.paper',
+  boxShadow: 24,
+  borderRadius: 4,
+};
+
+const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
   const params = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [state, setState] = useState({
-    id: params?.id || null,
-    nazvanie_id: editingGood?.nazvanie_id,
-    barcode: editingGood?.barcode,
-    product_type: editingGood?.product_type,
-    product_manufacture_id: editingGood?.product?.product_manufacture_id,
-    product_model_id: editingGood?.product?.product_model_id,
-    good_status_id: editingGood?.good_status?.id,
-    cost: editingGood?.product?.cost,
-  });
   const {
     good,
     createGoodLoading,
@@ -44,7 +59,21 @@ const CreateEditGoodForm = ({isEdit, editingGood, changeTab}) => {
     goodIsCreated,
     goodIsUpdated,
   } = useAppSelector(state => state.dataState);
+  const [state, setState] = useState({
+    id: params?.id || null,
+    nazvanie_id: editingGood?.nazvanie_id,
+    barcode: editingGood?.barcode,
+    product_type: editingGood?.product_type,
+    product_manufacture_id: editingGood?.product?.product_manufacture_id,
+    product_model_id: editingGood?.product?.product_model_id,
+    good_status_id: editingGood?.good_status?.id,
+    cost: editingGood?.product?.cost,
+  });
+  const [newManufactureData, setNewManufactureData] = useState(null);
+  const [newModelData, setNewModelData] = useState(null);
   const [snackBarOpen, setSnackBarOpen] = useState(false);
+  const [newManufactureModalOpen, setNewManufactureModalOpen] = useState(false);
+  const [newModelModalOpen, setNewModelModalOpen] = useState(false);
   
   useEffect(() => {
     if (createGoodError || updateGoodError) {
@@ -75,139 +104,284 @@ const CreateEditGoodForm = ({isEdit, editingGood, changeTab}) => {
   }, [changeTab, dispatch, goodIsUpdated]);
   
   const handleChange = (e) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     
-    setState((prevState) => ({
-      ...prevState, [name]: value,
-    }));
+    setState((prevState) => (
+      {
+        ...prevState, [name]: value,
+      }
+    ));
+  };
+  
+  const handleManufactureDataChange = (e) => {
+    const { name, value } = e.target;
+    
+    setNewManufactureData((prevState) => (
+      {
+        ...prevState, [name]: value,
+      }
+    ));
+  };
+  
+  const handleModelDataChange = (e) => {
+    const { name, value } = e.target;
+    
+    setNewModelData((prevState) => (
+      {
+        ...prevState, [name]: value,
+      }
+    ));
   };
   
   const handleFileChange = (e) => {
-    setState((prevState) => ({
-      ...prevState, photo_path: e.target.files[0],
-    }));
+    setState((prevState) => (
+      {
+        ...prevState, photo_path: e.target.files[0],
+      }
+    ));
   };
   
   const removeImage = () => {
-    setState((prevState) => ({
-      ...prevState, photo_path: null,
-    }));
+    setState((prevState) => (
+      {
+        ...prevState, photo_path: null,
+      }
+    ));
   };
   
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    if (!state.product_type || !state.product_manufacture_id || !state.product_model_id || !state.good_status_id || !state.cost || !state.barcode) return;
-    if (isEdit) {
-      await dispatch(updateGood({
-        ...state,
-        product_type_has_changed: editingGood?.product_type !== state.product_type || editingGood?.product?.product_manufacture_id !== state.product_manufacture_id || editingGood?.product?.product_model_id !== state.product_model_id || editingGood?.product?.cost !== state.cost,
-      }));
-    } else dispatch(createGood(state));
+  const handleNewManufactureModalOpen = () => setNewManufactureModalOpen(true);
+  
+  const handleNewManufactureModalClose = () => {
+    setNewManufactureModalOpen(false);
+    setNewManufactureData(null);
+  };
+  
+  const handleNewModelModalOpen = () => setNewModelModalOpen(true);
+  
+  const handleNewModelModalClose = () => {
+    setNewModelModalOpen(false);
+    setNewModelData(null);
   };
   
   const handleSnackBarClose = () => setSnackBarOpen(false);
   
-  return (<Box className='new-good-form'
-    component='form'
-    onSubmit={onSubmit}>
-    <FormControl required>
-      <InputLabel id='category-select-required-label'>категорий</InputLabel>
-      <Select
-        labelId='category-select-required-label'
-        id='category-select-required'
-        value={state.product_type}
-        label='категорий'
-        name='product_type'
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (!state.product_type || !(state.product_manufacture_id >= 0) || !(state.product_model_id >= 0) || !state.good_status_id || !state.cost || !state.barcode) return;
+    if (isEdit) {
+      await dispatch(updateGood({
+        ...state,
+        product_type_has_changed: editingGood?.product_type,
+        good_data_has_changed: editingGood?.product?.product_manufacture_id !== state.product_manufacture_id || editingGood?.product?.product_model_id !== state.product_model_id || editingGood?.product?.cost !== state.cost,
+      }));
+    } else dispatch(createGood(state));
+  };
+  
+  const onNewManufactureCreate = async (e) => {
+    e.preventDefault();
+    if (!newManufactureData.product_type || !newManufactureData.name) return;
+    const categoryName = categories.filter(category => category.name === newManufactureData.product_type)?.[0]?.createManufactureName;
+    await dispatch(createManufacture({
+      ...newManufactureData, product_type: categoryName || '',
+    }));
+    handleNewManufactureModalClose();
+  };
+  
+  const onNewModelCreate = async (e) => {
+    e.preventDefault();
+    if (newModelModalOpen && (
+      !newModelData?.product_type || !newModelData?.name
+    )) return;
+    const categoryName = categories.filter(category => category.name === newModelData.product_type)?.[0]?.createModelName;
+    await dispatch(createModel({
+      ...newModelData, product_type: categoryName || '',
+    }));
+    handleNewModelModalClose();
+  };
+  
+  return (
+    <Box className='new-good-form'
+      component='form'
+      onSubmit={onSubmit}>
+      <FormControl required>
+        <InputLabel id='category-select-required-label'>категорий</InputLabel>
+        <Select
+          labelId='category-select-required-label'
+          id='category-select-required'
+          value={state.product_type}
+          label='категорий'
+          name='product_type'
+          onChange={handleChange}
+        >
+          {categories.map(category => (
+            <MenuItem value={category.name}
+              key={category.name}>{category.value}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl required>
+        <InputLabel id='manufacture-select-required-label'>производитель</InputLabel>
+        <Select
+          labelId='manufacture-select-required-label'
+          id='manufacture-select-required'
+          value={state.product_manufacture_id}
+          label='производитель'
+          name='product_manufacture_id'
+          onChange={handleChange}
+        >
+          <MenuItem value=''
+            onClick={handleNewManufactureModalOpen}><em>Создать производителя</em></MenuItem>
+          {manufactures.map(manufacture => (
+            <MenuItem value={manufacture.id}
+              key={manufacture.id}>{manufacture.name}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl required>
+        <InputLabel id='model-select-required-label'>модель</InputLabel>
+        <Select
+          labelId='model-select-required-label'
+          id='model-select-required'
+          value={state.product_model_id}
+          label='модель'
+          name='product_model_id'
+          onChange={handleChange}
+        >
+          <MenuItem value=''
+            onClick={handleNewModelModalOpen}><em>Создать модель</em></MenuItem>
+          {models.map(model => (
+            <MenuItem value={model.id} key={model.id}>{model.name}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl required>
+        <InputLabel id='status-select-required-label'>статус</InputLabel>
+        <Select
+          labelId='status-select-required-label'
+          id='status-select-required'
+          value={state.good_status_id}
+          label='статус'
+          name='good_status_id'
+          onChange={handleChange}
+        >
+          {goodStatuses.filter(status => status.isAvailable).map(status => (
+            <MenuItem value={status.name}
+              key={status.name}>{status.value}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <TextField
+        id='price'
+        label='цена'
+        type='number'
+        inputProps={{
+          min: 0,
+        }}
+        variant='outlined'
+        name='cost'
+        value={state.cost}
         onChange={handleChange}
-      >
-        {categories.map(category => (
-          <MenuItem value={category.name}>{category.value}</MenuItem>))}
-      </Select>
-    </FormControl>
-    <FormControl required>
-      <InputLabel id='manufacture-select-required-label'>производитель</InputLabel>
-      <Select
-        labelId='manufacture-select-required-label'
-        id='manufacture-select-required'
-        value={state.product_manufacture_id}
-        label='производитель'
-        name='product_manufacture_id'
-        onChange={handleChange}
-      >
-        {manufactures.map(manufacture => (
-          <MenuItem value={manufacture.id}>{manufacture.name}</MenuItem>))}
-      </Select>
-    </FormControl>
-    <FormControl required>
-      <InputLabel id='model-select-required-label'>модель</InputLabel>
-      <Select
-        labelId='model-select-required-label'
-        id='model-select-required'
-        value={state.product_model_id}
-        label='модель'
-        name='product_model_id'
-        onChange={handleChange}
-      >
-        {models.map(model => (
-          <MenuItem value={model.id}>{model.name}</MenuItem>))}
-      </Select>
-    </FormControl>
-    <FormControl required>
-      <InputLabel id='status-select-required-label'>статус</InputLabel>
-      <Select
-        labelId='status-select-required-label'
-        id='status-select-required'
-        value={state.good_status_id}
-        label='статус'
-        name='good_status_id'
-        onChange={handleChange}
-      >
-        {goodStatuses.filter(status => status.isAvailable).map(status => (
-          <MenuItem value={status.name}>{status.value}</MenuItem>))}
-      </Select>
-    </FormControl>
-    <TextField
-      id='price'
-      label='цена'
-      type='number'
-      inputProps={{
-        min: 0,
-      }}
-      variant='outlined'
-      name='cost'
-      value={state.cost}
-      onChange={handleChange}
-      required
-    />
-    <TextField id='outlined-basic'
-      label='штрих код'
-      variant='outlined'
-      name='barcode'
-      value={state.barcode}
-      onChange={handleChange}
-      required
-    />
-    <Suspense fallback={<></>}>
-      <FileUpload label='фото товара'
-        file={state?.photo_path}
-        handleFileChange={handleFileChange}
-        removeImage={removeImage}
+        required
       />
-    </Suspense>
-    <LoadingButton
-      type='submit' fullWidth variant='contained' sx={{mt: 3, mb: 2}}
-      disabled={!state.product_type || !state.product_manufacture_id || !state.product_model_id || !state.good_status_id || !state.cost || !state.barcode}
-      loading={createGoodLoading || updateGoodLoading || modelsLoading || manufacturesLoading}
-    >
-      {isEdit ? 'Сохранить' : 'Создать'}
-    </LoadingButton>
-    <Snackbar
-      anchorOrigin={{vertical: 'top', horizontal: 'center'}}
-      open={snackBarOpen}
-      onClose={handleSnackBarClose}
-      message={isEdit ? updateGoodErrorMessage : createGoodErrorMessage}
-    />
-  </Box>);
+      <TextField id='outlined-basic'
+        label='штрих код'
+        variant='outlined'
+        name='barcode'
+        value={state.barcode}
+        onChange={handleChange}
+        required
+      />
+      <Suspense fallback={<></>}>
+        <FileUpload label='фото товара'
+          file={state?.photo_path}
+          handleFileChange={handleFileChange}
+          removeImage={removeImage}
+        />
+      </Suspense>
+      <LoadingButton
+        type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}
+        disabled={!state.product_type || !(state.product_manufacture_id >= 0) || !(state.product_model_id >= 0) || !state.good_status_id || !state.cost || !state.barcode}
+        loading={createGoodLoading || updateGoodLoading || modelsLoading || manufacturesLoading}
+      >
+        {isEdit ? 'Сохранить' : 'Создать'}
+      </LoadingButton>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={snackBarOpen}
+        onClose={handleSnackBarClose}
+        message={isEdit ? updateGoodErrorMessage : createGoodErrorMessage}
+      />
+      <Modal
+        aria-labelledby='transition-modal-title'
+        aria-describedby='transition-modal-description'
+        open={newManufactureModalOpen || newModelModalOpen}
+        onClose={() => {
+          handleNewManufactureModalClose();
+          handleNewModelModalClose();
+        }}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={newManufactureModalOpen || newModelModalOpen}>
+          <Box sx={modalStyle} className='new-manufacture-model-form-modal'>
+            <Typography variant='h6'
+              component='h6'
+              className='new-manufacture-model-form-modal-title'
+            >Создать производителя</Typography>
+            <Box className='new-good-form'
+              component='form'
+              onSubmit={newManufactureModalOpen ? onNewManufactureCreate : newModelModalOpen ? onNewModelCreate : () => {}}
+            >
+              <FormControl required>
+                <InputLabel id='category-select-required-label'>
+                  категорий
+                </InputLabel>
+                <Select
+                  labelId='category-select-required-label'
+                  id='category-select-required'
+                  value={newManufactureData?.product_type}
+                  label='категорий'
+                  name='product_type'
+                  onChange={newManufactureModalOpen ? handleManufactureDataChange : newModelModalOpen ? handleModelDataChange : () => {}}
+                >
+                  {categories.map(category => (
+                    <MenuItem value={category.name}
+                      key={category.name}>{category.value}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <TextField id='outlined-basic'
+                label={newManufactureModalOpen ? 'производитель' : newModelModalOpen ? 'модель' : ''}
+                variant='outlined'
+                name='name'
+                value={newManufactureModalOpen ? newManufactureData?.name : newModelModalOpen ? newModelData?.name : ''}
+                onChange={newManufactureModalOpen ? handleManufactureDataChange : newModelModalOpen ? handleModelDataChange : () => {}}
+                required
+              />
+              <LoadingButton
+                type='submit'
+                fullWidth
+                variant='contained'
+                sx={{ mt: 3, mb: 2 }}
+                //disabled={
+                //  newManufactureModalOpen ? !newManufactureData?.product_type
+                // || !newManufactureData?.name : newModelModalOpen ?
+                // !newModelModalOpen?.product_type || !newModelModalOpen?.name
+                // : false }
+              >
+                {'Создать'}
+              </LoadingButton>
+            </Box>
+          </Box>
+        </Fade>
+      </Modal>
+    </Box>
+  );
 };
 
 export default CreateEditGoodForm;
