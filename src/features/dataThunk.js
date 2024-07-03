@@ -36,7 +36,7 @@ export const createGood = createAsyncThunk('data/createGood', async (data, { rej
     };
     const createGoodForm = new FormData();
     
-    const reqToModel = await axiosApi.post(`http://10.1.2.75:8000/api/${data.product_type}/`, createItemForm);
+    const reqToModel = await axiosApi.post(`api/${data.product_type}/`, createItemForm);
     const resFromModel = await reqToModel.data;
     
     createGoodForm.append('nazvanie_id', resFromModel?.id);
@@ -121,7 +121,7 @@ export const getModels = createAsyncThunk('data/getModels', async (product_type,
 
 export const createManufacture = createAsyncThunk('data/createManufacture', async (data, { rejectWithValue }) => {
   try {
-    const req = await axiosApi.post(`http://10.1.2.75:8000/api/${data?.product_type}_manufactures/`, { name: data?.name });
+    const req = await axiosApi.post(`${data?.product_type}_manufactures/`, { name: data?.name });
     return await req.data;
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 401) {

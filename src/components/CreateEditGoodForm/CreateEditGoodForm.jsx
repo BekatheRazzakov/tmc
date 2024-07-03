@@ -194,6 +194,9 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
   
   const onNewManufactureCreate = async (e) => {
     e.preventDefault();
+    if (modelIsCreated || manufactureIsCreated) {
+      dispatch(resetCreateGoodData());
+    }
     if (!newManufactureData.product_type || !newManufactureData.name) return;
     await dispatch(createManufacture(newManufactureData));
     handleNewManufactureModalClose();
@@ -201,6 +204,9 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
   
   const onNewModelCreate = async (e) => {
     e.preventDefault();
+    if (modelIsCreated || manufactureIsCreated) {
+      dispatch(resetCreateGoodData());
+    }
     if (newModelModalOpen && (
       !newModelData?.product_type || !newModelData?.name
     )) return;
@@ -209,121 +215,123 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
   };
   
   return (
-    <Box className='new-good-form'
-      component='form'
-      onSubmit={onSubmit}>
-      <FormControl required>
-        <InputLabel id='category-select-required-label'>категорий</InputLabel>
-        <Select
-          labelId='category-select-required-label'
-          id='category-select-required'
-          value={state.product_type}
-          label='категорий'
-          name='product_type'
+    <>
+      <Box className='new-good-form'
+        component='form'
+        onSubmit={onSubmit}>
+        <FormControl required>
+          <InputLabel id='category-select-required-label'>категорий</InputLabel>
+          <Select
+            labelId='category-select-required-label'
+            id='category-select-required'
+            value={state.product_type}
+            label='категорий'
+            name='product_type'
+            onChange={handleChange}
+          >
+            {categories.map(category => (
+              <MenuItem value={category.name}
+                key={category.name}>{category.value}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl required>
+          <InputLabel id='manufacture-select-required-label'>производитель</InputLabel>
+          <Select
+            labelId='manufacture-select-required-label'
+            id='manufacture-select-required'
+            value={state.product_manufacture_id}
+            label='производитель'
+            name='product_manufacture_id'
+            onChange={handleChange}
+          >
+            <MenuItem value={state?.product_manufacture_id || 0}
+              onClick={handleNewManufactureModalOpen}><em>Создать производителя</em></MenuItem>
+            {manufactures.map(manufacture => (
+              <MenuItem value={manufacture.id}
+                key={manufacture.id}>{manufacture.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl required>
+          <InputLabel id='model-select-required-label'>модель</InputLabel>
+          <Select
+            labelId='model-select-required-label'
+            id='model-select-required'
+            value={state.product_model_id}
+            label='модель'
+            name='product_model_id'
+            onChange={handleChange}
+          >
+            <MenuItem value={state?.product_model_id || 0}
+              onClick={handleNewModelModalOpen}><em>Создать модель</em></MenuItem>
+            {models.map(model => (
+              <MenuItem value={model.id} key={model.id}>{model.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl required>
+          <InputLabel id='status-select-required-label'>статус</InputLabel>
+          <Select
+            labelId='status-select-required-label'
+            id='status-select-required'
+            value={state.good_status_id}
+            label='статус'
+            name='good_status_id'
+            onChange={handleChange}
+          >
+            {goodStatuses.filter(status => status.isAvailable).map(status => (
+              <MenuItem value={status.name}
+                key={status.name}>{status.value}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <TextField
+          id='price'
+          label='цена'
+          type='number'
+          inputProps={{
+            min: 0,
+          }}
+          variant='outlined'
+          name='cost'
+          value={state.cost}
           onChange={handleChange}
-        >
-          {categories.map(category => (
-            <MenuItem value={category.name}
-              key={category.name}>{category.value}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl required>
-        <InputLabel id='manufacture-select-required-label'>производитель</InputLabel>
-        <Select
-          labelId='manufacture-select-required-label'
-          id='manufacture-select-required'
-          value={state.product_manufacture_id}
-          label='производитель'
-          name='product_manufacture_id'
-          onChange={handleChange}
-        >
-          <MenuItem value={state?.product_manufacture_id || 0}
-            onClick={handleNewManufactureModalOpen}><em>Создать производителя</em></MenuItem>
-          {manufactures.map(manufacture => (
-            <MenuItem value={manufacture.id}
-              key={manufacture.id}>{manufacture.name}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl required>
-        <InputLabel id='model-select-required-label'>модель</InputLabel>
-        <Select
-          labelId='model-select-required-label'
-          id='model-select-required'
-          value={state.product_model_id}
-          label='модель'
-          name='product_model_id'
-          onChange={handleChange}
-        >
-          <MenuItem value={state?.product_model_id || 0}
-            onClick={handleNewModelModalOpen}><em>Создать модель</em></MenuItem>
-          {models.map(model => (
-            <MenuItem value={model.id} key={model.id}>{model.name}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl required>
-        <InputLabel id='status-select-required-label'>статус</InputLabel>
-        <Select
-          labelId='status-select-required-label'
-          id='status-select-required'
-          value={state.good_status_id}
-          label='статус'
-          name='good_status_id'
-          onChange={handleChange}
-        >
-          {goodStatuses.filter(status => status.isAvailable).map(status => (
-            <MenuItem value={status.name}
-              key={status.name}>{status.value}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <TextField
-        id='price'
-        label='цена'
-        type='number'
-        inputProps={{
-          min: 0,
-        }}
-        variant='outlined'
-        name='cost'
-        value={state.cost}
-        onChange={handleChange}
-        required
-      />
-      <TextField id='outlined-basic'
-        label='штрих код'
-        variant='outlined'
-        name='barcode'
-        value={state.barcode}
-        onChange={handleChange}
-        required
-      />
-      <Suspense fallback={<></>}>
-        <FileUpload label='фото товара'
-          file={state?.photo_path}
-          handleFileChange={handleFileChange}
-          removeImage={removeImage}
+          required
         />
-      </Suspense>
-      <LoadingButton
-        type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}
-        disabled={!state.product_type || !(
-          state.product_manufacture_id >= 0
-        ) || !(
-          state.product_model_id >= 0
-        ) || !state.good_status_id || !state.cost || !state.barcode}
-        loading={createGoodLoading || updateGoodLoading || modelsLoading || manufacturesLoading}
-      >
-        {isEdit ? 'Сохранить' : 'Создать'}
-      </LoadingButton>
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={snackBarOpen}
-        onClose={handleSnackBarClose}
-        message={isEdit ? updateGoodErrorMessage : manufactureIsCreated && !createManufactureErrorMessage ? 'производитель товара создан' : modelIsCreated && !createModelErrorMessage ? 'модель товара создана' : createGoodErrorMessage || createManufactureErrorMessage || createModelErrorMessage}
-      />
+        <TextField id='outlined-basic'
+          label='штрих код'
+          variant='outlined'
+          name='barcode'
+          value={state.barcode}
+          onChange={handleChange}
+          required
+        />
+        <Suspense fallback={<></>}>
+          <FileUpload label='фото товара'
+            file={state?.photo_path}
+            handleFileChange={handleFileChange}
+            removeImage={removeImage}
+          />
+        </Suspense>
+        <LoadingButton
+          type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}
+          disabled={!state.product_type || !(
+            state.product_manufacture_id >= 0
+          ) || !(
+            state.product_model_id >= 0
+          ) || !state.good_status_id || !state.cost || !state.barcode}
+          loading={createGoodLoading || updateGoodLoading || modelsLoading || manufacturesLoading}
+        >
+          {isEdit ? 'Сохранить' : 'Создать'}
+        </LoadingButton>
+        <Snackbar
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          open={snackBarOpen}
+          onClose={handleSnackBarClose}
+          message={isEdit && updateGoodErrorMessage || createGoodErrorMessage || createManufactureErrorMessage || createModelErrorMessage || modelIsCreated && 'модель товара создана' || manufactureIsCreated && 'производитель товара создан'}
+        />
+      </Box>
       <Modal
         aria-labelledby='transition-modal-title'
         aria-describedby='transition-modal-description'
@@ -390,7 +398,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
           </Box>
         </Fade>
       </Modal>
-    </Box>
+    </>
   );
 };
 

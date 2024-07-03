@@ -13,6 +13,7 @@ import Goods from "./containers/Goods/Goods";
 import SingleGood from "./containers/SingleGood/SingleGood";
 import './App.css';
 import NewGood from "./containers/NewGood/NewGood";
+import Trades from "./containers/Trades/Trades";
 
 function App() {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ function App() {
         <Route path='goods' element={<Goods/>}/>
         <Route path='goods/:id' element={<SingleGood/>}/>
         <Route path='create-good' element={<NewGood/>}/>
+        <Route path='trades' element={<Trades/>}/>
       </Routes>
     </div>
   );

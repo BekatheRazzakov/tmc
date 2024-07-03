@@ -81,7 +81,7 @@ const RightDrawer = memo(() => {
             <ListItemText primary='Пользователи'/>
           </ListItemButton>
         </ListItem>
-        <ListItem disablePadding onClick={() => onNavItemClick('/trade')}>
+        <ListItem disablePadding onClick={() => onNavItemClick('/trades')}>
           <ListItemButton>
             <ListItemIcon style={{ minWidth: '45px' }}>
               <SwapVertIcon/>

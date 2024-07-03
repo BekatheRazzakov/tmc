@@ -9,7 +9,12 @@ const initialState = {
 };
 
 const TradesSlice = createSlice({
-  name: "trade", initialState, reducers: {}, extraReducers: (builder) => {
+  name: "trade", initialState, reducers: {
+    resetCreateTradeData: (state) => {
+      state.createTradeErrorMessage = '';
+      state.tradeIsCreated = false;
+    },
+  }, extraReducers: (builder) => {
     builder.addCase(createTrade.pending, (state) => {
       state.createTradeLoading = true;
     });
