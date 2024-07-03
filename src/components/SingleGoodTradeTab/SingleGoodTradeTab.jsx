@@ -11,9 +11,8 @@ import {
 import { resetCreateTradeData } from "../../features/tradeSlice";
 import { createTrade } from "../../features/tradeThunk";
 
-const SingleGoodTrageTab = ({ goodId }) => {
+const SingleGoodTrageTab = ({ tradeId }) => {
   const dispatch = useAppDispatch();
-  const params = useParams();
   const navigate = useNavigate();
   const {
     users, usersLoading, usersErrorMessage, user
@@ -59,7 +58,7 @@ const SingleGoodTrageTab = ({ goodId }) => {
   const onTradeSubmit = async (e) => {
     e.preventDefault();
     await dispatch(createTrade({
-      good_id: Number(params?.id),
+      good_id: Number(tradeId),
       source_user_id: user?.id,
       destination_user_id: state?.id,
       trade_status_id: 1,

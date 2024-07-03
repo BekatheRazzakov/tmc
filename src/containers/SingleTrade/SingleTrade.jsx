@@ -20,8 +20,6 @@ const SingleTrade = () => {
     dispatch(getTrade(params?.id));
   }, [dispatch, params.id]);
   
-  console.log(trade);
-  
   useEffect(() => {
     if (tradeErrorMessage) setSnackBarOpen(true);
   }, [tradeErrorMessage]);
@@ -34,6 +32,7 @@ const SingleTrade = () => {
         <TradeInfoTab
           trade={trade}
           tradeLoading={tradeLoading}
+          tradeId={params?.id}
         />
       </div>
       <Snackbar

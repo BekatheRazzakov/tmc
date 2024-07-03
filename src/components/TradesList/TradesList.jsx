@@ -18,7 +18,6 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from 'react-redux';
 import { formatDate, tradeStatuses } from "../../constants";
-import { useNavigate } from "react-router-dom";
 import GoodsListFooter from "../GoodsListFooter/GoodsListFooter";
 import { getTrades } from "../../features/tradeThunk";
 
@@ -65,12 +64,11 @@ const TradesList = memo(({ trades }) => {
   const [paginationData, setPaginationData] = useState({
     pageSize: 20, pageNumber: 1, sortByCategory: 0,
   });
-  const [searchWord, setSearchWord] = useState('');
   
   const handleSortByChange = (e) => {
     setSortBy(e.target.value);
   };
-  
+
   const handlePaginationDataChange = (e) => {
     const { name, value } = e.target;
     setPaginationData(prevState => (
@@ -104,7 +102,7 @@ const TradesList = memo(({ trades }) => {
   
   const filteredGoodsList = useCallback(() => {
     return sortBy === 1 ? sortedByStatusWaiting() : sortBy === 2 ? sortedByStatusAccepted() : sortBy === 3 ? sortedByStatusDenied() : trades || []
-  }, [trades, searchWord, sortBy, sortedByStatusAccepted, sortedByStatusWaiting, sortedByStatusDenied]);
+  }, [trades, sortBy, sortedByStatusAccepted, sortedByStatusWaiting, sortedByStatusDenied]);
   
   return (
     <Paper elevation={4}
