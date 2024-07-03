@@ -26,79 +26,81 @@ import './rightDrawer.css';
 const RightDrawer = memo(() => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const {currentDrawer} = useAppSelector(state => state.dataState);
-  const {user} = useAppSelector(state => state.userState);
+  const { currentDrawer } = useAppSelector(state => state.dataState);
+  const { user } = useAppSelector(state => state.userState);
   
   const onNavItemClick = (tabName) => {
     dispatch(setDrawer(''));
     navigate(tabName);
   };
   
-  return (<Drawer
-    className='right-drawer'
-    anchor='right'
-    open={currentDrawer === 'right'}
-    onClose={() => dispatch(setDrawer(''))}
-  >
-    {user && <ListItem sx={{p: '0'}}>
-      <ListItemButton>
-        <Box sx={{display: 'flex', alignItems: 'center', gap: '15px'}}>
-          <Avatar
-            className='right-drawer-avatar'
-            alt={user.username}
-            src={PersonIcon}
-            sx={{bgcolor: deepPurple[500],}}
-          />
-          <Typography variant='h6' component='h6'>
-            {user.username}
-          </Typography>
-        </Box>
-      </ListItemButton>
-    </ListItem>}
-    <List className='right-drawer-list'>
-      <ListItem disablePadding onClick={() => onNavItemClick('/goods')}>
+  return (
+    <Drawer
+      className='right-drawer'
+      anchor='right'
+      open={currentDrawer === 'right'}
+      onClose={() => dispatch(setDrawer(''))}
+    >
+      {user && <ListItem sx={{ p: '0' }}>
         <ListItemButton>
-          <ListItemIcon style={{minWidth: '45px'}}>
-            <CategoryIcon/>
-          </ListItemIcon>
-          <ListItemText primary='ТМЦ'/>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <Avatar
+              className='right-drawer-avatar'
+              alt={user.username}
+              src={PersonIcon}
+              sx={{ bgcolor: deepPurple[500], }}
+            />
+            <Typography variant='h6' component='h6'>
+              {user.username}
+            </Typography>
+          </Box>
         </ListItemButton>
-      </ListItem>
-      <ListItem disablePadding onClick={() => onNavItemClick('/create-good')}>
-        <ListItemButton>
-          <ListItemIcon style={{minWidth: '45px'}}>
-            <AddBoxIcon/>
-          </ListItemIcon>
-          <ListItemText primary='Создать ТМЦ'/>
-        </ListItemButton>
-      </ListItem>
-      <ListItem disablePadding onClick={() => onNavItemClick('/users')}>
-        <ListItemButton>
-          <ListItemIcon style={{minWidth: '45px'}}>
-            <GroupsIcon/>
-          </ListItemIcon>
-          <ListItemText primary='Пользователи'/>
-        </ListItemButton>
-      </ListItem>
-      <ListItem disablePadding onClick={() => onNavItemClick('/trade')}>
-        <ListItemButton>
-          <ListItemIcon style={{minWidth: '45px'}}>
-            <SwapVertIcon/>
-          </ListItemIcon>
-          <ListItemText primary='Обмен товарами'/>
-        </ListItemButton>
-      </ListItem>
-      <ListItem className='right-drawer-logout-btn'
-        disablePadding
-        onClick={() => dispatch(setDrawer(''))}>
-        <Button
-          sx={{width: '100%'}}
-          color='error' onClick={() => dispatch(logout())}>
-          Выйти из аккаунта
-        </Button>
-      </ListItem>
-    </List>
-  </Drawer>);
+      </ListItem>}
+      <List className='right-drawer-list'>
+        <ListItem disablePadding onClick={() => onNavItemClick('/goods')}>
+          <ListItemButton>
+            <ListItemIcon style={{ minWidth: '45px' }}>
+              <CategoryIcon/>
+            </ListItemIcon>
+            <ListItemText primary='ТМЦ'/>
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding onClick={() => onNavItemClick('/create-good')}>
+          <ListItemButton>
+            <ListItemIcon style={{ minWidth: '45px' }}>
+              <AddBoxIcon/>
+            </ListItemIcon>
+            <ListItemText primary='Создать ТМЦ'/>
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding onClick={() => onNavItemClick('/users')}>
+          <ListItemButton>
+            <ListItemIcon style={{ minWidth: '45px' }}>
+              <GroupsIcon/>
+            </ListItemIcon>
+            <ListItemText primary='Пользователи'/>
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding onClick={() => onNavItemClick('/trade')}>
+          <ListItemButton>
+            <ListItemIcon style={{ minWidth: '45px' }}>
+              <SwapVertIcon/>
+            </ListItemIcon>
+            <ListItemText primary='Обмен товарами'/>
+          </ListItemButton>
+        </ListItem>
+        <ListItem className='right-drawer-logout-btn'
+          disablePadding
+          onClick={() => dispatch(setDrawer(''))}>
+          <Button
+            sx={{ width: '100%' }}
+            color='error' onClick={() => dispatch(logout())}>
+            Выйти из аккаунта
+          </Button>
+        </ListItem>
+      </List>
+    </Drawer>
+  );
 });
 
 export default RightDrawer;

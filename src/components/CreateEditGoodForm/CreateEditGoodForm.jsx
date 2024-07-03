@@ -25,7 +25,7 @@ import {
 } from "../../features/dataThunk";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  resetCreateGoodData, setGoodIsCreated, setGoodIsUpdated
+  resetCreateGoodData, setGoodIsUpdated
 } from "../../features/dataSlice";
 
 const FileUpload = lazy(() => import("../../components/FileUpload/FileUpload"));
@@ -84,6 +84,10 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
   const [newModelModalOpen, setNewModelModalOpen] = useState(false);
   
   useEffect(() => {
+    return () => dispatch(resetCreateGoodData());
+  }, [dispatch]);
+  
+  useEffect(() => {
     if (createGoodError || updateGoodError || modelIsCreated || manufactureIsCreated || createManufactureError || createModelError) {
       setSnackBarOpen(true);
     }
@@ -100,7 +104,6 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
     if (goodIsCreated) {
       navigate(`/goods/${good?.id}`);
       dispatch(resetCreateGoodData());
-      dispatch(setGoodIsCreated(false));
     }
   }, [dispatch, good?.id, goodIsCreated, navigate]);
   
@@ -235,7 +238,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
           name='product_manufacture_id'
           onChange={handleChange}
         >
-          <MenuItem value=''
+          <MenuItem value={state?.product_manufacture_id || 0}
             onClick={handleNewManufactureModalOpen}><em>Создать производителя</em></MenuItem>
           {manufactures.map(manufacture => (
             <MenuItem value={manufacture.id}
@@ -253,7 +256,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
           name='product_model_id'
           onChange={handleChange}
         >
-          <MenuItem value=''
+          <MenuItem value={state?.product_model_id || 0}
             onClick={handleNewModelModalOpen}><em>Создать модель</em></MenuItem>
           {models.map(model => (
             <MenuItem value={model.id} key={model.id}>{model.name}</MenuItem>
@@ -319,10 +322,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={snackBarOpen}
         onClose={handleSnackBarClose}
-        message={
-          isEdit ? updateGoodErrorMessage : manufactureIsCreated ? 'производитель товара создан' : modelIsCreated ? 'модель товара создана' :
-            createGoodErrorMessage || createManufactureErrorMessage || createModelErrorMessage
-        }
+        message={isEdit ? updateGoodErrorMessage : manufactureIsCreated && !createManufactureErrorMessage ? 'производитель товара создан' : modelIsCreated && !createModelErrorMessage ? 'модель товара создана' : createGoodErrorMessage || createManufactureErrorMessage || createModelErrorMessage}
       />
       <Modal
         aria-labelledby='transition-modal-title'
@@ -384,7 +384,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
                 disabled={newManufactureModalOpen ? !newManufactureData?.product_type || !newManufactureData?.name : newModelModalOpen ? !newModelData?.product_type || !newModelData?.name : false}
                 loading={newManufactureModalOpen ? createManufactureLoading : newModelModalOpen ? createModelLoading : false}
               >
-                {'Создать'}
+                Создать
               </LoadingButton>
             </Box>
           </Box>

@@ -45,6 +45,7 @@ const SingleGood = () => {
         <Tab className='single-good-tab-btn' label='Информация'/>
         <Tab className='single-good-tab-btn' label='Редактировать' disabled={!good?.product}/>
         <Tab className='single-good-tab-btn' label='Удалить' disabled={!good?.product}/>
+        <Tab className='single-good-tab-btn' label='Трейд'/>
       </Tabs>
     </Box>
     {value === 0 ? <div className='single-good-page-papers'>

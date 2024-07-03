@@ -54,6 +54,8 @@ export const createGood = createAsyncThunk('data/createGood', async (data, { rej
       return rejectWithValue('Ошибка при создании товара');
     } else if (isAxiosError(e) && e.response && e.response.status === 401) {
       return rejectWithValue('Неправильные учётные данные, авторизуйтесь снова');
+    } else if (isAxiosError(e) && e.response && e.response.status === 403) {
+      return rejectWithValue('У вас нет прав на создание товара');
     }
     throw e;
   }
@@ -101,6 +103,8 @@ export const updateGood = createAsyncThunk('data/updateGood', async (data, { rej
       return rejectWithValue('Ошибка при редактировании товара');
     } else if (isAxiosError(e) && e.response && e.response.status === 401) {
       return rejectWithValue('Неправильные учётные данные, авторизуйтесь снова');
+    } else if (isAxiosError(e) && e.response && e.response.status === 403) {
+      return rejectWithValue('У вас нет прав на редактирование товара');
     }
     throw e;
   }
