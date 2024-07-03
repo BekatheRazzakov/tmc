@@ -1,15 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createTrade, getTrade, getTrades } from "./tradeThunk";
+import { acceptTrade, createTrade, getTrade, getTrades } from "./tradeThunk";
 
 const initialState = {
   trades: [],
   trade: null,
   tradeLoading: false,
-  tradeErrorMessage: '',
-  tradesLoading: false,
-  tradesErrorMessage: '',
+  acceptTradeLoading: false,
   createTradeLoading: false,
+  tradesLoading: false,
+  tradeErrorMessage: '',
+  tradesErrorMessage: '',
   createTradeErrorMessage: '',
+  acceptTradeErrorMessage: '',
   tradeIsCreated: false,
 };
 
@@ -57,6 +59,17 @@ const TradesSlice = createSlice({
     });
     builder.addCase(createTrade.rejected, (state, { payload: error }) => {
       state.createTradeLoading = false;
+      state.createTradeErrorMessage = error || 'Что то пошло не так, попробуйте позже';
+    });
+    
+    builder.addCase(acceptTrade.pending, (state) => {
+      state.acceptTradeLoading = true;
+    });
+    builder.addCase(acceptTrade.fulfilled, (state) => {
+      state.acceptTradeLoading = false;
+    });
+    builder.addCase(acceptTrade.rejected, (state, { payload: error }) => {
+      state.acceptTradeLoading = false;
       state.createTradeErrorMessage = error || 'Что то пошло не так, попробуйте позже';
     });
   },

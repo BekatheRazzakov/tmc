@@ -5,10 +5,21 @@ import { formatDate, goodStatuses } from "../../constants";
 import { LoadingButton } from "@mui/lab";
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+import { useAppDispatch } from "../../app/hooks";
+import { acceptTrade } from "../../features/tradeThunk";
+import { useNavigate } from "react-router-dom";
 
 const TradeInfoTab = ({
   trade, tradeLoading
 }) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  
+  const onAccept = async () => {
+    await dispatch(acceptTrade(trade?.id));
+    navigate('/trades');
+  };
+  
   return (
     <Paper className='single-good-outer-paper'
       elevation={3}
@@ -106,7 +117,7 @@ const TradeInfoTab = ({
           </LoadingButton>
           <LoadingButton loadingPosition='start'
             startIcon={<CheckIcon/>}
-            color='success'>
+            color='success' onClick={onAccept}>
             Принять
           </LoadingButton>
         </ButtonGroup>

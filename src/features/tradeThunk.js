@@ -31,6 +31,22 @@ export const createTrade = createAsyncThunk('trades/createTrade', async (tradeDa
     const req = await axiosApi.post(`trades/`, tradeData);
     return await req.data;
   } catch (e) {
+    if (isAxiosError(e) && e.response && e.response.status === 401) {
+      return rejectWithValue('Неправильные учётные данные, авторизуйтесь снова');
+    } else if (isAxiosError(e) && e.response && e.response.status === 403) {
+      return rejectWithValue('У вас нет прав на создание трейда');
+    }
+    throw e;
+  }
+});
+
+export const acceptTrade = createAsyncThunk('trades/acceptTrade', async (tradeId, { rejectWithValue }) => {
+  try {
+    await axiosApi.post(`trades/${tradeId}/accept/`);
+  } catch (e) {
+    if (isAxiosError(e) && e.response && e.response.status === 401) {
+      return rejectWithValue('Неправильные учётные данные, авторизуйтесь снова');
+    }
     throw e;
   }
 });
