@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createTrade } from "./tradeThunk";
+import { createTrade, getTrades } from "./tradeThunk";
 
 const initialState = {
   trades: [],
+  tradesLoading: false,
+  tradesErrorMessage: '',
   createTradeLoading: false,
   createTradeErrorMessage: '',
   tradeIsCreated: false,
@@ -10,11 +12,26 @@ const initialState = {
 
 const TradesSlice = createSlice({
   name: "trade", initialState, reducers: {
+    resetTradeData: (state) => {
+      state.tradesErrorMessage = '';
+    },
     resetCreateTradeData: (state) => {
       state.createTradeErrorMessage = '';
       state.tradeIsCreated = false;
     },
   }, extraReducers: (builder) => {
+    builder.addCase(getTrades.pending, (state) => {
+      state.tradesLoading = true;
+    });
+    builder.addCase(getTrades.fulfilled, (state, { payload: res }) => {
+      state.tradesLoading = false;
+      state.trades = res || [];
+    });
+    builder.addCase(getTrades.rejected, (state, { payload: error }) => {
+      state.tradesLoading = false;
+      state.tradesErrorMessage = error || 'Что то пошло не так, попробуйте позже';
+    });
+    
     builder.addCase(createTrade.pending, (state) => {
       state.createTradeLoading = true;
     });
@@ -30,4 +47,4 @@ const TradesSlice = createSlice({
 });
 
 export const tradeReducer = TradesSlice.reducer;
-export const { resetCreateTradeData, } = TradesSlice.actions;
+export const { resetTradeData, resetCreateTradeData, } = TradesSlice.actions;

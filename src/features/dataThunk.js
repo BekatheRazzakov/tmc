@@ -5,7 +5,7 @@ import { isAxiosError } from "axios";
 // получает список товаров. использует пагинацию
 export const getGoods = createAsyncThunk("data/getGoods", async (data, { rejectWithValue }) => {
   try {
-    const response = await axiosApi(`goods/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}&product_type=${data?.sortByCategory || ''}`, data);
+    const response = await axiosApi(`goods/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}&product_type=${data?.sortByCategory || ''}`);
     return response.data;
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 400) {

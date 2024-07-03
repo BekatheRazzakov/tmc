@@ -54,7 +54,7 @@ const SingleGoodTrageTab = ({ goodId }) => {
     await dispatch(createTrade({
       good_id: Number(params?.id),
       source_user_id: user?.id,
-      destination_user_id: 25,
+      destination_user_id: state?.id,
       trade_status_id: 1,
     }));
   };
