@@ -18,7 +18,7 @@ export const getGoods = createAsyncThunk("data/getGoods", async (data, { rejectW
 export const getGood = createAsyncThunk("data/getGood", async (id, { rejectWithValue }) => {
   try {
     const response = await axiosApi(`goods/${id}`);
-    return response.data;
+    return response.data?.[0];
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 404) {
       return rejectWithValue('Товар не найден');
@@ -36,7 +36,7 @@ export const createGood = createAsyncThunk('data/createGood', async (data, { rej
     };
     const createGoodForm = new FormData();
     
-    const reqToModel = await axiosApi.post(`api/${data.product_type}/`, createItemForm);
+    const reqToModel = await axiosApi.post(`${data.product_type}/`, createItemForm);
     const resFromModel = await reqToModel.data;
     
     createGoodForm.append('nazvanie_id', resFromModel?.id);

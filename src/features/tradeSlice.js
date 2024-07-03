@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createTrade, getTrades } from "./tradeThunk";
+import { createTrade, getTrade, getTrades } from "./tradeThunk";
 
 const initialState = {
   trades: [],
+  trade: null,
+  tradeLoading: false,
+  tradeErrorMessage: '',
   tradesLoading: false,
   tradesErrorMessage: '',
   createTradeLoading: false,
@@ -32,11 +35,24 @@ const TradesSlice = createSlice({
       state.tradesErrorMessage = error || 'Что то пошло не так, попробуйте позже';
     });
     
+    builder.addCase(getTrade.pending, (state) => {
+      state.tradeLoading = true;
+    });
+    builder.addCase(getTrade.fulfilled, (state, { payload: res }) => {
+      state.tradeLoading = false;
+      state.trade = res || null;
+    });
+    builder.addCase(getTrade.rejected, (state, { payload: error }) => {
+      state.tradeLoading = false;
+      state.tradeErrorMessage = error || 'Что то пошло не так, попробуйте позже';
+    });
+    
     builder.addCase(createTrade.pending, (state) => {
       state.createTradeLoading = true;
     });
     builder.addCase(createTrade.fulfilled, (state, { payload: res }) => {
       state.createTradeLoading = false;
+      state.trade = res || null;
       state.tradeIsCreated = true;
     });
     builder.addCase(createTrade.rejected, (state, { payload: error }) => {

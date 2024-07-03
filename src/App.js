@@ -11,9 +11,10 @@ import UserToolbar from "./components/toolbar/UserToolbar";
 import { useEffect } from "react";
 import Goods from "./containers/Goods/Goods";
 import SingleGood from "./containers/SingleGood/SingleGood";
-import './App.css';
 import NewGood from "./containers/NewGood/NewGood";
 import Trades from "./containers/Trades/Trades";
+import SingleTrade from "./containers/SingleTrade/SingleTrade";
+import './App.css';
 
 function App() {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ function App() {
         <Route path='goods/:id' element={<SingleGood/>}/>
         <Route path='create-good' element={<NewGood/>}/>
         <Route path='trades' element={<Trades/>}/>
+        <Route path='trades/:id' element={<SingleTrade/>}/>
       </Routes>
     </div>
   );

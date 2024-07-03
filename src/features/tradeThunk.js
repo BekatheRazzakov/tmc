@@ -6,32 +6,21 @@ export const getTrades = createAsyncThunk("trades/getTrades", async (data, { rej
   try {
     const response = await axiosApi(`trades/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}`);
     return response.data;
-    //return [
-    //  {
-    //    source_user_id: 0,
-    //    destination_user_id: 0,
-    //    good_id: 0,
-    //    create_date: "string",
-    //    approved_date: "string",
-    //    comment: "string",
-    //    trade_status_id: 1,
-    //    is_deleted: false,
-    //    id: 0
-    //  }, {
-    //    source_user_id: 1,
-    //    destination_user_id: 1,
-    //    good_id: 1,
-    //    create_date: "string",
-    //    approved_date: "string",
-    //    comment: "string",
-    //    trade_status_id: 2,
-    //    is_deleted: false,
-    //    id: 1
-    //  }
-    //];
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 400) {
       return rejectWithValue('Что то пошло не так, попробуйте позже');
+    }
+    throw e;
+  }
+});
+
+export const getTrade = createAsyncThunk("trades/getTrade", async (id, { rejectWithValue }) => {
+  try {
+    const response = await axiosApi(`trades/${id}`);
+    return response.data;
+  } catch (e) {
+    if (isAxiosError(e) && e.response && e.response.status === 404) {
+      return rejectWithValue('Товар не найден');
     }
     throw e;
   }

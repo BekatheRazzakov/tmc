@@ -19,7 +19,7 @@ const SingleGoodTrageTab = ({ goodId }) => {
     users, usersLoading, usersErrorMessage, user
   } = useAppSelector(state => state.userState);
   const {
-    createTradeLoading, tradeIsCreated, createTradeErrorMessage
+    trade, createTradeLoading, tradeIsCreated, createTradeErrorMessage
   } = useAppSelector(state => state.tradeState);
   const [snackBarOpen, setSnackBarOpen] = useState(false);
   const [state, setState] = useState(null);
@@ -33,9 +33,16 @@ const SingleGoodTrageTab = ({ goodId }) => {
     if (usersErrorMessage || createTradeErrorMessage || tradeIsCreated) setSnackBarOpen(true);
   }, [createTradeErrorMessage, tradeIsCreated, usersErrorMessage]);
   
+  useEffect(() => {
+    if (tradeIsCreated) {
+      navigate(`/trades/${trade?.id}`);
+      dispatch(resetCreateTradeData());
+    }
+  }, [dispatch, trade?.id, tradeIsCreated, navigate]);
+  
   const handleChange = (e) => {
     const { innerText } = e.target;
-    const selectedUser = users.filter(user => user?.username === innerText)[0];
+    const selectedUser = users.filter(user => user?.full_name === innerText)[0];
     
     setState(() => (
       {
@@ -72,7 +79,7 @@ const SingleGoodTrageTab = ({ goodId }) => {
           <Autocomplete
             disablePortal
             id='combo-box-demo'
-            options={users.map(user => user?.username || '') || []}
+            options={users.map(user => user?.full_name || '') || []}
             value={state?.username}
             onChange={handleChange}
             renderInput={(params) =>

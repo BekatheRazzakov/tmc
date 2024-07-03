@@ -10,19 +10,13 @@ import {
   AppBar,
   Box,
   Chip,
-  IconButton,
   MenuItem,
   Paper,
   Select,
   TableContainer,
-  Toolbar,
   Typography
 } from "@mui/material";
-import SearchIcon from '@mui/icons-material/Search';
-import { alpha, styled } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
 import { useDispatch, useSelector } from 'react-redux';
-import AddIcon from '@mui/icons-material/Add';
 import { formatDate, tradeStatuses } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import GoodsListFooter from "../GoodsListFooter/GoodsListFooter";
@@ -30,62 +24,19 @@ import { getTrades } from "../../features/tradeThunk";
 
 const GoodsListTable = lazy(() => import('../GoodListTable/GoodsListTable'));
 
-const Search = styled('div')(({ theme }) => (
-  {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(1), width: 'auto',
-    },
-  }
-));
-
-const SearchIconWrapper = styled('div')(({ theme }) => (
-  {
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
-));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => (
-  {
-    color: 'inherit', width: '100%', '& .MuiInputBase-input': {
-      padding: theme.spacing(1, 1, 1, 0),
-      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-      transition: theme.transitions.create('width'),
-      [theme.breakpoints.up('sm')]: {
-        width: '13ch', '&:focus': {
-          width: '25ch',
-        },
-      },
-    },
-  }
-));
-
 const columns = [
   {
     id: 'source_user_id',
     label: 'От кого',
     minWidth: 200,
     align: 'center',
-    format: (value) => value?.username || value,
+    format: (value) => value?.full_name || value,
   }, {
     id: 'destination_user_id',
     label: 'Кому',
     minWidth: 200,
     align: 'center',
-    format: (value) => value?.username || value,
+    format: (value) => value?.full_name || value,
   }, {
     id: 'good_id', label: 'Товар', minWidth: 100, align: 'center',
   }, {
@@ -107,17 +58,10 @@ const columns = [
   },
 ];
 
-const CustomIconButton = styled(IconButton)({
-  color: 'white', '&:hover': {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-  }
-});
-
 const TradesList = memo(({ trades }) => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { tradesLoading } = useSelector(state => state.tradeState);
-  const [sortBy, setSortBy] = useState('none');
+  const [sortBy, setSortBy] = useState(0);
   const [paginationData, setPaginationData] = useState({
     pageSize: 20, pageNumber: 1, sortByCategory: 0,
   });
@@ -140,18 +84,27 @@ const TradesList = memo(({ trades }) => {
     dispatch(getTrades(paginationData));
   }, [dispatch, paginationData]);
   
-  const sortedByManufacture = useCallback(() => {
+  const sortedByStatusWaiting = useCallback(() => {
     return (
       trades || []
-    ).sort((a, b) => a?.product?.manufacture?.name?.localeCompare(b?.product?.manufacture?.name));
+    ).filter(trade => trade?.trade_status_id === 1);
+  }, [trades]);
+  
+  const sortedByStatusAccepted = useCallback(() => {
+    return (
+      trades || []
+    ).filter(trade => trade?.trade_status_id === 2);
+  }, [trades]);
+  
+  const sortedByStatusDenied = useCallback(() => {
+    return (
+      trades || []
+    ).filter(trade => trade?.trade_status_id === 3);
   }, [trades]);
   
   const filteredGoodsList = useCallback(() => {
-    const sortedTrades = (
-      sortedByManufacture() || []
-    );
-    return sortedTrades.filter(trade => trade?.product?.manufacture?.name.toLowerCase().includes(searchWord?.toLowerCase()));
-  }, [trades, searchWord, sortBy, sortedByManufacture]);
+    return sortBy === 1 ? sortedByStatusWaiting() : sortBy === 2 ? sortedByStatusAccepted() : sortBy === 3 ? sortedByStatusDenied() : trades || []
+  }, [trades, searchWord, sortBy, sortedByStatusAccepted, sortedByStatusWaiting, sortedByStatusDenied]);
   
   return (
     <Paper elevation={4}
@@ -167,21 +120,6 @@ const TradesList = memo(({ trades }) => {
             p: '10px 0',
             gap: '10px',
           }}>
-          <Toolbar className='goods-search-toolbar'
-            sx={{
-              p: '0px!important', minHeight: 'unset!important', mr: 'auto'
-            }}>
-            <Search sx={{ m: '0!important' }}>
-              <SearchIconWrapper>
-                <SearchIcon/>
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder='Найти товар…'
-                inputProps={{ 'aria-label': 'search' }}
-                onChange={e => setSearchWord(e.target.value)}
-              />
-            </Search>
-          </Toolbar>
           <Box sx={{
             display: "flex", alignItems: 'center', flexWrap: 'no-wrap'
           }}>
@@ -195,31 +133,19 @@ const TradesList = memo(({ trades }) => {
               onChange={handleSortByChange}
               sx={{ color: '#FFFFFF', minWidth: '175px' }}
             >
-              <MenuItem value='none'>без сортировки</MenuItem>
-              <MenuItem value='manufacture'>производитель (А-Я)</MenuItem>
-              <MenuItem value='model'>модель (А-Я)</MenuItem>
-              <MenuItem value='cost-increase'>цена (по возрастанию)</MenuItem>
-              <MenuItem value='cost-decrease'>цена (по убыванию)</MenuItem>
+              <MenuItem value={0}>без сортировки</MenuItem>
               {tradeStatuses.map(status => (
                 <MenuItem value={status.name}
-                  key={status.value}>статус: {status.value}</MenuItem>
+                  key={status.id}>статус: {status.value}</MenuItem>
               ))}
             </Select>
-          </Box>
-          <Box className='goods-list-tools' sx={{ width: '100%' }}>
-            <CustomIconButton size='large'
-              onClick={() => navigate('/create-good')}
-              sx={{ ml: 'auto' }}
-            >
-              <AddIcon/>
-            </CustomIconButton>
           </Box>
         </AppBar>
       </Box>
       <TableContainer sx={{ maxHeight: 530 }}>
         <Suspense fallback={<></>}>
           <GoodsListTable
-            filteredGoodsList={() => trades}
+            filteredGoodsList={filteredGoodsList}
             columns={columns}
             goodsLoading={tradesLoading}
           />
