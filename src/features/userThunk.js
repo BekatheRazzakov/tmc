@@ -8,6 +8,7 @@ export const signIn = createAsyncThunk("user/signIn", async (userData, { rejectW
     formData.append("username", userData.username);
     formData.append("password", userData.password);
     const response = await axiosApi.post("/login/", formData);
+    console.log(response);
     return {
       token: response.data?.access_token,
       username: response.data?.username,

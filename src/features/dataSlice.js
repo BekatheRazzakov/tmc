@@ -5,7 +5,10 @@ import {
   getGood,
   getGoods,
   getManufactures,
-  getModels, deleteGood, createManufacture, createModel,
+  getModels,
+  deleteGood,
+  createManufacture,
+  createModel,
 } from "./dataThunk";
 
 const initialState = {
@@ -71,9 +74,12 @@ const DataSlice = createSlice({
       state.createModelErrorMessage = '';
       state.updateGoodError = '';
       state.updateGoodErrorMessage = '';
-    },
-    setGoodIsUpdated: (state, action) => {
+    }, setGoodIsUpdated: (state, action) => {
       state.goodIsUpdated = action.payload;
+    }, resetCreateTradeData: (state) => {
+      state.tradeIsCreated = false;
+      state.createTradeLoading = false;
+      state.createTradeErrorMessage = false;
     },
   }, extraReducers: (builder) => {
     builder.addCase(getGoods.pending, (state) => {

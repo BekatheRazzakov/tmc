@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Box, FormControl, Snackbar, TextField } from "@mui/material";
 import { Autocomplete } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { getUsers } from "../../features/userThunk";
-import { resetCreateGoodData } from "../../features/dataSlice";
+import {
+  resetCreateGoodData,
+} from "../../features/dataSlice";
+import { resetCreateTradeData } from "../../features/tradeSlice";
+import { createTrade } from "../../features/tradeThunk";
 
 const SingleGoodTrageTab = ({ goodId }) => {
   const dispatch = useAppDispatch();
+  const params = useParams();
   const navigate = useNavigate();
   const {
-    users, usersLoading, usersErrorMessage
+    users, usersLoading, usersErrorMessage, user
   } = useAppSelector(state => state.userState);
+  const {
+    createTradeLoading, tradeIsCreated, createTradeErrorMessage
+  } = useAppSelector(state => state.tradeState);
   const [snackBarOpen, setSnackBarOpen] = useState(false);
   const [state, setState] = useState(null);
   
@@ -22,8 +30,8 @@ const SingleGoodTrageTab = ({ goodId }) => {
   }, [dispatch]);
   
   useEffect(() => {
-    if (usersErrorMessage) setSnackBarOpen(true);
-  }, [usersErrorMessage]);
+    if (usersErrorMessage || createTradeErrorMessage || tradeIsCreated) setSnackBarOpen(true);
+  }, [createTradeErrorMessage, tradeIsCreated, usersErrorMessage]);
   
   const handleChange = (e) => {
     const { innerText } = e.target;
@@ -31,16 +39,24 @@ const SingleGoodTrageTab = ({ goodId }) => {
     
     setState(() => (
       {
-        id: selectedUser?.id,
-        username: selectedUser?.username,
+        id: selectedUser?.id, username: selectedUser?.username,
       }
     ));
   };
   
-  const handleSnackBarClose = () => setSnackBarOpen(false);
+  const handleSnackBarClose = () => {
+    setSnackBarOpen(false);
+    dispatch(resetCreateTradeData());
+  }
   
-  const onTradeSubmit = (e) => {
+  const onTradeSubmit = async (e) => {
     e.preventDefault();
+    await dispatch(createTrade({
+      good_id: Number(params?.id),
+      source_user_id: user?.id,
+      destination_user_id: 25,
+      trade_status_id: 1,
+    }));
   };
   
   return (
@@ -65,7 +81,7 @@ const SingleGoodTrageTab = ({ goodId }) => {
           <LoadingButton
             type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}
             disabled={usersLoading}
-            loading={false}
+            loading={createTradeLoading}
           >
             Передать
           </LoadingButton>
@@ -75,7 +91,7 @@ const SingleGoodTrageTab = ({ goodId }) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={snackBarOpen}
         onClose={handleSnackBarClose}
-        message={usersErrorMessage || ''}
+        message={usersErrorMessage || createTradeErrorMessage || 'Что то пошло не так, попробуйте позже'}
       />
     </div>
   );
