@@ -4,7 +4,7 @@ import { isAxiosError } from "axios";
 
 export const getTrades = createAsyncThunk("trades/getTrades", async (data, { rejectWithValue }) => {
   try {
-    const response = await axiosApi(`trades/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}`);
+    const response = await axiosApi(`trades/user/story/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}`);
     return response.data;
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 400) {
@@ -43,6 +43,17 @@ export const createTrade = createAsyncThunk('trades/createTrade', async (tradeDa
 export const acceptTrade = createAsyncThunk('trades/acceptTrade', async (tradeId, { rejectWithValue }) => {
   try {
     await axiosApi.post(`trades/${tradeId}/accept/`);
+  } catch (e) {
+    if (isAxiosError(e) && e.response && e.response.status === 401) {
+      return rejectWithValue('Неправильные учётные данные, авторизуйтесь снова');
+    }
+    throw e;
+  }
+});
+
+export const denyTrade = createAsyncThunk('trades/denyTrade', async (data, { rejectWithValue }) => {
+  try {
+    await axiosApi.post(`trades/${data?.id}/deny/`, { comment: data?.comment });
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 401) {
       return rejectWithValue('Неправильные учётные данные, авторизуйтесь снова');

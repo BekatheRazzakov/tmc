@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { useNavigate, useParams } from "react-router-dom";
-import { Box, FormControl, Snackbar, TextField } from "@mui/material";
-import { Autocomplete } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import {
+  Autocomplete,
+  Box,
+  FormControl,
+  Snackbar,
+  TextField
+} from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { getUsers } from "../../features/userThunk";
-import {
-  resetCreateGoodData,
-} from "../../features/dataSlice";
+import { resetCreateGoodData, } from "../../features/dataSlice";
 import { resetCreateTradeData } from "../../features/tradeSlice";
 import { createTrade } from "../../features/tradeThunk";
 
-const SingleGoodTrageTab = ({ tradeId }) => {
+const SingleGoodTrageTab = ({ goodId }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const {
@@ -58,7 +61,7 @@ const SingleGoodTrageTab = ({ tradeId }) => {
   const onTradeSubmit = async (e) => {
     e.preventDefault();
     await dispatch(createTrade({
-      good_id: Number(tradeId),
+      good_id: Number(goodId),
       source_user_id: user?.id,
       destination_user_id: state?.id,
       trade_status_id: 1,

@@ -12,12 +12,15 @@ const Trades = () => {
   const {
     trades, tradesErrorMessage
   } = useAppSelector(state => state.tradeState);
+  const {
+    user
+  } = useAppSelector(state => state.userState);
   const [snackBarOpen, setSnackBarOpen] = useState(false);
   
   useEffect(() => {
     dispatch(setCurrentPage('Трейды'));
-    dispatch(getTrades());
-  }, [dispatch]);
+    dispatch(getTrades({ id: user?.id }));
+  }, [dispatch, user?.id]);
   
   useEffect(() => {
     if (tradesErrorMessage) setSnackBarOpen(true);

@@ -1,28 +1,35 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { acceptTrade, createTrade, getTrade, getTrades } from "./tradeThunk";
+import {
+  acceptTrade,
+  createTrade,
+  denyTrade,
+  getTrade,
+  getTrades
+} from "./tradeThunk";
 
 const initialState = {
   trades: [],
   trade: null,
   tradeLoading: false,
   acceptTradeLoading: false,
+  denyTradeLoading: false,
   createTradeLoading: false,
   tradesLoading: false,
   tradeErrorMessage: '',
   tradesErrorMessage: '',
   createTradeErrorMessage: '',
   acceptTradeErrorMessage: '',
+  denyTradeErrorMessage: '',
   tradeIsCreated: false,
 };
 
 const TradesSlice = createSlice({
   name: "trade", initialState, reducers: {
-    resetTradeData: (state) => {
-      state.tradesErrorMessage = '';
-    },
     resetCreateTradeData: (state) => {
       state.createTradeErrorMessage = '';
       state.tradeIsCreated = false;
+      state.acceptTradeErrorMessage = '';
+      state.denyTradeErrorMessage = '';
     },
   }, extraReducers: (builder) => {
     builder.addCase(getTrades.pending, (state) => {
@@ -70,10 +77,21 @@ const TradesSlice = createSlice({
     });
     builder.addCase(acceptTrade.rejected, (state, { payload: error }) => {
       state.acceptTradeLoading = false;
-      state.createTradeErrorMessage = error || 'Что то пошло не так, попробуйте позже';
+      state.acceptTradeErrorMessage = error || 'Что то пошло не так, попробуйте позже';
+    });
+    
+    builder.addCase(denyTrade.pending, (state) => {
+      state.denyTradeLoading = true;
+    });
+    builder.addCase(denyTrade.fulfilled, (state) => {
+      state.denyTradeLoading = false;
+    });
+    builder.addCase(denyTrade.rejected, (state, { payload: error }) => {
+      state.denyTradeLoading = false;
+      state.denyTradeErrorMessage = error || 'Что то пошло не так, попробуйте позже';
     });
   },
 });
 
 export const tradeReducer = TradesSlice.reducer;
-export const { resetTradeData, resetCreateTradeData, } = TradesSlice.actions;
+export const { resetCreateTradeData } = TradesSlice.actions;

@@ -82,5 +82,5 @@ export const formatDate = (date) => {
   const hours = pad(newDate.getHours(), 2);
   const minutes = pad(newDate.getMinutes(), 2);
   
-  return `${year}.${month}.${day}  ${hours}:${minutes}`;
+  return `${day}.${month}.${year}  ${hours}:${minutes}`;
 };
