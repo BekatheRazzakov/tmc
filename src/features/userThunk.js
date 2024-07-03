@@ -14,8 +14,20 @@ export const signIn = createAsyncThunk("user/signIn", async (userData, { rejectW
       id: response.data?.token_type,
     };
   } catch (e) {
-    if (isAxiosError(e) && e.response && e.response.status === 400) {
-      return rejectWithValue(e.response.data);
+    if (isAxiosError(e) && e.response && e.response.status === 401) {
+      return rejectWithValue('Неправильные учётные данные');
+    }
+    throw e;
+  }
+});
+
+export const getUsers = createAsyncThunk('users/getUsers', async (_, { rejectWithValue }) => {
+  try {
+    const req = await axiosApi('installers/');
+    return await req.data || [];
+  } catch (e) {
+    if (isAxiosError(e) && e.response && e.response.status === 403) {
+      return rejectWithValue('Нет разрешения на трейд товара');
     }
     throw e;
   }

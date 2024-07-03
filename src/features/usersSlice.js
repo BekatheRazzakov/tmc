@@ -1,9 +1,12 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {signIn} from "./userThunk";
+import { getUsers, signIn } from "./userThunk";
 
 const initialState = {
   user: "",
+  users: [],
   signInLoading: false,
+  usersLoading: false,
+  usersErrorMessage: '',
   authorizationError: "",
   authorizationMessage: "",
 };
@@ -14,6 +17,9 @@ const UsersSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.user = '';
+    },
+    resetGetUserData: (state) => {
+      state.usersErrorMessage = '';
     },
   },
   extraReducers: (builder) => {
@@ -30,10 +36,22 @@ const UsersSlice = createSlice({
     });
     builder.addCase(signIn.rejected, (state, {payload: error}) => {
       state.signInLoading = false;
-      state.authorizationError = error?.error || 'Произошла ошибка. Попробуйте позже';
+      state.authorizationError = error || 'Произошла ошибка. Попробуйте позже';
+    });
+    
+    builder.addCase(getUsers.pending, (state) => {
+      state.usersLoading = true;
+    });
+    builder.addCase(getUsers.fulfilled, (state, {payload: res}) => {
+      state.usersLoading = false;
+      state.users = res || [];
+    });
+    builder.addCase(getUsers.rejected, (state, {payload: error}) => {
+      state.usersLoading = false;
+      state.authorizationError = error || 'Произошла ошибка. Попробуйте позже';
     });
   },
 });
 
 export const userReducer = UsersSlice.reducer;
-export const {logout} = UsersSlice.actions;
+export const {logout, resetGetUserData} = UsersSlice.actions;

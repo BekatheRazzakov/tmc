@@ -1,6 +1,5 @@
 import React from 'react';
 import DeleteWarningImg from '../../assets/delete-warning.svg';
-import { Button } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { deleteGood } from "../../features/dataThunk";
 import { useNavigate } from "react-router-dom";

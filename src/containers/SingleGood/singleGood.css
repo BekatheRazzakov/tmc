@@ -100,6 +100,12 @@
   margin: 0 auto;
 }
 
+.single-good-trade-form {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
 @media (max-width: 1267px) {
   .single-good-delete-tab {
     flex-direction: column;
@@ -205,5 +211,18 @@
   .single-good-delete-tab-btn {
     padding: 5px 12px!important;
     font-size: 8px!important;
+  }
+  
+  .MuiAutocomplete-inputRoot {
+    padding: 5px 39px 5px 5px!important;
+  }
+  
+  .single-good-page .MuiAutocomplete-input,
+  .single-good-page .MuiInputLabel-root {
+    font-size: 14px!important;
+  }
+  
+  .single-good-page .MuiInputLabel-root {
+    top: -3px;
   }
 }

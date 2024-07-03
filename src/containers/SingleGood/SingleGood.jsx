@@ -7,6 +7,8 @@ import { Box, Paper, Snackbar, Tab, Tabs } from "@mui/material";
 import './singleGood.css';
 import SingleGoodDeleteTab
   from "../../components/SingleGoodDeleteTab/SingleGoodDeleteTab";
+import SingleGoodTradeTab
+  from "../../components/SingleGoodTradeTab/SingleGoodTradeTab";
 
 const CreateEditGoodForm = lazy(() => import("../../components/CreateEditGoodForm/CreateEditGoodForm"));
 const GoodInfoTab = lazy(() => import('../../components/GoodInfoTab/GoodInfoTab'));
@@ -35,44 +37,58 @@ const SingleGood = () => {
     setValue(newValue);
   };
   
-  return (<div className='single-good-page'>
-    <Box>
-      <Tabs
-        value={value} onChange={handleTabChange}
-        aria-label='basic tabs example'
-        variant='scrollable'
-      >
-        <Tab className='single-good-tab-btn' label='Информация'/>
-        <Tab className='single-good-tab-btn' label='Редактировать' disabled={!good?.product}/>
-        <Tab className='single-good-tab-btn' label='Удалить' disabled={!good?.product}/>
-        <Tab className='single-good-tab-btn' label='Трейд'/>
-      </Tabs>
-    </Box>
-    {value === 0 ? <div className='single-good-page-papers'>
-      <Suspense fallback={<></>}>
-        <GoodInfoTab
-          good={good}
-          goodLoading={goodLoading}
-        />
-      </Suspense>
-    </div> : value === 1 ? <Paper
-      className='single-good-edit-paper'
-      elevation={3}>
-      <Suspense fallback={<></>}>
-        <CreateEditGoodForm isEdit editingGood={good} changeTab={handleTabChange}/>
-      </Suspense>
-    </Paper> : value === 2 ? <Paper className='single-good-delete-warning-paper'
-      sx={{p: '40px',}}
-      elevation={3}>
-      <SingleGoodDeleteTab goodId={good?.id}/>
-    </Paper> : null}
-    <Snackbar
-      anchorOrigin={{vertical: 'top', horizontal: 'center'}}
-      open={snackBarOpen}
-      onClose={handleSnackBarClose}
-      message={goodError || deleteGoodErrorMessage}
-    />
-  </div>);
+  return (
+    <div className='single-good-page'>
+      <Box>
+        <Tabs
+          value={value} onChange={handleTabChange}
+          aria-label='basic tabs example'
+          variant='scrollable'
+        >
+          <Tab className='single-good-tab-btn' label='Информация'/>
+          <Tab className='single-good-tab-btn'
+            label='Редактировать'
+            disabled={!good?.product}/>
+          <Tab className='single-good-tab-btn'
+            label='Удалить'
+            disabled={!good?.product}/>
+          <Tab className='single-good-tab-btn' label='Трейд'/>
+        </Tabs>
+      </Box>
+      {value === 0 ? <div className='single-good-page-papers'>
+        <Suspense fallback={<></>}>
+          <GoodInfoTab
+            good={good}
+            goodLoading={goodLoading}
+          />
+        </Suspense>
+      </div> : value === 1 ? <Paper
+        className='single-good-edit-paper'
+        elevation={3}>
+        <Suspense fallback={<></>}>
+          <CreateEditGoodForm isEdit
+            editingGood={good}
+            changeTab={handleTabChange}/>
+        </Suspense>
+      </Paper> : value === 2 ?
+        <Paper className='single-good-delete-warning-paper'
+          sx={{ p: '40px', }}
+          elevation={3}>
+          <SingleGoodDeleteTab goodId={good?.id}/>
+        </Paper> : value === 3 ?
+          <Paper className='single-good-delete-warning-paper'
+            sx={{ p: '40px', }}
+            elevation={3}>
+            <SingleGoodTradeTab goodId={good?.id}/>
+          </Paper> : null}
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={snackBarOpen}
+        onClose={handleSnackBarClose}
+        message={goodError || deleteGoodErrorMessage}
+      />
+    </div>
+  );
 };
 
 export default SingleGood;
