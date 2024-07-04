@@ -118,7 +118,7 @@ export const updateGood = createAsyncThunk('data/updateGood', async (data, { rej
 });
 
 // получение списка производителей товаров по типу товара
-export const getManufactures = createAsyncThunk('data/getManufactures', async (product_type, { rejectValue }) => {
+export const getManufactures = createAsyncThunk('data/getManufactures', async (product_type) => {
   try {
     const req = await axiosApi(`${product_type}_manufactures/`);
     return await req.data;
@@ -128,7 +128,7 @@ export const getManufactures = createAsyncThunk('data/getManufactures', async (p
 });
 
 // получение списка моделей товаров по типу товара
-export const getModels = createAsyncThunk('data/getModels', async (product_type, { rejectValue }) => {
+export const getModels = createAsyncThunk('data/getModels', async (product_type) => {
   try {
     const req = await axiosApi(`${product_type}_models/`);
     return await req.data;
@@ -168,7 +168,7 @@ export const createModel = createAsyncThunk('data/createModel', async (data, { r
 });
 
 // удаление товара
-export const deleteGood = createAsyncThunk('data/deleteGood', async (id, { rejectWithValue }) => {
+export const deleteGood = createAsyncThunk('data/deleteGood', async (id) => {
   try {
     const reqToGoods = await axiosApi.delete(`goods/${id}`);
     return await reqToGoods.data;

@@ -329,7 +329,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           open={snackBarOpen}
           onClose={handleSnackBarClose}
-          message={isEdit && updateGoodErrorMessage || createGoodErrorMessage || createManufactureErrorMessage || createModelErrorMessage || modelIsCreated && 'модель товара создана' || manufactureIsCreated && 'производитель товара создан'}
+          message={(isEdit && updateGoodErrorMessage) || createGoodErrorMessage || createManufactureErrorMessage || createModelErrorMessage || (modelIsCreated && 'модель товара создана') || (manufactureIsCreated && 'производитель товара создан')}
         />
       </Box>
       <Modal
