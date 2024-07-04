@@ -86,7 +86,7 @@ const RightDrawer = memo(() => {
             <ListItemIcon style={{ minWidth: '45px' }}>
               <SwapVertIcon/>
             </ListItemIcon>
-            <ListItemText primary='Обмен товарами'/>
+            <ListItemText primary='Трейды'/>
           </ListItemButton>
         </ListItem>
         <ListItem className='right-drawer-logout-btn'
@@ -94,7 +94,11 @@ const RightDrawer = memo(() => {
           onClick={() => dispatch(setDrawer(''))}>
           <Button
             sx={{ width: '100%' }}
-            color='error' onClick={() => dispatch(logout())}>
+            color='error'
+            onClick={() => {
+              dispatch(logout());
+              navigate('/sign-in');
+            }}>
             Выйти из аккаунта
           </Button>
         </ListItem>

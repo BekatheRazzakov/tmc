@@ -52,7 +52,6 @@ const TradeInfoTab = ({
   useEffect(() => {
     if (acceptTradeErrorMessage || denyTradeErrorMessage) {
       setSnackBarOpen(true);
-    } else {
     }
   }, [acceptTradeErrorMessage, denyTradeErrorMessage, dispatch]);
   

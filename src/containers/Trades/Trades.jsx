@@ -5,6 +5,7 @@ import { useAppSelector } from "../../app/hooks";
 import { Snackbar } from "@mui/material";
 import TradesList from "../../components/TradesList/TradesList";
 import { getTrades } from "../../features/tradeThunk";
+import { resetTradesErrorData } from "../../features/tradeSlice";
 import './trades.css';
 
 const Trades = () => {
@@ -20,6 +21,7 @@ const Trades = () => {
   useEffect(() => {
     dispatch(setCurrentPage('Трейды'));
     dispatch(getTrades({ id: user?.id }));
+    return () => dispatch(resetTradesErrorData());
   }, [dispatch, user?.id]);
   
   useEffect(() => {

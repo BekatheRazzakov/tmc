@@ -2,9 +2,15 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosApi from "../axiosApi";
 import { isAxiosError } from "axios";
 
-export const getTrades = createAsyncThunk("trades/getTrades", async (data, { rejectWithValue }) => {
+// получение списка трейдов
+export const getTrades = createAsyncThunk("trades/getTrades", async (data, {
+  getState, rejectWithValue
+}) => {
   try {
-    const response = await axiosApi(`trades/user/story/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}`);
+    const state = getState();
+    const userRole = state.userState.user.role;
+    
+    const response = await axiosApi(`trades${userRole === 'admin' ? '' : '/user/story'}/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}`);
     return response.data;
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 400) {
@@ -14,6 +20,7 @@ export const getTrades = createAsyncThunk("trades/getTrades", async (data, { rej
   }
 });
 
+// получение одного трейда
 export const getTrade = createAsyncThunk("trades/getTrade", async (id, { rejectWithValue }) => {
   try {
     const response = await axiosApi(`trades/${id}`);
@@ -26,6 +33,7 @@ export const getTrade = createAsyncThunk("trades/getTrade", async (id, { rejectW
   }
 });
 
+// создание трейда
 export const createTrade = createAsyncThunk('trades/createTrade', async (tradeData, { rejectWithValue }) => {
   try {
     const req = await axiosApi.post(`trades/`, tradeData);
@@ -40,6 +48,7 @@ export const createTrade = createAsyncThunk('trades/createTrade', async (tradeDa
   }
 });
 
+// запрос на принятие запроса на трейд
 export const acceptTrade = createAsyncThunk('trades/acceptTrade', async (tradeId, { rejectWithValue }) => {
   try {
     await axiosApi.post(`trades/${tradeId}/accept/`);
@@ -51,6 +60,7 @@ export const acceptTrade = createAsyncThunk('trades/acceptTrade', async (tradeId
   }
 });
 
+// запрос на отказ запроса на трейд
 export const denyTrade = createAsyncThunk('trades/denyTrade', async (data, { rejectWithValue }) => {
   try {
     await axiosApi.post(`trades/${data?.id}/deny/`, { comment: data?.comment });

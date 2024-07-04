@@ -317,9 +317,9 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
         <LoadingButton
           type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}
           disabled={!state.product_type || !(
-            state.product_manufacture_id >= 0
+            state.product_manufacture_id > 0
           ) || !(
-            state.product_model_id >= 0
+            state.product_model_id > 0
           ) || !state.good_status_id || !state.cost || !state.barcode}
           loading={createGoodLoading || updateGoodLoading || modelsLoading || manufacturesLoading}
         >

@@ -242,6 +242,7 @@ const GoodsList = memo(({goods}) => {
             {categories.map(category => (
               <MenuItem value={category.name} key={category.name}>статус: {category.value}</MenuItem>))
             }
+            <MenuItem value='deleted'>Удалённые</MenuItem>
           </Select>
         </Box>
         <Box sx={{

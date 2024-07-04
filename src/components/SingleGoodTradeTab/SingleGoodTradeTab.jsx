@@ -89,7 +89,7 @@ const SingleGoodTrageTab = ({ goodId }) => {
           />
           <LoadingButton
             type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}
-            disabled={usersLoading}
+            disabled={usersLoading || !state?.username}
             loading={createTradeLoading}
           >
             Передать

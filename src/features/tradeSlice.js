@@ -31,9 +31,13 @@ const TradesSlice = createSlice({
       state.acceptTradeErrorMessage = '';
       state.denyTradeErrorMessage = '';
     },
+    resetTradesErrorData: (state) => {
+      state.tradesErrorMessage = '';
+    },
   }, extraReducers: (builder) => {
     builder.addCase(getTrades.pending, (state) => {
       state.tradesLoading = true;
+      state.tradesErrorMessage = '';
     });
     builder.addCase(getTrades.fulfilled, (state, { payload: res }) => {
       state.tradesLoading = false;
@@ -94,4 +98,4 @@ const TradesSlice = createSlice({
 });
 
 export const tradeReducer = TradesSlice.reducer;
-export const { resetCreateTradeData } = TradesSlice.actions;
+export const { resetCreateTradeData, resetTradesErrorData } = TradesSlice.actions;
