@@ -11,8 +11,8 @@ export const signIn = createAsyncThunk("user/signIn", async (userData, { rejectW
     return {
       token: response.data?.access_token,
       username: response.data?.username,
-      id: response.data?.token_type,
-      role: 'admin',
+      id: response.data?.user_id,
+      role: response?.data.permission_name === null && response?.data?.access_token ? 'admin' : response?.data.permission_name,
     };
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 401) {

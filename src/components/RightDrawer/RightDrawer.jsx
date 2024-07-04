@@ -65,14 +65,18 @@ const RightDrawer = memo(() => {
             <ListItemText primary='ТМЦ'/>
           </ListItemButton>
         </ListItem>
-        <ListItem disablePadding onClick={() => onNavItemClick('/create-good')}>
-          <ListItemButton>
-            <ListItemIcon style={{ minWidth: '45px' }}>
-              <AddBoxIcon/>
-            </ListItemIcon>
-            <ListItemText primary='Создать ТМЦ'/>
-          </ListItemButton>
-        </ListItem>
+        {
+          ['admin', 'Заведующий склада'].includes(user?.role) &&
+          <ListItem disablePadding
+            onClick={() => onNavItemClick('/create-good')}>
+            <ListItemButton>
+              <ListItemIcon style={{ minWidth: '45px' }}>
+                <AddBoxIcon/>
+              </ListItemIcon>
+              <ListItemText primary='Создать ТМЦ'/>
+            </ListItemButton>
+          </ListItem>
+        }
         <ListItem disablePadding onClick={() => onNavItemClick('/users')}>
           <ListItemButton>
             <ListItemIcon style={{ minWidth: '45px' }}>

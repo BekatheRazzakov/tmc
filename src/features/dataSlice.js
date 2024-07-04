@@ -16,6 +16,7 @@ const initialState = {
   currentDrawer: '',
   goods: [],
   good: null,
+  pagesAmount: 1,
   models: [],
   manufactures: [],
   goodsLoading: false,
@@ -87,11 +88,12 @@ const DataSlice = createSlice({
     });
     builder.addCase(getGoods.fulfilled, (state, { payload: res }) => {
       state.goodsLoading = false;
-      state.goods = res.map(good => (
+      state.goods = res.data?.map(good => (
         {
           ...good, selected: 0,
         }
       )) || [];
+      state.pagesAmount = res?.total_pages || 1;
     });
     builder.addCase(getGoods.rejected, (state, { payload: error }) => {
       state.goodsLoading = false;
@@ -157,7 +159,7 @@ const DataSlice = createSlice({
       state.modelsLoading = false;
       state.models = res || [];
     });
-    builder.addCase(getModels.rejected, (state, { payload: error }) => {
+    builder.addCase(getModels.rejected, (state) => {
       state.modelsLoading = false;
     });
     
@@ -204,7 +206,7 @@ const DataSlice = createSlice({
       state.manufacturesLoading = false;
       state.manufactures = res || [];
     });
-    builder.addCase(getManufactures.rejected, (state, { payload: error }) => {
+    builder.addCase(getManufactures.rejected, (state) => {
       state.manufacturesLoading = false;
     });
     
@@ -213,7 +215,7 @@ const DataSlice = createSlice({
       state.deleteGoodError = false;
       state.deleteGoodErrorMessage = '';
     });
-    builder.addCase(deleteGood.fulfilled, (state, { payload: res }) => {
+    builder.addCase(deleteGood.fulfilled, (state) => {
       state.deleteGoodLoading = false;
     });
     builder.addCase(deleteGood.rejected, (state, { payload: error }) => {

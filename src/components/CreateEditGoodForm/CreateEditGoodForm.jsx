@@ -320,8 +320,8 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
             state.product_manufacture_id > 0
           ) || !(
             state.product_model_id > 0
-          ) || !state.good_status_id || !state.cost || !state.barcode}
-          loading={createGoodLoading || updateGoodLoading || modelsLoading || manufacturesLoading}
+          ) || !state.good_status_id || !state.cost || !state.barcode || modelsLoading || manufacturesLoading}
+          loading={createGoodLoading || updateGoodLoading}
         >
           {isEdit ? 'Сохранить' : 'Создать'}
         </LoadingButton>
@@ -329,7 +329,13 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           open={snackBarOpen}
           onClose={handleSnackBarClose}
-          message={(isEdit && updateGoodErrorMessage) || createGoodErrorMessage || createManufactureErrorMessage || createModelErrorMessage || (modelIsCreated && 'модель товара создана') || (manufactureIsCreated && 'производитель товара создан')}
+          message={(
+            isEdit && updateGoodErrorMessage
+          ) || createGoodErrorMessage || createManufactureErrorMessage || createModelErrorMessage || (
+            modelIsCreated && 'модель товара создана'
+          ) || (
+            manufactureIsCreated && 'производитель товара создан'
+          )}
         />
       </Box>
       <Modal

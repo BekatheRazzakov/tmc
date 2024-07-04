@@ -10,6 +10,7 @@ import {
 const initialState = {
   trades: [],
   trade: null,
+  pagesAmount: 1,
   tradeLoading: false,
   acceptTradeLoading: false,
   denyTradeLoading: false,
@@ -41,7 +42,8 @@ const TradesSlice = createSlice({
     });
     builder.addCase(getTrades.fulfilled, (state, { payload: res }) => {
       state.tradesLoading = false;
-      state.trades = res || [];
+      state.trades = res?.data || [];
+      state.pagesAmount = res?.total_count || 1;
     });
     builder.addCase(getTrades.rejected, (state, { payload: error }) => {
       state.tradesLoading = false;

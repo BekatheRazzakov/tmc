@@ -1,38 +1,46 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import './goodsListFooter.css';
+import { useAppSelector } from "../../app/hooks";
 
-const GoodsListFooter = ({paginationData, handlePaginationDataChange}) => {
+const GoodsListFooter = ({ paginationData, handlePaginationDataChange }) => {
+  const { pagesAmount } = useAppSelector(state => state.dataState);
+  const pagesArray = useCallback(() => {
+    return Array.from({ length: pagesAmount || 0 }, (_, index) => index);
+  }, [pagesAmount]);
+  
   return (
     <Box className='goods-list-footer'>
       <FormControl className='goods-list-footer-page-size'>
-        <InputLabel id="demo-simple-select-label" variant="standard">страница</InputLabel>
+        <InputLabel id='demo-simple-select-label'
+          variant='standard'>страница</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          name="pageNumber"
+          labelId='demo-simple-select-label'
+          id='demo-simple-select'
+          name='pageNumber'
           value={paginationData.pageNumber}
-          label="страница"
+          label='страница'
           onChange={handlePaginationDataChange}
-          variant="standard"
+          variant='standard'
         >
-          <MenuItem value={1}>1</MenuItem>
-          <MenuItem value={2}>2</MenuItem>
-          <MenuItem value={3}>3</MenuItem>
-          <MenuItem value={4}>4</MenuItem>
-          <MenuItem value={5}>5</MenuItem>
+          {
+            pagesArray().map(page => (
+              <MenuItem value={page + 1}>{page + 1}</MenuItem>
+            ))
+          }
         </Select>
       </FormControl>
       <FormControl className='goods-list-footer-page-size'>
-        <InputLabel id="demo-simple-select-label" variant="standard">товаров на страницу</InputLabel>
+        <InputLabel id='demo-simple-select-label'
+          variant='standard'>товаров на страницу</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          name="pageSize"
+          labelId='demo-simple-select-label'
+          id='demo-simple-select'
+          name='pageSize'
           value={paginationData.pageSize}
-          label="товаров на страницу"
+          label='товаров на страницу'
           onChange={handlePaginationDataChange}
-          variant="standard"
+          variant='standard'
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
