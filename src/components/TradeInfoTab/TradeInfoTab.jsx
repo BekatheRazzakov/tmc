@@ -134,6 +134,18 @@ const TradeInfoTab = ({
               variant='body2'>{formatDate(trade?.create_date)}</Typography>
           </div>
           <div className='single-good-info-divider'></div>
+          {
+            trade?.trade_status_id === 2 &&
+            <>
+              <div className='single-good-info-row'>
+                <Typography component='span'
+                  variant='body1'><strong>Дата принятия</strong></Typography>
+                <Typography component='span'
+                  variant='body2'>{formatDate(trade?.approved_date)}</Typography>
+              </div>
+              <div className='single-good-info-divider'></div>
+            </>
+          }
           {trade?.trade_status_id === 3 && <>
             <div className='single-good-info-row'>
               <Typography component='span'

@@ -11,7 +11,11 @@ export const getGoods = createAsyncThunk("data/getGoods", async (data, {
     const userRole = state.userState.user.role;
     
     const response = await axiosApi(`${['admin', 'Заведующий склада'].includes(userRole) ? data?.sortByCategory === 'deleted' ? 'soft_deleted_goods' : 'goods' : 'users/goods'}/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}&product_type=${data?.sortByCategory || ''}`);
-    return response.data;
+    if (!['admin', 'Заведующий склада'].includes(userRole)) {
+      return {
+        data: response.data,
+      }
+    } else return response.data;
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 400) {
       return rejectWithValue(e.response.data);
