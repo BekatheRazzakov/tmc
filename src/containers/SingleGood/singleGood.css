@@ -5,6 +5,7 @@
 
 .single-good-tab-btn {
   flex-grow: 1;
+  max-width: unset!important;
 }
 
 .single-good-page-papers {

@@ -1,9 +1,5 @@
 import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate
+  Navigate, Route, Routes, useLocation, useNavigate
 } from "react-router-dom";
 import { useAppSelector } from "./app/hooks";
 import SignIn from "./containers/signIn/SignIn";
@@ -35,7 +31,8 @@ function App() {
         <Route path='sign-in' element={<SignIn/>}/>
         <Route path='goods' element={<Goods/>}/>
         <Route path='goods/:id' element={<SingleGood/>}/>
-        <Route path='create-good' element={<NewGood/>}/>
+        {['admin', 'Заведующий склада'].includes(user?.role) &&
+          <Route path='create-good' element={<NewGood/>}/>}
         <Route path='trades' element={<Trades/>}/>
         <Route path='trades/:id' element={<SingleTrade/>}/>
       </Routes>

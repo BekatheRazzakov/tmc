@@ -20,6 +20,20 @@ export const getTrades = createAsyncThunk("trades/getTrades", async (data, {
   }
 });
 
+export const getDeletedTrades = createAsyncThunk("trades/getDeletedTrades", async (data, {
+  rejectWithValue
+}) => {
+  try {
+    const response = await axiosApi(`trades/soft_deleted/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}`);
+    return response.data;
+  } catch (e) {
+    if (isAxiosError(e) && e.response && e.response.status === 400) {
+      return rejectWithValue('Что то пошло не так, попробуйте позже');
+    }
+    throw e;
+  }
+});
+
 // получение одного трейда
 export const getTrade = createAsyncThunk("trades/getTrade", async (id, { rejectWithValue }) => {
   try {
@@ -39,7 +53,9 @@ export const createTrade = createAsyncThunk('trades/createTrade', async (tradeDa
     const req = await axiosApi.post(`trades/`, tradeData);
     return await req.data;
   } catch (e) {
-    if (isAxiosError(e) && e.response && e.response.status === 401) {
+    if (isAxiosError(e) && e.response && e.response.status === 400) {
+      return rejectWithValue(e.response.data?.detail);
+    } else if (isAxiosError(e) && e.response && e.response.status === 401) {
       return rejectWithValue('Неправильные учётные данные, авторизуйтесь снова');
     } else if (isAxiosError(e) && e.response && e.response.status === 403) {
       return rejectWithValue('У вас нет прав на создание трейда');
@@ -67,6 +83,17 @@ export const denyTrade = createAsyncThunk('trades/denyTrade', async (data, { rej
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 401) {
       return rejectWithValue('Неправильные учётные данные, авторизуйтесь снова');
+    }
+    throw e;
+  }
+});
+
+export const deleteTrade = createAsyncThunk('trades/deleteTrade', async (id, { rejectWithValue }) => {
+  try {
+    await axiosApi.delete(`trades/${id}/`);
+  } catch (e) {
+    if (isAxiosError(e) && e.response && e.response.status === 400) {
+      return rejectWithValue(e.response.data?.detail || '');
     }
     throw e;
   }

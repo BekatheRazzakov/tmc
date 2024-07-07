@@ -100,7 +100,7 @@ const SingleGoodTrageTab = ({ goodId }) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={snackBarOpen}
         onClose={handleSnackBarClose}
-        message={usersErrorMessage || createTradeErrorMessage || 'Что то пошло не так, попробуйте позже'}
+        message={usersErrorMessage || createTradeErrorMessage}
       />
     </div>
   );

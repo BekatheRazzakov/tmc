@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Box,
-  ButtonGroup,
-  Chip,
-  Modal,
-  Paper,
-  Snackbar,
-  TextField,
-  Typography
+  Box, ButtonGroup, Chip, Modal, Paper, Snackbar, TextField, Typography
 } from "@mui/material";
 import Skeleton from "@mui/material/Skeleton";
 import { formatDate, tradeStatuses } from "../../constants";
@@ -15,7 +8,7 @@ import { LoadingButton } from "@mui/lab";
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { acceptTrade, denyTrade } from "../../features/tradeThunk";
+import { acceptTrade, deleteTrade, denyTrade } from "../../features/tradeThunk";
 import { useNavigate } from "react-router-dom";
 
 const denyModalStyle = {
@@ -70,6 +63,10 @@ const TradeInfoTab = ({
   
   const handleSnackBarClose = () => setSnackBarOpen(false);
   const toggleDenyModal = () => setDenyModalOpen(!denyModalOpen);
+  const onDeleteTrade = async () => {
+    await dispatch(deleteTrade(trade?.id));
+    navigate('/trades');
+  };
   
   return (
     <Paper className='single-good-outer-paper'
@@ -134,18 +131,15 @@ const TradeInfoTab = ({
               variant='body2'>{formatDate(trade?.create_date)}</Typography>
           </div>
           <div className='single-good-info-divider'></div>
-          {
-            trade?.trade_status_id === 2 &&
-            <>
-              <div className='single-good-info-row'>
-                <Typography component='span'
-                  variant='body1'><strong>Дата принятия</strong></Typography>
-                <Typography component='span'
-                  variant='body2'>{formatDate(trade?.approved_date)}</Typography>
-              </div>
-              <div className='single-good-info-divider'></div>
-            </>
-          }
+          {trade?.trade_status_id === 2 && <>
+            <div className='single-good-info-row'>
+              <Typography component='span'
+                variant='body1'><strong>Дата принятия</strong></Typography>
+              <Typography component='span'
+                variant='body2'>{formatDate(trade?.approved_date)}</Typography>
+            </div>
+            <div className='single-good-info-divider'></div>
+          </>}
           {trade?.trade_status_id === 3 && <>
             <div className='single-good-info-row'>
               <Typography component='span'
@@ -185,6 +179,15 @@ const TradeInfoTab = ({
             Принять
           </LoadingButton>
         </ButtonGroup>}
+      {user?.role === 'admin' && <ButtonGroup variant='outlined'
+        aria-label='Loading button group'
+        fullWidth>
+        <LoadingButton loadingPosition='start'
+          startIcon={<CloseIcon/>}
+          color='error' onClick={onDeleteTrade}>
+          Удалить
+        </LoadingButton>
+      </ButtonGroup>}
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={snackBarOpen}

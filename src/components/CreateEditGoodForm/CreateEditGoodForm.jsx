@@ -76,6 +76,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
     product_model_id: editingGood?.product?.product_model_id,
     good_status_id: editingGood?.good_status?.id,
     cost: editingGood?.product?.cost,
+    photo_path: editingGood?.photo_path
   });
   const [newManufactureData, setNewManufactureData] = useState(null);
   const [newModelData, setNewModelData] = useState(null);
@@ -309,9 +310,10 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
         />
         <Suspense fallback={<></>}>
           <FileUpload label='фото товара'
-            file={state?.photo_path}
+            file={isEdit ? 'data:image/png;base64,' + state?.photo_path : state?.photo_path}
             handleFileChange={handleFileChange}
             removeImage={removeImage}
+            isByte={isEdit}
           />
         </Suspense>
         <LoadingButton

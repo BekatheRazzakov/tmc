@@ -15,7 +15,6 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setDrawer } from "../../features/dataSlice";
 import { logout } from "../../features/usersSlice";
 import CategoryIcon from '@mui/icons-material/Category';
-import GroupsIcon from '@mui/icons-material/Groups';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { useNavigate } from "react-router-dom";
@@ -65,8 +64,7 @@ const RightDrawer = memo(() => {
             <ListItemText primary='ТМЦ'/>
           </ListItemButton>
         </ListItem>
-        {
-          ['admin', 'Заведующий склада'].includes(user?.role) &&
+        {['admin', 'Заведующий склада'].includes(user?.role) &&
           <ListItem disablePadding
             onClick={() => onNavItemClick('/create-good')}>
             <ListItemButton>
@@ -75,16 +73,7 @@ const RightDrawer = memo(() => {
               </ListItemIcon>
               <ListItemText primary='Создать ТМЦ'/>
             </ListItemButton>
-          </ListItem>
-        }
-        <ListItem disablePadding onClick={() => onNavItemClick('/users')}>
-          <ListItemButton>
-            <ListItemIcon style={{ minWidth: '45px' }}>
-              <GroupsIcon/>
-            </ListItemIcon>
-            <ListItemText primary='Пользователи'/>
-          </ListItemButton>
-        </ListItem>
+          </ListItem>}
         <ListItem disablePadding onClick={() => onNavItemClick('/trades')}>
           <ListItemButton>
             <ListItemIcon style={{ minWidth: '45px' }}>

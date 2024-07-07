@@ -1,25 +1,14 @@
 import React, {
-  lazy,
-  memo,
-  Suspense,
-  useCallback,
-  useEffect,
-  useState
+  lazy, memo, Suspense, useCallback, useEffect, useState
 } from 'react';
 import {
-  AppBar,
-  Box,
-  Chip,
-  MenuItem,
-  Paper,
-  Select,
-  TableContainer,
-  Typography
+  AppBar, Box, Chip, MenuItem, Paper, Select, TableContainer, Typography
 } from "@mui/material";
 import { useDispatch, useSelector } from 'react-redux';
 import { formatDate, tradeStatuses } from "../../constants";
 import GoodsListFooter from "../GoodsListFooter/GoodsListFooter";
-import { getTrades } from "../../features/tradeThunk";
+import { getDeletedTrades, getTrades } from "../../features/tradeThunk";
+import { useAppSelector } from "../../app/hooks";
 
 const GoodsListTable = lazy(() => import('../GoodListTable/GoodsListTable'));
 
@@ -60,6 +49,9 @@ const columns = [
 const TradesList = memo(({ trades }) => {
   const dispatch = useDispatch();
   const { tradesLoading } = useSelector(state => state.tradeState);
+  const {
+    user
+  } = useAppSelector(state => state.userState);
   const [sortBy, setSortBy] = useState(0);
   const [paginationData, setPaginationData] = useState({
     pageSize: 20, pageNumber: 1, sortByCategory: 0,
@@ -68,7 +60,7 @@ const TradesList = memo(({ trades }) => {
   const handleSortByChange = (e) => {
     setSortBy(e.target.value);
   };
-
+  
   const handlePaginationDataChange = (e) => {
     const { name, value } = e.target;
     setPaginationData(prevState => (
@@ -81,6 +73,11 @@ const TradesList = memo(({ trades }) => {
   useEffect(() => {
     dispatch(getTrades(paginationData));
   }, [dispatch, paginationData]);
+  
+  useEffect(() => {
+    if (user?.role === 'admin' && sortBy === 4) dispatch(getDeletedTrades(paginationData));
+    if (sortBy === 0) dispatch(getTrades(paginationData));
+  }, [dispatch, paginationData, user?.role, sortBy]);
   
   const sortedByStatusWaiting = useCallback(() => {
     return (
@@ -123,7 +120,7 @@ const TradesList = memo(({ trades }) => {
           }}>
             <Typography variant='body1'
               component='span'
-              sx={{ mr: '10px' }}>Сортировка по:</Typography>
+              sx={{ mr: '10px' }}>Фильтр по{sortBy === 4 && ' удалённым'}:</Typography>
             <Select
               labelId='demo-simple-select-filled-label'
               id='demo-simple-select-filled'
@@ -131,11 +128,13 @@ const TradesList = memo(({ trades }) => {
               onChange={handleSortByChange}
               sx={{ color: '#FFFFFF', minWidth: '175px' }}
             >
-              <MenuItem value={0}>без сортировки</MenuItem>
+              <MenuItem value={0}>без фильтрации</MenuItem>
               {tradeStatuses.map(status => (
                 <MenuItem value={status.name}
                   key={status.id}>статус: {status.value}</MenuItem>
               ))}
+              {user?.role === 'admin' &&
+                <MenuItem value={4}>Удалённые</MenuItem>}
             </Select>
           </Box>
         </AppBar>

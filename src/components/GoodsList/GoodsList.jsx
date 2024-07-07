@@ -258,7 +258,7 @@ const GoodsList = memo(({ goods }) => {
             >
               <MenuItem value={0}>Все</MenuItem>
               {
-                ['admin', 'Заведующий склада'].includes(user?.role) &&
+                ['Заведующий склада'].includes(user?.role) &&
                 <MenuItem value="my-goods">Мои товары</MenuItem>
               }
               {categories.map(category => (

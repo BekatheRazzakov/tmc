@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   acceptTrade,
   createTrade,
-  denyTrade,
+  denyTrade, getDeletedTrades,
   getTrade,
   getTrades
 } from "./tradeThunk";
@@ -46,6 +46,20 @@ const TradesSlice = createSlice({
       state.pagesAmount = res?.total_count || 1;
     });
     builder.addCase(getTrades.rejected, (state, { payload: error }) => {
+      state.tradesLoading = false;
+      state.tradesErrorMessage = error || 'Что то пошло не так, попробуйте позже';
+    });
+    
+    builder.addCase(getDeletedTrades.pending, (state) => {
+      state.tradesLoading = true;
+      state.tradesErrorMessage = '';
+    });
+    builder.addCase(getDeletedTrades.fulfilled, (state, { payload: res }) => {
+      state.tradesLoading = false;
+      state.trades = res?.data || [];
+      state.pagesAmount = res?.total_count || 1;
+    });
+    builder.addCase(getDeletedTrades.rejected, (state, { payload: error }) => {
       state.tradesLoading = false;
       state.tradesErrorMessage = error || 'Что то пошло не так, попробуйте позже';
     });
