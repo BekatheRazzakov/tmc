@@ -77,10 +77,8 @@ const DataSlice = createSlice({
       state.updateGoodErrorMessage = '';
     }, setGoodIsUpdated: (state, action) => {
       state.goodIsUpdated = action.payload;
-    }, resetCreateTradeData: (state) => {
-      state.tradeIsCreated = false;
-      state.createTradeLoading = false;
-      state.createTradeErrorMessage = false;
+    }, resetGoodsError: (state) => {
+      state.goodsError = '';
     },
   }, extraReducers: (builder) => {
     builder.addCase(getGoods.pending, (state) => {
@@ -234,4 +232,5 @@ export const {
   setAllGoodsSelected,
   resetCreateGoodData,
   setGoodIsUpdated,
+  resetGoodsError,
 } = DataSlice.actions;

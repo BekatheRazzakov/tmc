@@ -10,7 +10,7 @@ export const getGoods = createAsyncThunk("data/getGoods", async (data, {
     const state = getState();
     const userRole = state.userState.user.role;
     
-    const response = await axiosApi(`${['admin', 'Заведующий склада'].includes(userRole) ? data?.sortByCategory === 'deleted' ? 'soft_deleted_goods' : 'goods' : 'users/goods'}/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}&product_type=${data?.sortByCategory || ''}`);
+    const response = await axiosApi(`${['admin', 'Заведующий склада'].includes(userRole) ? data?.sortByCategory === 'deleted' ? 'soft_deleted_goods' : data?.sortByCategory === 'my-goods' ? 'users/goods' : 'goods' : 'users/goods'}/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}&product_type=${data?.sortByCategory || ''}`);
     if (!['admin', 'Заведующий склада'].includes(userRole)) {
       return {
         data: response.data,
@@ -86,7 +86,7 @@ export const updateGood = createAsyncThunk('data/updateGood', async (data, { rej
       const resFromModel = await reqToModel.data;
       
       editGoodForm.append('nazvanie_id', resFromModel?.id);
-    } else if (!data.product_type_has_changed && !data.good_data_has_changed) {
+    } else if (data.product_type_has_changed || data.good_data_has_changed) {
       const updateItemForm = {
         product_manufacture_id: data?.product_manufacture_id,
         product_model_id: data?.product_model_id,

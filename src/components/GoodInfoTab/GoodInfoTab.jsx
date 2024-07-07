@@ -25,7 +25,7 @@ const GoodInfoTab = ({
       </> : <>
         <img
           className='single-good-img'
-          src={good?.img || notFoundImage}
+          src={good?.photo_path ? 'data:image/png;base64,' + good?.photo_path : notFoundImage}
           alt={'image'}
           loading='lazy'
         />

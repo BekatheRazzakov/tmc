@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from "react-redux";
-import { setCurrentPage } from "../../features/dataSlice";
+import { resetGoodsError, setCurrentPage } from "../../features/dataSlice";
 import { getGoods } from "../../features/dataThunk";
 import { useAppSelector } from "../../app/hooks";
 import GoodsStatusPapers
@@ -22,6 +22,7 @@ const Goods = () => {
   useEffect(() => {
     dispatch(setCurrentPage('Товары'));
     dispatch(getGoods());
+    return () => dispatch(resetGoodsError());
   }, [dispatch]);
   
   const onPaperStatusChange = (value) => setItemPaperStatus(value);

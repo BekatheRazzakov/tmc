@@ -257,6 +257,10 @@ const GoodsList = memo(({ goods }) => {
               sx={{ color: '#FFFFFF', minWidth: '175px' }}
             >
               <MenuItem value={0}>Все</MenuItem>
+              {
+                ['admin', 'Заведующий склада'].includes(user?.role) &&
+                <MenuItem value="my-goods">Мои товары</MenuItem>
+              }
               {categories.map(category => (
                 <MenuItem value={category.name}
                   key={category.name}>статус: {category.value}</MenuItem>

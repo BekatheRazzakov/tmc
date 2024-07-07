@@ -186,7 +186,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
     if (isEdit) {
       await dispatch(updateGood({
         ...state,
-        product_type_has_changed: editingGood?.product_type,
+        product_type_has_changed: editingGood?.product_type !== state.product_type,
         good_data_has_changed: editingGood?.product?.product_manufacture_id !== state.product_manufacture_id || editingGood?.product?.product_model_id !== state.product_model_id || editingGood?.product?.cost !== state.cost,
       }));
     } else dispatch(createGood(state));

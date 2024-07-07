@@ -47,7 +47,7 @@ const SingleGood = () => {
           variant='scrollable'
         >
           <Tab className='single-good-tab-btn' label='Информация'/>
-          <Tab className='single-good-tab-btn' label='Трейд'/>
+          <Tab className='single-good-tab-btn' label='Трейд' disabled={!good?.product}/>
           {['admin', 'Заведующий склада'].includes(user?.role) && <Tab className='single-good-tab-btn'
             label='Редактировать'
             disabled={!good?.product}/>}
