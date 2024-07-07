@@ -42,7 +42,9 @@ const GoodsListTable = memo(({
             <TableRow
               hover role='checkbox'
               tabIndex={-1} key={row?.id}
-              onClick={() => navigate(`/${row?.destination_user_id ? 'trades' : 'goods'}/${row?.id}`)}
+              onClick={() => {
+                if (!row?.is_deleted) navigate(`/${row?.destination_user_id ? 'trades' : 'goods'}/${row?.id}`);
+              }}
             >
               {columns?.map((column, i) => {
                 const value = row[column.id];

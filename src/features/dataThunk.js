@@ -10,8 +10,8 @@ export const getGoods = createAsyncThunk("data/getGoods", async (data, {
     const state = getState();
     const userRole = state.userState.user.role;
     
-    const response = await axiosApi(`${['admin', 'Заведующий склада'].includes(userRole) ? data?.sortByCategory === 'deleted' ? 'soft_deleted_goods' : data?.sortByCategory === 'my-goods' ? 'users/goods' : 'goods' : 'users/goods'}/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}&product_type=${data?.sortByCategory === 'deleted' ? '' : data?.sortByCategory || ''}`);
-    if (!['admin', 'Заведующий склада'].includes(userRole)) {
+    const response = await axiosApi(`${['admin', 'Заведующий склада'].includes(userRole) ? data?.sortByCategory === 'deleted' ? 'soft_deleted_goods' : data?.sortByCategory === 'my-goods' ? 'users/goods' : 'goods' : 'users/goods'}/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}&product_type=${['deleted', 'my-goods'].includes(data?.sortByCategory) ? '' : data?.sortByCategory || ''}`);
+    if (!['admin', 'Заведующий склада'].includes(userRole) || data?.sortByCategory === 'deleted') {
       return {
         data: response.data,
       }
