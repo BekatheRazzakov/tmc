@@ -10,6 +10,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { acceptTrade, deleteTrade, denyTrade } from "../../features/tradeThunk";
 import { useNavigate } from "react-router-dom";
+import {
+  resetTradeAcceptDenyData,
+  resetTradeAcceptedDeniedData
+} from "../../features/tradeSlice";
 
 const denyModalStyle = {
   position: 'absolute',
@@ -33,7 +37,9 @@ const TradeInfoTab = ({
     acceptTradeLoading,
     denyTradeLoading,
     acceptTradeErrorMessage,
-    denyTradeErrorMessage
+    denyTradeErrorMessage,
+    tradeIsAccepted,
+    tradeIsDenied,
   } = useAppSelector(state => state.tradeState);
   const {
     user
@@ -48,21 +54,32 @@ const TradeInfoTab = ({
     }
   }, [acceptTradeErrorMessage, denyTradeErrorMessage, dispatch]);
   
+  useEffect(() => {
+    if (tradeIsAccepted || tradeIsDenied) navigate('/trades');
+  }, [navigate, tradeIsAccepted, tradeIsDenied]);
+  
+  useEffect(() => {
+    return () => dispatch(resetTradeAcceptDenyData());
+  }, [dispatch]);
+  
   const onAccept = async () => {
-    await dispatch(acceptTrade(trade?.id));
-    navigate('/trades');
+    dispatch(acceptTrade(trade?.id));
   };
   
   const onDeny = async (e) => {
     e.preventDefault();
-    await dispatch(denyTrade({
+    dispatch(denyTrade({
       id: trade?.id, comment,
     }));
-    navigate('/trades');
   };
   
-  const handleSnackBarClose = () => setSnackBarOpen(false);
+  const handleSnackBarClose = () => {
+    setSnackBarOpen(false);
+    dispatch(resetTradeAcceptedDeniedData());
+  }
+  
   const toggleDenyModal = () => setDenyModalOpen(!denyModalOpen);
+  
   const onDeleteTrade = async () => {
     await dispatch(deleteTrade(trade?.id));
     navigate('/trades');
@@ -76,28 +93,35 @@ const TradeInfoTab = ({
         {tradeLoading ? <>
           <div className='single-good-info-row'>
             <Typography component='span'
-              variant='body1'><strong>производитель</strong></Typography>
+              variant='body1'><strong>От кого</strong></Typography>
             <Skeleton variant='text'
               sx={{ fontSize: '1rem', width: '80px' }}/>
           </div>
           <div className='single-good-info-divider'></div>
           <div className='single-good-info-row'>
             <Typography component='span'
-              variant='body1'><strong>Модель</strong></Typography>
+              variant='body1'><strong>Кому</strong></Typography>
             <Skeleton variant='text'
               sx={{ fontSize: '1rem', width: '80px' }}/>
           </div>
           <div className='single-good-info-divider'></div>
           <div className='single-good-info-row'>
             <Typography component='span'
-              variant='body1'><strong>Цена</strong></Typography>
+              variant='body1'><strong>ID товара</strong></Typography>
             <Skeleton variant='text'
               sx={{ fontSize: '1rem', width: '80px' }}/>
           </div>
           <div className='single-good-info-divider'></div>
           <div className='single-good-info-row'>
             <Typography component='span'
-              variant='body1'><strong>Штрих код</strong></Typography>
+              variant='body1'><strong>Дата создания</strong></Typography>
+            <Skeleton variant='text'
+              sx={{ fontSize: '1rem', width: '80px' }}/>
+          </div>
+          <div className='single-good-info-divider'></div>
+          <div className='single-good-info-row'>
+            <Typography component='span'
+              variant='body1'><strong>Статус</strong></Typography>
             <Skeleton variant='text'
               sx={{ fontSize: '1rem', width: '80px' }}/>
           </div>
@@ -164,7 +188,7 @@ const TradeInfoTab = ({
             style={{ marginTop: '5px' }}></div>
         </>}
       </div>
-      {trade?.trade_status_id === 1 && trade?.destination_user_id === user?.id &&
+      {trade?.trade_status_id === 1 && trade?.destination_user_id === user?.fullname &&
         <ButtonGroup variant='outlined'
           aria-label='Loading button group'
           fullWidth>

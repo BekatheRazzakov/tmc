@@ -22,6 +22,8 @@ const initialState = {
   acceptTradeErrorMessage: '',
   denyTradeErrorMessage: '',
   tradeIsCreated: false,
+  tradeIsAccepted: false,
+  tradeIsDenied: false,
 };
 
 const TradesSlice = createSlice({
@@ -34,6 +36,15 @@ const TradesSlice = createSlice({
     },
     resetTradesErrorData: (state) => {
       state.tradesErrorMessage = '';
+    },
+    resetTradeAcceptedDeniedData: (state) => {
+      state.tradeIsDenied = false;
+      state.tradeIsAccepted = false;
+    },
+    resetTradeAcceptDenyData: (state) => {
+      console.log(1);
+      state.acceptTradeErrorMessage = '';
+      state.denyTradeErrorMessage = '';
     },
   }, extraReducers: (builder) => {
     builder.addCase(getTrades.pending, (state) => {
@@ -94,6 +105,7 @@ const TradesSlice = createSlice({
     });
     builder.addCase(acceptTrade.fulfilled, (state) => {
       state.acceptTradeLoading = false;
+      state.tradeIsAccepted = true;
     });
     builder.addCase(acceptTrade.rejected, (state, { payload: error }) => {
       state.acceptTradeLoading = false;
@@ -114,4 +126,9 @@ const TradesSlice = createSlice({
 });
 
 export const tradeReducer = TradesSlice.reducer;
-export const { resetCreateTradeData, resetTradesErrorData } = TradesSlice.actions;
+export const {
+  resetCreateTradeData,
+  resetTradesErrorData,
+  resetTradeAcceptedDeniedData,
+  resetTradeAcceptDenyData,
+} = TradesSlice.actions;

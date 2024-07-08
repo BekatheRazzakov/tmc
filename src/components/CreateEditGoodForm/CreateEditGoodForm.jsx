@@ -12,7 +12,7 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import { categories, goodStatuses } from "../../constants";
+import { categories } from "../../constants";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
@@ -25,7 +25,8 @@ import {
 } from "../../features/dataThunk";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  resetCreateGoodData, setGoodIsUpdated
+  resetCreateGoodData,
+  setGoodIsUpdated
 } from "../../features/dataSlice";
 
 const FileUpload = lazy(() => import("../../components/FileUpload/FileUpload"));
@@ -74,7 +75,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
     product_type: editingGood?.product_type,
     product_manufacture_id: editingGood?.product?.product_manufacture_id,
     product_model_id: editingGood?.product?.product_model_id,
-    good_status_id: editingGood?.good_status?.id,
+    good_status_id: 1,
     cost: editingGood?.product?.cost,
     photo_path: editingGood?.photo_path || null,
   });
@@ -161,14 +162,30 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
     ));
   };
   
-  const handleNewManufactureModalOpen = () => setNewManufactureModalOpen(true);
+  const handleNewManufactureModalOpen = () => {
+    setNewManufactureModalOpen(true);
+    setNewManufactureData(prevState => (
+      {
+        ...prevState,
+        product_type: state?.product_type,
+      }
+    ));
+  }
   
   const handleNewManufactureModalClose = () => {
     setNewManufactureModalOpen(false);
     setNewManufactureData(null);
   };
   
-  const handleNewModelModalOpen = () => setNewModelModalOpen(true);
+  const handleNewModelModalOpen = () => {
+    setNewModelModalOpen(true);
+    setNewModelData(prevState => (
+      {
+        ...prevState,
+        product_type: state?.product_type,
+      }
+    ));
+  }
   
   const handleNewModelModalClose = () => {
     setNewModelModalOpen(false);
@@ -274,22 +291,6 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
             </Select>
           </FormControl>
         </>}
-        <FormControl required>
-          <InputLabel id='status-select-required-label'>статус</InputLabel>
-          <Select
-            labelId='status-select-required-label'
-            id='status-select-required'
-            value={state.good_status_id}
-            label='статус'
-            name='good_status_id'
-            onChange={handleChange}
-          >
-            {goodStatuses.filter(status => status.isAvailable).map(status => (
-              <MenuItem value={status.name}
-                key={status.name}>{status.value}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
         <TextField
           id='price'
           label='цена'
@@ -313,7 +314,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
         />
         <Suspense fallback={<></>}>
           <FileUpload label='фото товара'
-            file={state?.photo_path ? 'data:image/png;base64,' + state?.photo_path : null}
+            file={state?.photo_path ? isEdit ? 'data:image/png;base64,' + state?.photo_path : state?.photo_path : null}
             handleFileChange={handleFileChange}
             removeImage={removeImage}
             isByte={isEdit}
