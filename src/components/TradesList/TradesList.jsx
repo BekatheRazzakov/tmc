@@ -75,8 +75,7 @@ const TradesList = memo(({ trades }) => {
   }, [dispatch, paginationData]);
   
   useEffect(() => {
-    if (user?.role === 'admin' && sortBy === 4) dispatch(getDeletedTrades(paginationData));
-    if (sortBy === 0) dispatch(getTrades(paginationData));
+    if (user?.role === 'admin' && sortBy === 4) dispatch(getDeletedTrades(paginationData)); else dispatch(getTrades(paginationData));
   }, [dispatch, paginationData, user?.role, sortBy]);
   
   const sortedByStatusWaiting = useCallback(() => {

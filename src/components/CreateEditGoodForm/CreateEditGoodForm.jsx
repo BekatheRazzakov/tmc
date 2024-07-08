@@ -76,7 +76,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
     product_model_id: editingGood?.product?.product_model_id,
     good_status_id: editingGood?.good_status?.id,
     cost: editingGood?.product?.cost,
-    photo_path: editingGood?.photo_path
+    photo_path: editingGood?.photo_path || null,
   });
   const [newManufactureData, setNewManufactureData] = useState(null);
   const [newModelData, setNewModelData] = useState(null);
@@ -236,41 +236,44 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
             ))}
           </Select>
         </FormControl>
-        <FormControl required>
-          <InputLabel id='manufacture-select-required-label'>производитель</InputLabel>
-          <Select
-            labelId='manufacture-select-required-label'
-            id='manufacture-select-required'
-            value={state.product_manufacture_id}
-            label='производитель'
-            name='product_manufacture_id'
-            onChange={handleChange}
-          >
-            <MenuItem value={state?.product_manufacture_id || 0}
-              onClick={handleNewManufactureModalOpen}><em>Создать производителя</em></MenuItem>
-            {manufactures.map(manufacture => (
-              <MenuItem value={manufacture.id}
-                key={manufacture.id}>{manufacture.name}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl required>
-          <InputLabel id='model-select-required-label'>модель</InputLabel>
-          <Select
-            labelId='model-select-required-label'
-            id='model-select-required'
-            value={state.product_model_id}
-            label='модель'
-            name='product_model_id'
-            onChange={handleChange}
-          >
-            <MenuItem value={state?.product_model_id || 0}
-              onClick={handleNewModelModalOpen}><em>Создать модель</em></MenuItem>
-            {models.map(model => (
-              <MenuItem value={model.id} key={model.id}>{model.name}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        {state?.product_type && <>
+          <FormControl required>
+            <InputLabel id='manufacture-select-required-label'>производитель</InputLabel>
+            <Select
+              labelId='manufacture-select-required-label'
+              id='manufacture-select-required'
+              value={state.product_manufacture_id}
+              label='производитель'
+              name='product_manufacture_id'
+              onChange={handleChange}
+            >
+              <MenuItem value={state?.product_manufacture_id || 0}
+                onClick={handleNewManufactureModalOpen}><em>Создать производителя</em></MenuItem>
+              {manufactures.map(manufacture => (
+                <MenuItem value={manufacture.id}
+                  key={manufacture.id}>{manufacture.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl required>
+            <InputLabel id='model-select-required-label'>модель</InputLabel>
+            <Select
+              labelId='model-select-required-label'
+              id='model-select-required'
+              value={state.product_model_id}
+              label='модель'
+              name='product_model_id'
+              onChange={handleChange}
+            >
+              <MenuItem value={state?.product_model_id || 0}
+                onClick={handleNewModelModalOpen}><em>Создать модель</em></MenuItem>
+              {models.map(model => (
+                <MenuItem value={model.id}
+                  key={model.id}>{model.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </>}
         <FormControl required>
           <InputLabel id='status-select-required-label'>статус</InputLabel>
           <Select
@@ -310,7 +313,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
         />
         <Suspense fallback={<></>}>
           <FileUpload label='фото товара'
-            file={isEdit ? 'data:image/png;base64,' + state?.photo_path : state?.photo_path}
+            file={state?.photo_path ? 'data:image/png;base64,' + state?.photo_path : null}
             handleFileChange={handleFileChange}
             removeImage={removeImage}
             isByte={isEdit}
@@ -373,10 +376,11 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
                 <Select
                   labelId='category-select-required-label'
                   id='category-select-required'
-                  value={newManufactureData?.product_type}
+                  value={state?.product_type}
                   label='категорий'
                   name='product_type'
                   onChange={newManufactureModalOpen ? handleManufactureDataChange : newModelModalOpen ? handleModelDataChange : () => {}}
+                  disabled
                 >
                   {categories.map(category => (
                     <MenuItem value={category.name}

@@ -54,7 +54,9 @@ export const createTrade = createAsyncThunk('trades/createTrade', async (tradeDa
     return await req.data;
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 400) {
-      return rejectWithValue(e.response.data?.detail);
+      return rejectWithValue(
+        e.response.data?.detail === 'Trade already exists' ? 'Трейд уже существует' : e.response.data?.detail
+      );
     } else if (isAxiosError(e) && e.response && e.response.status === 401) {
       return rejectWithValue('Неправильные учётные данные, авторизуйтесь снова');
     } else if (isAxiosError(e) && e.response && e.response.status === 403) {
