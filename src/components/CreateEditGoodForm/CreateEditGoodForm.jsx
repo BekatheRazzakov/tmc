@@ -314,10 +314,10 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
         />
         <Suspense fallback={<></>}>
           <FileUpload label='фото товара'
-            file={state?.photo_path ? isEdit ? 'data:image/png;base64,' + state?.photo_path : state?.photo_path : null}
+            file={isEdit ? typeof state?.photo_path === 'string' ? 'data:image/png;base64,' + state?.photo_path : state?.photo_path : state?.photo_path || null}
             handleFileChange={handleFileChange}
             removeImage={removeImage}
-            isByte={isEdit}
+            isByte={typeof state?.photo_path === 'string'}
           />
         </Suspense>
         <LoadingButton
