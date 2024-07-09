@@ -12,13 +12,12 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import { categories } from "../../constants";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   createGood,
   createManufacture,
-  createModel,
+  createModel, getCategories,
   getManufactures,
   getModels,
   updateGood
@@ -67,6 +66,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
     createModelError,
     createManufactureErrorMessage,
     createModelErrorMessage,
+    categories,
   } = useAppSelector(state => state.dataState);
   const [state, setState] = useState({
     id: params?.id || null,
@@ -96,6 +96,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
   }, [createGoodError, createManufactureError, createModelError, manufactureIsCreated, modelIsCreated, updateGoodError]);
   
   useEffect(() => {
+    dispatch(getCategories());
     if (state.product_type) {
       dispatch(getModels(state?.product_type));
       dispatch(getManufactures(state?.product_type));

@@ -2,6 +2,19 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosApi from "../axiosApi";
 import { isAxiosError } from "axios";
 
+// получение списка категориев
+export const getCategories = createAsyncThunk('data/getCategories', async () => {
+  try {
+    const req = await axiosApi(`goods/products`);
+    return req.data.map(category => ({
+      name: category?.type || '-',
+      value: category?.translations?.ru || '-',
+    }));
+  } catch (e) {
+    throw e;
+  }
+});
+
 // получает список товаров. использует пагинацию
 export const getGoods = createAsyncThunk("data/getGoods", async (data, {
   getState, rejectWithValue

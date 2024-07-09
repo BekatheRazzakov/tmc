@@ -8,7 +8,7 @@ import {
   getModels,
   deleteGood,
   createManufacture,
-  createModel,
+  createModel, getCategories,
 } from "./dataThunk";
 
 const initialState = {
@@ -17,6 +17,7 @@ const initialState = {
   goods: [],
   good: null,
   pagesAmount: 1,
+  categories: [],
   models: [],
   manufactures: [],
   goodsLoading: false,
@@ -81,6 +82,14 @@ const DataSlice = createSlice({
       state.goodsError = '';
     },
   }, extraReducers: (builder) => {
+    builder.addCase(getCategories.pending, () => {
+    });
+    builder.addCase(getCategories.fulfilled, (state, { payload: res }) => {
+      state.categories = res || [];
+    });
+    builder.addCase(getCategories.rejected, () => {
+    });
+    
     builder.addCase(getGoods.pending, (state) => {
       state.goodsLoading = true;
     });

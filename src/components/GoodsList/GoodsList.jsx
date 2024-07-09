@@ -20,7 +20,7 @@ import InputBase from '@mui/material/InputBase';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAllGoodsSelected, setGoodSelected } from "../../features/dataSlice";
 import AddIcon from '@mui/icons-material/Add';
-import { categories, goodStatuses } from "../../constants";
+import { goodStatuses } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import GoodsListFooter from "../GoodsListFooter/GoodsListFooter";
 import { getGoods } from "../../features/dataThunk";
@@ -112,7 +112,7 @@ const CustomIconButton = styled(IconButton)({
 const GoodsList = memo(({ goods }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { goodsLoading } = useSelector(state => state.dataState);
+  const { goodsLoading, categories } = useSelector(state => state.dataState);
   const { user } = useSelector(state => state.userState);
   const [searchWord, setSearchWord] = useState('');
   const [sortBy, setSortBy] = useState('none');
