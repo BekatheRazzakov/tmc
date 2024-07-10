@@ -9,13 +9,13 @@ export const goodStatuses = [
     className: 'status-in-storage',
   }, {
     name: 2,
-    value: 'у НУ',
+    value: 'у начальника участка',
     color: 'secondary',
     isAvailable: true,
     className: 'status-nu',
   }, {
     name: 3,
-    value: 'у СИ',
+    value: 'у сервис инженера',
     color: 'warning',
     isAvailable: true,
     className: 'status-si',

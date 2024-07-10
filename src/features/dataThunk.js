@@ -40,7 +40,7 @@ export const getGoods = createAsyncThunk("data/getGoods", async (data, {
 export const getGood = createAsyncThunk("data/getGood", async (id, { rejectWithValue }) => {
   try {
     const response = await axiosApi(`goods/${id}`);
-    return response.data?.[0];
+    return response.data;
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 404) {
       return rejectWithValue('Товар не найден');

@@ -20,7 +20,7 @@ import InputBase from '@mui/material/InputBase';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAllGoodsSelected, setGoodSelected } from "../../features/dataSlice";
 import AddIcon from '@mui/icons-material/Add';
-import { goodStatuses } from "../../constants";
+import { goodStatuses, tradeStatuses } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import GoodsListFooter from "../GoodsListFooter/GoodsListFooter";
 import { getGoods } from "../../features/dataThunk";
@@ -92,12 +92,22 @@ const columns = [
       <span style={{ textDecoration: 'underline' }}>c</span></span>,
   }, {
     id: 'good_status',
-    label: 'Статус',
+    label: 'Статус ТМЦ',
     minWidth: 200,
     align: 'center',
     format: (value) => <Chip
       label={goodStatuses[value?.id - 1].value || ''}
       color={goodStatuses[value?.id - 1].color || 'default'}
+      sx={{ height: '22px', fontSize: '12px', lineHeight: '12px', }}
+    />,
+  }, {
+    id: 'trade_status',
+    label: 'Статус трейда',
+    minWidth: 200,
+    align: 'center',
+    format: (value) => <Chip
+      label={value?.id ? tradeStatuses[value?.id - 1].value : '-'}
+      color={value?.id ? tradeStatuses[value?.id - 1].color : 'default'}
       sx={{ height: '22px', fontSize: '12px', lineHeight: '12px', }}
     />,
   }, { id: 'barcode', label: 'Штрих код', minWidth: 120, align: 'center', },
@@ -257,10 +267,8 @@ const GoodsList = memo(({ goods }) => {
               sx={{ color: '#FFFFFF', minWidth: '175px' }}
             >
               <MenuItem value={0}>Все</MenuItem>
-              {
-                ['Заведующий склада'].includes(user?.role) &&
-                <MenuItem value="my-goods">Мои товары</MenuItem>
-              }
+              {['Заведующий склада'].includes(user?.role) &&
+                <MenuItem value='my-goods'>Мои товары</MenuItem>}
               {categories.map(category => (
                 <MenuItem value={category.name}
                   key={category.name}>статус: {category.value}</MenuItem>

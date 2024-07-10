@@ -188,7 +188,7 @@ const TradeInfoTab = ({
             style={{ marginTop: '5px' }}></div>
         </>}
       </div>
-      {trade?.trade_status_id === 1 && trade?.destination_user_id === user?.fullname &&
+      {trade?.trade_status?.id === 1 && trade?.destination_user_name?.full_name === user?.fullname &&
         <ButtonGroup variant='outlined'
           aria-label='Loading button group'
           fullWidth>
