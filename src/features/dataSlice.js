@@ -8,7 +8,8 @@ import {
   getModels,
   deleteGood,
   createManufacture,
-  createModel, getCategories,
+  createModel,
+  getCategories,
 } from "./dataThunk";
 
 const initialState = {
@@ -100,7 +101,7 @@ const DataSlice = createSlice({
           ...good, selected: 0,
         }
       )) || [];
-      state.pagesAmount = res?.total_pages || 1;
+      state.goodsPagesAmount = res?.total_pages || 1;
     });
     builder.addCase(getGoods.rejected, (state, { payload: error }) => {
       state.goodsLoading = false;

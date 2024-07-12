@@ -2,12 +2,15 @@ import React, { useCallback } from 'react';
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import './goodsListFooter.css';
 import { useAppSelector } from "../../app/hooks";
+import { useLocation } from "react-router-dom";
 
 const GoodsListFooter = ({ paginationData, handlePaginationDataChange }) => {
-  const { pagesAmount } = useAppSelector(state => state.dataState);
+  const location = useLocation().pathname;
+  const { goodsPagesAmount } = useAppSelector(state => state.dataState);
+  const { tradesPagesAmount } = useAppSelector(state => state.tradeState);
   const pagesArray = useCallback(() => {
-    return Array.from({ length: pagesAmount || 0 }, (_, index) => index);
-  }, [pagesAmount]);
+    return Array.from({ length: location.includes('goods') ? goodsPagesAmount : tradesPagesAmount || 0 }, (_, index) => index);
+  }, [goodsPagesAmount, location, tradesPagesAmount]);
   
   return (
     <Box className='goods-list-footer'>
@@ -23,11 +26,9 @@ const GoodsListFooter = ({ paginationData, handlePaginationDataChange }) => {
           onChange={handlePaginationDataChange}
           variant='standard'
         >
-          {
-            pagesArray().map(page => (
-              <MenuItem value={page + 1}>{page + 1}</MenuItem>
-            ))
-          }
+          {pagesArray().map(page => (
+            <MenuItem value={page + 1}>{page + 1}</MenuItem>
+          ))}
         </Select>
       </FormControl>
       <FormControl className='goods-list-footer-page-size'>
