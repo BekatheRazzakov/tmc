@@ -6,14 +6,14 @@ import Skeleton from "@mui/material/Skeleton";
 import { useNavigate } from "react-router-dom";
 
 const GoodsListTable = memo(({
-  columns, goodsLoading, filteredGoodsList
+  columns, goodsLoading, filteredGoodsList, checkBoxColumn,
 }) => {
   const navigate = useNavigate();
   return (
     <Table stickyHeader aria-label='sticky table'>
       <TableHead>
         <TableRow>
-          {columns.map((column, i) => (
+          {[checkBoxColumn ? checkBoxColumn() : [], ...columns].map((column, i) => (
             <TableCell
               key={i}
               align={column.align}
@@ -46,7 +46,7 @@ const GoodsListTable = memo(({
                 if (!row?.is_deleted) navigate(`/${row?.destination_user_id ? 'trades' : 'goods'}/${row?.id}`);
               }}
             >
-              {columns?.map((column, i) => {
+              {[checkBoxColumn ? checkBoxColumn(row.id) : [], ...columns].map((column, i) => {
                 const value = row[column.id];
                 return (
                   <TableCell key={i} align={column.align}>

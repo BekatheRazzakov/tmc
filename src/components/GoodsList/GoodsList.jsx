@@ -4,9 +4,12 @@ import React, {
 import {
   AppBar,
   Box,
+  Button,
   Checkbox,
   Chip,
+  FormControl,
   IconButton,
+  InputLabel,
   MenuItem,
   Paper,
   Select,
@@ -24,6 +27,7 @@ import { goodStatuses, tradeStatuses } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import GoodsListFooter from "../GoodsListFooter/GoodsListFooter";
 import { getGoods } from "../../features/dataThunk";
+import BulkTrade from "../BulkTrade/BulkTrade";
 
 const GoodsListTable = lazy(() => import('../GoodListTable/GoodsListTable'));
 
@@ -129,9 +133,15 @@ const GoodsList = memo(({ goods }) => {
   const [paginationData, setPaginationData] = useState({
     pageSize: 20, pageNumber: 1, sortByCategory: 0,
   });
+  const [bulkTradeModalOpen, setBulkTradeModalOpen] = useState(false);
+  const [currentAction, setCurrentAction] = useState('');
   
   const handleSortByChange = (e) => {
     setSortBy(e.target.value);
+  };
+  
+  const handleActionChange = (e) => {
+    setCurrentAction(e.target.value);
   };
   
   const handlePaginationDataChange = (e) => {
@@ -143,9 +153,20 @@ const GoodsList = memo(({ goods }) => {
     ));
   };
   
+  const toggleBulkTradeModal = (value) => {
+    if (!value) {
+      setCurrentAction('');
+    }
+    setBulkTradeModalOpen(value || !bulkTradeModalOpen);
+  };
+  
   useEffect(() => {
     dispatch(getGoods(paginationData));
   }, [dispatch, paginationData]);
+  
+  useEffect(() => {
+    if (currentAction === 'trade') setBulkTradeModalOpen(true);
+  }, [currentAction]);
   
   const sortedByManufacture = useCallback(() => {
     return (
@@ -196,6 +217,10 @@ const GoodsList = memo(({ goods }) => {
     return sortedGoods.filter(good => good?.product?.manufacture?.name.toLowerCase().includes(searchWord?.toLowerCase()) || good?.product?.model?.name.toLowerCase().includes(searchWord?.toLowerCase()) || good?.product?.cost?.toString().includes(searchWord));
   }, [goods, searchWord, sortBy, sortedByCost, sortedByManufacture, sortedByModel, sortedByStatusAtAbon, sortedByStatusInStorage, sortedByStatusNU, sortedByStatusSI]);
   
+  const selectedGoods = useCallback(() => {
+    return filteredGoodsList().filter(good => good?.selected);
+  }, [filteredGoodsList]);
+  
   const checkBoxColumn = useCallback(id => {
     const allChecked = filteredGoodsList().filter(good => good.selected === 1).length === filteredGoodsList().length;
     return {
@@ -237,79 +262,97 @@ const GoodsList = memo(({ goods }) => {
             p: '10px 0',
             gap: '10px',
           }}>
-          <Toolbar className='goods-search-toolbar'
-            sx={{
-              p: '0px!important', minHeight: 'unset!important', mr: 'auto'
-            }}>
-            <Search sx={{ m: '0!important' }}>
-              <SearchIconWrapper>
-                <SearchIcon/>
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder='Найти товар…'
-                inputProps={{ 'aria-label': 'search' }}
-                onChange={e => setSearchWord(e.target.value)}
-              />
-            </Search>
-          </Toolbar>
-          <Box sx={{
+          {selectedGoods().length > 0 ? <Box sx={{
             display: "flex", alignItems: 'center', flexWrap: 'no-wrap'
           }}>
             <Typography variant='body1'
               component='span'
-              sx={{ mr: '10px' }}>категории:</Typography>
+              sx={{ mr: '10px' }}>Выбрать действие:</Typography>
             <Select
               labelId='demo-simple-select-filled-label'
               id='demo-simple-select-filled'
               name='sortByCategory'
-              value={paginationData.sortByCategory}
-              onChange={handlePaginationDataChange}
+              value={currentAction}
+              onChange={handleActionChange}
               sx={{ color: '#FFFFFF', minWidth: '175px' }}
             >
-              <MenuItem value={0}>Все</MenuItem>
-              {['Заведующий склада'].includes(user?.role) &&
-                <MenuItem value='my-goods'>Мои товары</MenuItem>}
-              {categories.map(category => (
-                <MenuItem value={category.name}
-                  key={category.name}>статус: {category.value}</MenuItem>
-              ))}
-              {user?.role === 'admin' &&
-                <MenuItem value='deleted'>Удалённые</MenuItem>}
+              <MenuItem value='trade'>Трейд нескольких товаров</MenuItem>
             </Select>
-          </Box>
-          <Box sx={{
-            display: "flex", alignItems: 'center', flexWrap: 'no-wrap'
-          }}>
-            <Typography variant='body1'
-              component='span'
-              sx={{ mr: '10px' }}>Сортировка по:</Typography>
-            <Select
-              labelId='demo-simple-select-filled-label'
-              id='demo-simple-select-filled'
-              value={sortBy}
-              onChange={handleSortByChange}
-              sx={{ color: '#FFFFFF', minWidth: '175px' }}
-            >
-              <MenuItem value='none'>без сортировки</MenuItem>
-              <MenuItem value='manufacture'>производитель (А-Я)</MenuItem>
-              <MenuItem value='model'>модель (А-Я)</MenuItem>
-              <MenuItem value='cost-increase'>цена (по возрастанию)</MenuItem>
-              <MenuItem value='cost-decrease'>цена (по убыванию)</MenuItem>
-              {goodStatuses.filter(status => status.isAvailable).map(status => (
-                <MenuItem value={status.className}
-                  key={status.value}>статус: {status.value}</MenuItem>
-              ))}
-            </Select>
-          </Box>
-          {['admin', 'Заведующий склада'].includes(user?.role) &&
-            <Box className='goods-list-tools' sx={{ width: '100%' }}>
-              <CustomIconButton size='large'
-                onClick={() => navigate('/create-good')}
-                sx={{ ml: 'auto' }}
+          </Box> : <>
+            <Toolbar className='goods-search-toolbar'
+              sx={{
+                p: '0px!important', minHeight: 'unset!important', mr: 'auto'
+              }}>
+              <Search sx={{ m: '0!important' }}>
+                <SearchIconWrapper>
+                  <SearchIcon/>
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder='Найти товар…'
+                  inputProps={{ 'aria-label': 'search' }}
+                  onChange={e => setSearchWord(e.target.value)}
+                />
+              </Search>
+            </Toolbar>
+            <Box sx={{
+              display: "flex", alignItems: 'center', flexWrap: 'no-wrap'
+            }}>
+              <Typography variant='body1'
+                component='span'
+                sx={{ mr: '10px' }}>категории:</Typography>
+              <Select
+                labelId='demo-simple-select-filled-label'
+                id='demo-simple-select-filled'
+                name='sortByCategory'
+                value={paginationData.sortByCategory}
+                onChange={handlePaginationDataChange}
+                sx={{ color: '#FFFFFF', minWidth: '175px' }}
               >
-                <AddIcon/>
-              </CustomIconButton>
-            </Box>}
+                <MenuItem value={0}>Все</MenuItem>
+                {['Заведующий склада'].includes(user?.role) &&
+                  <MenuItem value='my-goods'>Мои товары</MenuItem>}
+                {categories.map(category => (
+                  <MenuItem value={category.name}
+                    key={category.name}>статус: {category.value}</MenuItem>
+                ))}
+                {user?.role === 'admin' &&
+                  <MenuItem value='deleted'>Удалённые</MenuItem>}
+              </Select>
+            </Box>
+            <Box sx={{
+              display: "flex", alignItems: 'center', flexWrap: 'no-wrap'
+            }}>
+              <Typography variant='body1'
+                component='span'
+                sx={{ mr: '10px' }}>Сортировка по:</Typography>
+              <Select
+                labelId='demo-simple-select-filled-label'
+                id='demo-simple-select-filled'
+                value={sortBy}
+                onChange={handleSortByChange}
+                sx={{ color: '#FFFFFF', minWidth: '175px' }}
+              >
+                <MenuItem value='none'>без сортировки</MenuItem>
+                <MenuItem value='manufacture'>производитель (А-Я)</MenuItem>
+                <MenuItem value='model'>модель (А-Я)</MenuItem>
+                <MenuItem value='cost-increase'>цена (по возрастанию)</MenuItem>
+                <MenuItem value='cost-decrease'>цена (по убыванию)</MenuItem>
+                {goodStatuses.filter(status => status.isAvailable).map(status => (
+                  <MenuItem value={status.className}
+                    key={status.value}>статус: {status.value}</MenuItem>
+                ))}
+              </Select>
+            </Box>
+            {['admin', 'Заведующий склада'].includes(user?.role) &&
+              <Box className='goods-list-tools' sx={{ width: '100%' }}>
+                <CustomIconButton size='large'
+                  onClick={() => navigate('/create-good')}
+                  sx={{ ml: 'auto' }}
+                >
+                  <AddIcon/>
+                </CustomIconButton>
+              </Box>}
+          </>}
         </AppBar>
       </Box>
       <TableContainer sx={{ maxHeight: 530 }}>
@@ -324,6 +367,7 @@ const GoodsList = memo(({ goods }) => {
       </TableContainer>
       <GoodsListFooter handlePaginationDataChange={handlePaginationDataChange}
         paginationData={paginationData}/>
+      <BulkTrade open={bulkTradeModalOpen} toggleModal={toggleBulkTradeModal} selectedGoods={selectedGoods()}/>
     </Paper>
   );
 });
