@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Autocomplete, Box, FormControl, Modal, TextField
+  Autocomplete,
+  Box,
+  FormControl,
+  Modal,
+  TextField
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getUsers } from "../../features/userThunk";
 import { resetCreateGoodData } from "../../features/dataSlice";
+import { createTrades } from "../../features/tradeThunk";
 
 const bulkTradeModalStyle = {
   position: 'absolute',
@@ -25,6 +30,9 @@ const BulkTrade = ({ open, toggleModal, selectedGoods }) => {
   const {
     users, usersLoading, user
   } = useAppSelector(state => state.userState);
+  const {
+    createTradesLoading
+  } = useAppSelector(state => state.tradeState);
   const [state, setState] = useState(null);
   
   useEffect(() => {
@@ -53,7 +61,9 @@ const BulkTrade = ({ open, toggleModal, selectedGoods }) => {
         trade_status_id: 1,
       }
     ));
-    console.log(readyForTrades);
+    dispatch(createTrades({
+      trades: readyForTrades,
+    }))
   };
   
   return (
@@ -80,7 +90,7 @@ const BulkTrade = ({ open, toggleModal, selectedGoods }) => {
           <LoadingButton
             type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}
             disabled={usersLoading || !state?.username}
-            loading={false}
+            loading={createTradesLoading}
           >
             Передать
           </LoadingButton>

@@ -1,18 +1,20 @@
 import React, {
-  lazy, Suspense, useCallback, useState, memo, useEffect
+  lazy,
+  memo,
+  Suspense,
+  useCallback,
+  useEffect,
+  useState
 } from 'react';
 import {
   AppBar,
   Box,
-  Button,
   Checkbox,
   Chip,
-  FormControl,
   IconButton,
-  InputLabel,
   MenuItem,
   Paper,
-  Select,
+  Select, Snackbar,
   TableContainer,
   Toolbar,
   Typography
@@ -28,6 +30,8 @@ import { useNavigate } from "react-router-dom";
 import GoodsListFooter from "../GoodsListFooter/GoodsListFooter";
 import { getGoods } from "../../features/dataThunk";
 import BulkTrade from "../BulkTrade/BulkTrade";
+import { resetCreateTradesData } from "../../features/tradeSlice";
+import { useAppSelector } from "../../app/hooks";
 
 const GoodsListTable = lazy(() => import('../GoodListTable/GoodsListTable'));
 
@@ -128,6 +132,9 @@ const GoodsList = memo(({ goods }) => {
   const dispatch = useDispatch();
   const { goodsLoading, categories } = useSelector(state => state.dataState);
   const { user } = useSelector(state => state.userState);
+  const {
+    createTradesErrorMessage, tradesCreated
+  } = useAppSelector(state => state.tradeState);
   const [searchWord, setSearchWord] = useState('');
   const [sortBy, setSortBy] = useState('none');
   const [paginationData, setPaginationData] = useState({
@@ -135,6 +142,7 @@ const GoodsList = memo(({ goods }) => {
   });
   const [bulkTradeModalOpen, setBulkTradeModalOpen] = useState(false);
   const [currentAction, setCurrentAction] = useState('');
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
   
   const handleSortByChange = (e) => {
     setSortBy(e.target.value);
@@ -153,12 +161,12 @@ const GoodsList = memo(({ goods }) => {
     ));
   };
   
-  const toggleBulkTradeModal = (value) => {
+  const toggleBulkTradeModal = useCallback((value) => {
     if (!value) {
       setCurrentAction('');
     }
     setBulkTradeModalOpen(value || !bulkTradeModalOpen);
-  };
+  }, [bulkTradeModalOpen])
   
   useEffect(() => {
     dispatch(getGoods(paginationData));
@@ -167,6 +175,19 @@ const GoodsList = memo(({ goods }) => {
   useEffect(() => {
     if (currentAction === 'trade') setBulkTradeModalOpen(true);
   }, [currentAction]);
+  
+  useEffect(() => {
+    if (createTradesErrorMessage || tradesCreated) setSnackBarOpen(true);
+    if (tradesCreated) {
+      toggleBulkTradeModal(false);
+      dispatch(getGoods(paginationData));
+    }
+  }, [createTradesErrorMessage, dispatch, paginationData, toggleBulkTradeModal, tradesCreated]);
+  
+  const handleSnackBarClose = () => {
+    setSnackBarOpen(false);
+    dispatch(resetCreateTradesData());
+  }
   
   const sortedByManufacture = useCallback(() => {
     return (
@@ -367,7 +388,15 @@ const GoodsList = memo(({ goods }) => {
       </TableContainer>
       <GoodsListFooter handlePaginationDataChange={handlePaginationDataChange}
         paginationData={paginationData}/>
-      <BulkTrade open={bulkTradeModalOpen} toggleModal={toggleBulkTradeModal} selectedGoods={selectedGoods()}/>
+      <BulkTrade open={bulkTradeModalOpen}
+        toggleModal={toggleBulkTradeModal}
+        selectedGoods={selectedGoods()}/>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={snackBarOpen}
+        onClose={handleSnackBarClose}
+        message={tradesCreated ? 'Трейды созданы' : '' || createTradesErrorMessage}
+      />
     </Paper>
   );
 });

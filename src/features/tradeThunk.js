@@ -66,6 +66,25 @@ export const createTrade = createAsyncThunk('trades/createTrade', async (tradeDa
   }
 });
 
+// создание трейдов одним запросом
+export const createTrades = createAsyncThunk('trades/createTrades', async (tradeData, { rejectWithValue }) => {
+  try {
+    const req = await axiosApi.post(`trades/multiple`, tradeData);
+    return await req.data;
+  } catch (e) {
+    if (isAxiosError(e) && e.response && e.response.status === 400) {
+      return rejectWithValue(
+        e.response.data?.detail === 'Trade already exists' ? 'Трейд уже существует' : e.response.data?.detail
+      );
+    } else if (isAxiosError(e) && e.response && e.response.status === 401) {
+      return rejectWithValue('Неправильные учётные данные, авторизуйтесь снова');
+    } else if (isAxiosError(e) && e.response && e.response.status === 403) {
+      return rejectWithValue('У вас нет прав на создание трейда');
+    }
+    throw e;
+  }
+});
+
 // запрос на принятие запроса на трейд
 export const acceptTrade = createAsyncThunk('trades/acceptTrade', async (tradeId, { rejectWithValue }) => {
   try {

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   acceptTrade,
-  createTrade,
+  createTrade, createTrades,
   denyTrade, getDeletedTrades,
   getTrade,
   getTrades
@@ -15,13 +15,16 @@ const initialState = {
   acceptTradeLoading: false,
   denyTradeLoading: false,
   createTradeLoading: false,
+  createTradesLoading: false,
   tradesLoading: false,
   tradeErrorMessage: '',
   tradesErrorMessage: '',
   createTradeErrorMessage: '',
+  createTradesErrorMessage: '',
   acceptTradeErrorMessage: '',
   denyTradeErrorMessage: '',
   tradeIsCreated: false,
+  tradesCreated: false,
   tradeIsAccepted: false,
   tradeIsDenied: false,
 };
@@ -33,6 +36,10 @@ const TradesSlice = createSlice({
       state.tradeIsCreated = false;
       state.acceptTradeErrorMessage = '';
       state.denyTradeErrorMessage = '';
+    },
+    resetCreateTradesData: (state) => {
+      state.createTradesErrorMessage = '';
+      state.tradesCreated = false;
     },
     resetTradesErrorData: (state) => {
       state.tradesErrorMessage = '';
@@ -99,6 +106,19 @@ const TradesSlice = createSlice({
       state.createTradeErrorMessage = error || 'Что то пошло не так, попробуйте позже';
     });
     
+    builder.addCase(createTrades.pending, (state) => {
+      state.createTradesLoading = true;
+    });
+    builder.addCase(createTrades.fulfilled, (state, { payload: res }) => {
+      state.createTradesLoading = false;
+      state.trade = res || null;
+      state.tradesCreated = true;
+    });
+    builder.addCase(createTrades.rejected, (state, { payload: error }) => {
+      state.createTradesLoading = false;
+      state.createTradesErrorMessage = error || 'Что то пошло не так, попробуйте позже';
+    });
+    
     builder.addCase(acceptTrade.pending, (state) => {
       state.acceptTradeLoading = true;
     });
@@ -130,4 +150,5 @@ export const {
   resetTradesErrorData,
   resetTradeAcceptedDeniedData,
   resetTradeAcceptDenyData,
+  resetCreateTradesData,
 } = TradesSlice.actions;
