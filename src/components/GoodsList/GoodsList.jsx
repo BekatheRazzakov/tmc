@@ -182,7 +182,7 @@ const GoodsList = memo(({ goods }) => {
       toggleBulkTradeModal(false);
       dispatch(getGoods(paginationData));
     }
-  }, [createTradesErrorMessage, dispatch, paginationData, toggleBulkTradeModal, tradesCreated]);
+  }, [createTradesErrorMessage, dispatch, paginationData, tradesCreated]);
   
   const handleSnackBarClose = () => {
     setSnackBarOpen(false);
