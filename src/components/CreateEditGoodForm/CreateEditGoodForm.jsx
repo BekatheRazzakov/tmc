@@ -366,7 +366,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
             <Typography variant='h6'
               component='h6'
               className='new-manufacture-model-form-modal-title'
-            >Создать производителя</Typography>
+            >Создать {newManufactureModalOpen ? 'производителя' : 'модель'}</Typography>
             <Box className='new-good-form'
               component='form'
               onSubmit={newManufactureModalOpen ? onNewManufactureCreate : newModelModalOpen ? onNewModelCreate : () => {}}

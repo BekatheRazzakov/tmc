@@ -56,11 +56,8 @@ const TradeInfoTab = ({
   
   useEffect(() => {
     if (tradeIsAccepted || tradeIsDenied) navigate('/trades');
-  }, [navigate, tradeIsAccepted, tradeIsDenied]);
-  
-  useEffect(() => {
     return () => dispatch(resetTradeAcceptDenyData());
-  }, [dispatch]);
+  }, [dispatch, navigate, tradeIsAccepted, tradeIsDenied]);
   
   const onAccept = async () => {
     dispatch(acceptTrade(trade?.id));
@@ -131,14 +128,14 @@ const TradeInfoTab = ({
             <Typography component='span'
               variant='body1'><strong>От кого</strong></Typography>
             <Typography component='span'
-              variant='body2'>{trade?.source_user_id}</Typography>
+              variant='body2'>{trade?.source_user_name?.full_name}</Typography>
           </div>
           <div className='single-good-info-divider'></div>
           <div className='single-good-info-row'>
             <Typography component='span'
               variant='body1'><strong>Кому</strong></Typography>
             <Typography component='span'
-              variant='body2'>{trade?.destination_user_id}</Typography>
+              variant='body2'>{trade?.destination_user_name?.full_name}</Typography>
           </div>
           <div className='single-good-info-divider'></div>
           <div className='single-good-info-row'>

@@ -14,13 +14,13 @@ const GoodsListTable = lazy(() => import('../GoodListTable/GoodsListTable'));
 
 const columns = [
   {
-    id: 'source_user_id',
+    id: 'source_user_name',
     label: 'От кого',
     minWidth: 200,
     align: 'center',
-    format: (value) => value?.full_name || value,
+    format: (value) => value?.full_name,
   }, {
-    id: 'destination_user_id',
+    id: 'destination_user_name',
     label: 'Кому',
     minWidth: 200,
     align: 'center',

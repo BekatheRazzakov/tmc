@@ -1,4 +1,4 @@
-export const apiUrl = 'http://10.1.2.75:8000/api/';
+export const apiUrl = 'http://10.1.2.25:8000/api/';
 
 export const goodStatuses = [
   {

@@ -49,6 +49,8 @@ const TradesSlice = createSlice({
       state.tradeIsAccepted = false;
     },
     resetTradeAcceptDenyData: (state) => {
+      state.tradeIsAccepted = false;
+      state.tradeIsDenied = false;
       state.acceptTradeErrorMessage = '';
       state.denyTradeErrorMessage = '';
     },
@@ -122,7 +124,8 @@ const TradesSlice = createSlice({
     builder.addCase(acceptTrade.pending, (state) => {
       state.acceptTradeLoading = true;
     });
-    builder.addCase(acceptTrade.fulfilled, (state) => {
+    builder.addCase(acceptTrade.fulfilled, (state, {payload: res}) => {
+      state.trade = res || null;
       state.acceptTradeLoading = false;
       state.tradeIsAccepted = true;
     });
@@ -134,8 +137,10 @@ const TradesSlice = createSlice({
     builder.addCase(denyTrade.pending, (state) => {
       state.denyTradeLoading = true;
     });
-    builder.addCase(denyTrade.fulfilled, (state) => {
+    builder.addCase(denyTrade.fulfilled, (state, {payload: res}) => {
+      state.trade = res || null;
       state.denyTradeLoading = false;
+      state.tradeIsDenied = true;
     });
     builder.addCase(denyTrade.rejected, (state, { payload: error }) => {
       state.denyTradeLoading = false;
