@@ -6,10 +6,12 @@ import { isAxiosError } from "axios";
 export const getCategories = createAsyncThunk('data/getCategories', async () => {
   try {
     const req = await axiosApi(`goods/products`);
-    return req.data.map(category => ({
-      name: category?.type || '-',
-      value: category?.translations?.ru || '-',
-    }));
+    return req.data.map(category => (
+      {
+        name: category?.type || '-',
+        value: category?.translations?.ru || '-',
+      }
+    ));
   } catch (e) {
     throw e;
   }
@@ -116,8 +118,13 @@ export const updateGood = createAsyncThunk('data/updateGood', async (data, { rej
     editGoodForm.append('cost', data?.cost);
     editGoodForm.append('good_status_id', data?.good_status_id);
     editGoodForm.append('product_type', data?.product_type);
-    if (data?.photo_path) {
+    if (data?.photo_path && typeof data?.photo_path === 'object') {
       editGoodForm.append('photo_path', data.photo_path);
+    } else if (data?.photo_path && typeof data?.photo_path === 'string') {
+      const byteArray = new TextEncoder().encode(data?.photo_path);
+      const blob = new Blob([byteArray], { type: "text/plain" });
+      const file = new File([blob], "example.txt", { type: "text/plain" });
+      editGoodForm.append('photo_path', file);
     }
     
     const reqToGoods = await axiosApi.put(`goods/${data?.id}`, editGoodForm);

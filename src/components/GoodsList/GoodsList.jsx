@@ -1,10 +1,5 @@
 import React, {
-  lazy,
-  memo,
-  Suspense,
-  useCallback,
-  useEffect,
-  useState
+  lazy, memo, Suspense, useCallback, useEffect, useState
 } from 'react';
 import {
   AppBar,
@@ -14,7 +9,8 @@ import {
   IconButton,
   MenuItem,
   Paper,
-  Select, Snackbar,
+  Select,
+  Snackbar,
   TableContainer,
   Toolbar,
   Typography
@@ -25,7 +21,7 @@ import InputBase from '@mui/material/InputBase';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAllGoodsSelected, setGoodSelected } from "../../features/dataSlice";
 import AddIcon from '@mui/icons-material/Add';
-import { goodStatuses, tradeStatuses } from "../../constants";
+import { goodStatuses, productTypes, tradeStatuses } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import GoodsListFooter from "../GoodsListFooter/GoodsListFooter";
 import { getGoods } from "../../features/dataThunk";
@@ -80,6 +76,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => (
 
 const columns = [
   {
+    id: 'product_type',
+    label: 'Категорий',
+    minWidth: 70,
+    align: 'center',
+    format: (value) => productTypes.filter(productType => productType.en.toLowerCase() === value)[0]?.ru,
+  }, {
     id: 'product',
     label: 'Производитель',
     minWidth: 70,

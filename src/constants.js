@@ -1,4 +1,20 @@
-export const apiUrl = 'http://10.1.2.25:8000/api/';
+export const apiUrl = 'http://10.1.2.86:8000/api/';
+
+export const productTypes = [
+  { en: "Cable", ru: "Кабель" },
+  { en: "Adapter", ru: "Адаптер" },
+  { en: "Router", ru: "Маршрутизатор" },
+  { en: "Clamp", ru: "Зажим" },
+  { en: "Media Converter", ru: "Медиаконвертер" },
+  { en: "ODF", ru: "ODF" },
+  { en: "ONU", ru: "ONU" },
+  { en: "Patch Cord", ru: "Патч-корд" },
+  { en: "Set Top Box", ru: "Приставка" },
+  { en: "SFP Module", ru: "SFP Модуль" },
+  { en: "Splitter", ru: "Сплиттер" },
+  { en: "Straight Bracket", ru: "Прямой кронштейн" },
+  { en: "UTP Cable", ru: "UTP Кабель" },
+];
 
 export const goodStatuses = [
   {
