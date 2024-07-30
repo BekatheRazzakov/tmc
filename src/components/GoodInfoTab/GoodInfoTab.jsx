@@ -73,6 +73,13 @@ const GoodInfoTab = ({
             <div className='single-good-info-divider'></div>
             <div className='single-good-info-row'>
               <Typography component='span'
+                variant='body1'><strong>Пользователь</strong></Typography>
+              <Skeleton variant='text'
+                sx={{ fontSize: '1rem', width: '80px' }}/>
+            </div>
+            <div className='single-good-info-divider'></div>
+            <div className='single-good-info-row'>
+              <Typography component='span'
                 variant='body1'><strong>Статус ТМЦ</strong></Typography>
               <Skeleton variant='text'
                 sx={{ fontSize: '1rem', width: '80px' }}/>
@@ -112,6 +119,13 @@ const GoodInfoTab = ({
                 variant='body1'><strong>Штрих код</strong></Typography>
               <Typography component='span'
                 variant='body2'>{good?.barcode}</Typography>
+            </div>
+            <div className='single-good-info-divider'></div>
+            <div className='single-good-info-row'>
+              <Typography component='span'
+                variant='body1'><strong>Пользователь</strong></Typography>
+              <Typography component='span'
+                variant='body2'>{good?.user_id}</Typography>
             </div>
             <div className='single-good-info-divider'></div>
             <div className='single-good-info-row'>

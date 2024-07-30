@@ -385,6 +385,7 @@ const GoodsList = memo(({ goods }) => {
             checkBoxColumn={checkBoxColumn}
             columns={columns}
             goodsLoading={goodsLoading}
+            currentCategory={paginationData?.sortByCategory}
           />
         </Suspense>
       </TableContainer>

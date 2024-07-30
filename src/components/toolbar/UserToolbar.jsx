@@ -24,7 +24,7 @@ const UserToolbar = () => {
       <AppBar position='static'>
         <Toolbar>
           <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-            {!location.pathname.includes('goods') && <IconButton
+            {location.pathname !== '/goods' && <IconButton
               size='large'
               edge='start'
               color='inherit'

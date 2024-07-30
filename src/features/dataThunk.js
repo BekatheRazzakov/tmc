@@ -8,8 +8,7 @@ export const getCategories = createAsyncThunk('data/getCategories', async () => 
     const req = await axiosApi(`goods/products`);
     return req.data.map(category => (
       {
-        name: category?.type || '-',
-        value: category?.translations?.ru || '-',
+        name: category?.type || '-', value: category?.translations?.ru || '-',
       }
     ));
   } catch (e) {
@@ -26,6 +25,25 @@ export const getGoods = createAsyncThunk("data/getGoods", async (data, {
     const userRole = state.userState.user.role;
     
     const response = await axiosApi(`${['admin', 'Заведующий склада'].includes(userRole) ? data?.sortByCategory === 'deleted' ? 'soft_deleted_goods' : data?.sortByCategory === 'my-goods' ? 'users/goods' : 'goods' : 'users/goods'}/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}&product_type=${['deleted', 'my-goods'].includes(data?.sortByCategory) ? '' : data?.sortByCategory || ''}`);
+    if (['admin'].includes(userRole) || data?.sortByCategory === 'deleted') {
+      return response.data;
+    } else return { data: response.data }
+  } catch (e) {
+    if (isAxiosError(e) && e.response && e.response.status === 400) {
+      return rejectWithValue(e.response.data);
+    }
+    throw e;
+  }
+});
+
+export const getAllGoods = createAsyncThunk("data/getAllGoods", async (data, {
+  getState, rejectWithValue
+}) => {
+  try {
+    const state = getState();
+    const userRole = state.userState.user.role;
+    
+    const response = await axiosApi(`${['admin', 'Заведующий склада'].includes(userRole) ? data?.sortByCategory === 'deleted' ? 'soft_deleted_goods' : data?.sortByCategory === 'my-goods' ? 'users/goods' : 'goods' : 'users/goods'}/?page=${data?.pageNumber || 1}&page_size=10000000&product_type=${['deleted', 'my-goods'].includes(data?.sortByCategory) ? '' : data?.sortByCategory || ''}`);
     if (!['admin', 'Заведующий склада'].includes(userRole) || data?.sortByCategory === 'deleted') {
       return {
         data: response.data,
@@ -115,19 +133,15 @@ export const updateGood = createAsyncThunk('data/updateGood', async (data, { rej
       editGoodForm.append('nazvanie_id', data?.nazvanie_id);
     }
     editGoodForm.append('barcode', data?.barcode);
+    editGoodForm.append('user_id', data?.user_id);
     editGoodForm.append('cost', data?.cost);
     editGoodForm.append('good_status_id', data?.good_status_id);
     editGoodForm.append('product_type', data?.product_type);
     if (data?.photo_path && typeof data?.photo_path === 'object') {
       editGoodForm.append('photo_path', data.photo_path);
-    } else if (data?.photo_path && typeof data?.photo_path === 'string') {
-      const byteArray = new TextEncoder().encode(data?.photo_path);
-      const blob = new Blob([byteArray], { type: "text/plain" });
-      const file = new File([blob], "example.txt", { type: "text/plain" });
-      editGoodForm.append('photo_path', file);
     }
     
-    const reqToGoods = await axiosApi.put(`goods/${data?.id}`, editGoodForm);
+    const reqToGoods = await axiosApi.patch(`goods/${data?.id}`, editGoodForm);
     return await reqToGoods.data;
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 422) {

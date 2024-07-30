@@ -27,7 +27,7 @@ const GoodsListFooter = ({ paginationData, handlePaginationDataChange }) => {
           variant='standard'
         >
           {pagesArray().map(page => (
-            <MenuItem value={page + 1}>{page + 1}</MenuItem>
+            <MenuItem value={page + 1} key={page}>{page + 1}</MenuItem>
           ))}
         </Select>
       </FormControl>

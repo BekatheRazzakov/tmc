@@ -17,16 +17,17 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   createGood,
   createManufacture,
-  createModel, getCategories,
+  createModel,
+  getCategories,
   getManufactures,
   getModels,
   updateGood
 } from "../../features/dataThunk";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  resetCreateGoodData,
-  setGoodIsUpdated
+  resetCreateGoodData, setGoodIsUpdated
 } from "../../features/dataSlice";
+import { getUsers } from "../../features/userThunk";
 
 const FileUpload = lazy(() => import("../../components/FileUpload/FileUpload"));
 
@@ -68,6 +69,9 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
     createModelErrorMessage,
     categories,
   } = useAppSelector(state => state.dataState);
+  const {
+    users, usersLoading,
+  } = useAppSelector(state => state.userState);
   const [state, setState] = useState({
     id: params?.id || null,
     nazvanie_id: editingGood?.nazvanie_id,
@@ -78,6 +82,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
     good_status_id: 1,
     cost: editingGood?.product?.cost,
     photo_path: editingGood?.photo_path || null,
+    user_id: editingGood?.user_id,
   });
   const [newManufactureData, setNewManufactureData] = useState(null);
   const [newModelData, setNewModelData] = useState(null);
@@ -86,6 +91,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
   const [newModelModalOpen, setNewModelModalOpen] = useState(false);
   
   useEffect(() => {
+    dispatch(getUsers());
     return () => dispatch(resetCreateGoodData());
   }, [dispatch]);
   
@@ -167,8 +173,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
     setNewManufactureModalOpen(true);
     setNewManufactureData(prevState => (
       {
-        ...prevState,
-        product_type: state?.product_type,
+        ...prevState, product_type: state?.product_type,
       }
     ));
   }
@@ -182,8 +187,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
     setNewModelModalOpen(true);
     setNewModelData(prevState => (
       {
-        ...prevState,
-        product_type: state?.product_type,
+        ...prevState, product_type: state?.product_type,
       }
     ));
   }
@@ -207,6 +211,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
         ...state,
         product_type_has_changed: editingGood?.product_type !== state.product_type,
         good_data_has_changed: editingGood?.product?.product_manufacture_id !== state.product_manufacture_id || editingGood?.product?.product_model_id !== state.product_model_id || editingGood?.product?.cost !== state.cost,
+        user_id: users?.filter(user => user?.full_name === state?.user_id)[0]?.id,
       }));
     } else dispatch(createGood(state));
   };
@@ -313,6 +318,28 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
           onChange={handleChange}
           required
         />
+        <FormControl required>
+          <InputLabel id='user-select-required-label'>Пользователь</InputLabel>
+          <Select
+            labelId='category-select-required-label'
+            id='category-select-required'
+            value={state?.user_id}
+            label='Пользователь'
+            name='user_id'
+            onChange={handleChange}
+          >
+            {usersLoading ? <MenuItem value=''
+            >
+              Загрузка...
+            </MenuItem> : users?.map(user => (
+              <MenuItem value={user?.full_name}
+                key={user?.id}
+              >
+                {user?.full_name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <Suspense fallback={<></>}>
           <FileUpload label='фото товара'
             file={isEdit ? typeof state?.photo_path === 'string' ? 'data:image/png;base64,' + state?.photo_path : state?.photo_path : state?.photo_path || null}

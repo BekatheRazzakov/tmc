@@ -9,19 +9,21 @@ import {
   deleteGood,
   createManufacture,
   createModel,
-  getCategories,
+  getCategories, getAllGoods,
 } from "./dataThunk";
 
 const initialState = {
   currentPage: '',
   currentDrawer: '',
   goods: [],
+  allGoods: [],
   good: null,
   pagesAmount: 1,
   categories: [],
   models: [],
   manufactures: [],
   goodsLoading: false,
+  allGoodsLoading: false,
   goodLoading: false,
   createGoodLoading: false,
   modelsLoading: false,
@@ -105,6 +107,23 @@ const DataSlice = createSlice({
     });
     builder.addCase(getGoods.rejected, (state, { payload: error }) => {
       state.goodsLoading = false;
+      state.goodsError = error?.error || 'Что-то пошло не так';
+    });
+    
+    builder.addCase(getAllGoods.pending, (state) => {
+      state.allGoodsLoading = true;
+    });
+    builder.addCase(getAllGoods.fulfilled, (state, { payload: res }) => {
+      state.allGoodsLoading = false;
+      state.allGoods = res.data?.map(good => (
+        {
+          ...good, selected: 0,
+        }
+      )) || [];
+      state.goodsPagesAmount = res?.total_pages || 1;
+    });
+    builder.addCase(getAllGoods.rejected, (state, { payload: error }) => {
+      state.allGoodsLoading = false;
       state.goodsError = error?.error || 'Что-то пошло не так';
     });
     

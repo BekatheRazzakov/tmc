@@ -6,14 +6,14 @@ import Skeleton from "@mui/material/Skeleton";
 import { useNavigate } from "react-router-dom";
 
 const GoodsListTable = memo(({
-  columns, goodsLoading, filteredGoodsList, checkBoxColumn,
+  columns, goodsLoading, filteredGoodsList, checkBoxColumn, currentCategory,
 }) => {
   const navigate = useNavigate();
   return (
     <Table stickyHeader aria-label='sticky table'>
       <TableHead>
         <TableRow>
-          {[checkBoxColumn ? checkBoxColumn() : [], ...columns].map((column, i) => (
+          {[checkBoxColumn && currentCategory !== 'deleted' ? checkBoxColumn() : [], ...columns].map((column, i) => (
             <TableCell
               key={i}
               align={column.align}
@@ -43,10 +43,10 @@ const GoodsListTable = memo(({
               hover role='checkbox'
               tabIndex={-1} key={row?.id}
               onClick={() => {
-                if (!row?.is_deleted) navigate(`/${row?.destination_user_id ? 'trades' : 'goods'}/${row?.id}`);
+                if (currentCategory !== 'deleted' || row?.is_deleted) navigate(`/${row?.destination_user_id ? 'trades' : 'goods'}/${row?.id}`);
               }}
             >
-              {[checkBoxColumn ? checkBoxColumn(row.id) : [], ...columns].map((column, i) => {
+              {[checkBoxColumn && currentCategory !== 'deleted' ? checkBoxColumn(row.id) : [], ...columns].map((column, i) => {
                 const value = row[column.id];
                 return (
                   <TableCell key={i} align={column.align}>
