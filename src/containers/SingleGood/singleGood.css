@@ -5,7 +5,7 @@
 
 .single-good-tab-btn {
   flex-grow: 1;
-  max-width: unset!important;
+  max-width: unset !important;
 }
 
 .single-good-page-papers {
@@ -43,13 +43,13 @@
 
 .single-good-title {
   text-wrap: wrap;
-  line-height: 1!important;
-  margin-bottom: 5px!important;
+  line-height: 1 !important;
+  margin-bottom: 5px !important;
 }
 
 .single-good-value {
   text-wrap: wrap;
-  line-height: 1!important;
+  line-height: 1 !important;
 }
 
 .single-good-info {
@@ -81,7 +81,7 @@
 }
 
 .single-good-info-skeleton {
-  transform: unset!important;
+  transform: unset !important;
   max-width: 200px;
   width: 100%;
 }
@@ -112,7 +112,7 @@
     flex-direction: column;
     align-items: center;
   }
-  
+
   .single-good-delete-tab-right {
     text-align: center;
   }
@@ -123,106 +123,106 @@
     width: unset;
     margin: 0 10px;
   }
-  
+
   .single-good-img {
     max-width: 140px;
     margin: 0 auto;
   }
-  
+
   .single-good-title {
-    font-size: 18px!important;
+    font-size: 18px !important;
   }
-  
+
   .single-good-value {
-    font-size: 12px!important;
+    font-size: 12px !important;
   }
-  
+
   .single-good-edit-paper {
     padding: 20px;
   }
-  
+
   .single-good-delete-warning-paper {
-    padding: 20px!important;
+    padding: 20px !important;
   }
-  
+
   .single-good-delete-tab {
     gap: 20px;
   }
-  
+
   .single-good-delete-tab-left img {
     width: 250px;
   }
-  
+
   .single-good-delete-tab-right h1 {
     font-size: 26px;
   }
-  
+
   .single-good-delete-tab-right h3 {
     font-size: 14px;
   }
-  
+
   .single-good-delete-tab-btn {
-    padding: 5px 12px!important;
-    font-size: 10px!important;
+    padding: 5px 12px !important;
+    font-size: 10px !important;
   }
 }
 
 @media (max-width: 578px) {
   .single-good-tab-btn {
-    font-size: 10px!important;
+    font-size: 10px !important;
   }
-  
+
   .single-good-page-papers {
     flex-direction: column;
   }
-  
+
   .single-good-outer-paper {
     padding: 12px 12px 15px;
   }
-  
+
   .single-good-outer-paper:first-child {
     max-width: unset;
     text-align: center;
   }
-  
+
   .single-good-info-skeleton {
     align-self: center;
   }
-  
+
   .single-good-edit-paper {
     padding: 10px;
   }
-  
+
   .single-good-delete-warning-paper {
-    padding: 10px!important;
+    padding: 10px !important;
   }
-  
+
   .single-good-delete-tab-left img {
     width: 150px;
   }
-  
+
   .single-good-delete-tab-right h1 {
     font-size: 18px;
   }
-  
+
   .single-good-delete-tab-right h3 {
     font-size: 10px;
   }
-  
+
   .single-good-delete-tab-btn {
-    padding: 5px 12px!important;
-    font-size: 8px!important;
+    padding: 5px 12px !important;
+    font-size: 8px !important;
   }
-  
+
   .MuiAutocomplete-inputRoot {
-    padding: 5px 39px 5px 5px!important;
+    padding: 5px 39px 5px 5px !important;
   }
-  
+
   .single-good-page .MuiAutocomplete-input,
   .single-good-page .MuiInputLabel-root {
-    font-size: 14px!important;
+    font-size: 14px !important;
   }
-  
+
   .single-good-page .MuiInputLabel-root {
     top: -3px;
   }

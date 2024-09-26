@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   acceptTrade,
-  createTrade, createTrades,
-  denyTrade, getDeletedTrades,
+  createTrade,
+  createTrades,
+  denyTrade,
+  getDeletedTrades,
   getTrade,
-  getTrades
+  getTrades,
 } from "./tradeThunk";
 
 const initialState = {
@@ -17,12 +19,12 @@ const initialState = {
   createTradeLoading: false,
   createTradesLoading: false,
   tradesLoading: false,
-  tradeErrorMessage: '',
-  tradesErrorMessage: '',
-  createTradeErrorMessage: '',
-  createTradesErrorMessage: '',
-  acceptTradeErrorMessage: '',
-  denyTradeErrorMessage: '',
+  tradeErrorMessage: "",
+  tradesErrorMessage: "",
+  createTradeErrorMessage: "",
+  createTradesErrorMessage: "",
+  acceptTradeErrorMessage: "",
+  denyTradeErrorMessage: "",
   tradeIsCreated: false,
   tradesCreated: false,
   tradeIsAccepted: false,
@@ -30,19 +32,21 @@ const initialState = {
 };
 
 const TradesSlice = createSlice({
-  name: "trade", initialState, reducers: {
+  name: "trade",
+  initialState,
+  reducers: {
     resetCreateTradeData: (state) => {
-      state.createTradeErrorMessage = '';
+      state.createTradeErrorMessage = "";
       state.tradeIsCreated = false;
-      state.acceptTradeErrorMessage = '';
-      state.denyTradeErrorMessage = '';
+      state.acceptTradeErrorMessage = "";
+      state.denyTradeErrorMessage = "";
     },
     resetCreateTradesData: (state) => {
-      state.createTradesErrorMessage = '';
+      state.createTradesErrorMessage = "";
       state.tradesCreated = false;
     },
     resetTradesErrorData: (state) => {
-      state.tradesErrorMessage = '';
+      state.tradesErrorMessage = "";
     },
     resetTradeAcceptedDeniedData: (state) => {
       state.tradeIsDenied = false;
@@ -51,13 +55,14 @@ const TradesSlice = createSlice({
     resetTradeAcceptDenyData: (state) => {
       state.tradeIsAccepted = false;
       state.tradeIsDenied = false;
-      state.acceptTradeErrorMessage = '';
-      state.denyTradeErrorMessage = '';
+      state.acceptTradeErrorMessage = "";
+      state.denyTradeErrorMessage = "";
     },
-  }, extraReducers: (builder) => {
+  },
+  extraReducers: (builder) => {
     builder.addCase(getTrades.pending, (state) => {
       state.tradesLoading = true;
-      state.tradesErrorMessage = '';
+      state.tradesErrorMessage = "";
     });
     builder.addCase(getTrades.fulfilled, (state, { payload: res }) => {
       state.tradesLoading = false;
@@ -66,12 +71,13 @@ const TradesSlice = createSlice({
     });
     builder.addCase(getTrades.rejected, (state, { payload: error }) => {
       state.tradesLoading = false;
-      state.tradesErrorMessage = error || 'Что то пошло не так, попробуйте позже';
+      state.tradesErrorMessage =
+        error || "Что то пошло не так, попробуйте позже";
     });
-    
+
     builder.addCase(getDeletedTrades.pending, (state) => {
       state.tradesLoading = true;
-      state.tradesErrorMessage = '';
+      state.tradesErrorMessage = "";
     });
     builder.addCase(getDeletedTrades.fulfilled, (state, { payload: res }) => {
       state.tradesLoading = false;
@@ -80,9 +86,10 @@ const TradesSlice = createSlice({
     });
     builder.addCase(getDeletedTrades.rejected, (state, { payload: error }) => {
       state.tradesLoading = false;
-      state.tradesErrorMessage = error || 'Что то пошло не так, попробуйте позже';
+      state.tradesErrorMessage =
+        error || "Что то пошло не так, попробуйте позже";
     });
-    
+
     builder.addCase(getTrade.pending, (state) => {
       state.tradeLoading = true;
     });
@@ -92,9 +99,10 @@ const TradesSlice = createSlice({
     });
     builder.addCase(getTrade.rejected, (state, { payload: error }) => {
       state.tradeLoading = false;
-      state.tradeErrorMessage = error || 'Что то пошло не так, попробуйте позже';
+      state.tradeErrorMessage =
+        error || "Что то пошло не так, попробуйте позже";
     });
-    
+
     builder.addCase(createTrade.pending, (state) => {
       state.createTradeLoading = true;
     });
@@ -105,9 +113,10 @@ const TradesSlice = createSlice({
     });
     builder.addCase(createTrade.rejected, (state, { payload: error }) => {
       state.createTradeLoading = false;
-      state.createTradeErrorMessage = error || 'Что то пошло не так, попробуйте позже';
+      state.createTradeErrorMessage =
+        error || "Что то пошло не так, попробуйте позже";
     });
-    
+
     builder.addCase(createTrades.pending, (state) => {
       state.createTradesLoading = true;
     });
@@ -118,33 +127,36 @@ const TradesSlice = createSlice({
     });
     builder.addCase(createTrades.rejected, (state, { payload: error }) => {
       state.createTradesLoading = false;
-      state.createTradesErrorMessage = error || 'Что то пошло не так, попробуйте позже';
+      state.createTradesErrorMessage =
+        error || "Что то пошло не так, попробуйте позже";
     });
-    
+
     builder.addCase(acceptTrade.pending, (state) => {
       state.acceptTradeLoading = true;
     });
-    builder.addCase(acceptTrade.fulfilled, (state, {payload: res}) => {
+    builder.addCase(acceptTrade.fulfilled, (state, { payload: res }) => {
       state.trade = res || null;
       state.acceptTradeLoading = false;
       state.tradeIsAccepted = true;
     });
     builder.addCase(acceptTrade.rejected, (state, { payload: error }) => {
       state.acceptTradeLoading = false;
-      state.acceptTradeErrorMessage = error || 'Что то пошло не так, попробуйте позже';
+      state.acceptTradeErrorMessage =
+        error || "Что то пошло не так, попробуйте позже";
     });
-    
+
     builder.addCase(denyTrade.pending, (state) => {
       state.denyTradeLoading = true;
     });
-    builder.addCase(denyTrade.fulfilled, (state, {payload: res}) => {
+    builder.addCase(denyTrade.fulfilled, (state, { payload: res }) => {
       state.trade = res || null;
       state.denyTradeLoading = false;
       state.tradeIsDenied = true;
     });
     builder.addCase(denyTrade.rejected, (state, { payload: error }) => {
       state.denyTradeLoading = false;
-      state.denyTradeErrorMessage = error || 'Что то пошло не так, попробуйте позже';
+      state.denyTradeErrorMessage =
+        error || "Что то пошло не так, попробуйте позже";
     });
   },
 });

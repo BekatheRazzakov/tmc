@@ -1,4 +1,4 @@
-export const apiUrl = 'http://10.1.2.168:8001/api/';
+export const apiUrl = "http://10.1.2.168:8001/api/";
 
 export const productTypes = [
   { en: "Cable", ru: "Кабель" },
@@ -19,56 +19,61 @@ export const productTypes = [
 export const goodStatuses = [
   {
     name: 1,
-    value: 'на складе',
-    color: 'primary',
+    value: "на складе",
+    color: "primary",
     isAvailable: true,
-    className: 'status-in-storage',
-  }, {
+    className: "status-in-storage",
+  },
+  {
     name: 2,
-    value: 'у начальника участка',
-    color: 'secondary',
+    value: "у начальника участка",
+    color: "secondary",
     isAvailable: true,
-    className: 'status-nu',
-  }, {
+    className: "status-nu",
+  },
+  {
     name: 3,
-    value: 'у сервис инженера',
-    color: 'warning',
+    value: "у сервис инженера",
+    color: "warning",
     isAvailable: true,
-    className: 'status-si',
-  }, {
+    className: "status-si",
+  },
+  {
     name: 4,
-    value: 'у абонента',
-    color: 'success',
+    value: "у абонента",
+    color: "success",
     isAvailable: false,
-    className: 'status-at-abon',
+    className: "status-at-abon",
   },
 ];
 
 export const tradeStatuses = [
   {
     name: 1,
-    value: 'в ожидании',
-    color: 'warning',
-  }, {
+    value: "в ожидании",
+    color: "warning",
+  },
+  {
     name: 2,
-    value: 'принят',
-    color: 'success',
-  }, {
+    value: "принят",
+    color: "success",
+  },
+  {
     name: 3,
-    value: 'отклонён',
-    color: 'error',
+    value: "отклонён",
+    color: "error",
   },
 ];
 
 export const formatDate = (date) => {
   const newDate = new Date(date);
-  const pad = (num, size) => num.toString().padStart(size, '0');
-  
+  const pad = (num, size) => num.toString().padStart(size, "0");
+
   const year = newDate.getFullYear();
   const month = pad(newDate.getMonth() + 1, 2);
   const day = pad(newDate.getDate(), 2);
   const hours = pad(newDate.getHours(), 2);
   const minutes = pad(newDate.getMinutes(), 2);
-  
+
   return `${day}.${month}.${year}  ${hours}:${minutes}`;
 };
