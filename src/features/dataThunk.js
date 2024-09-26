@@ -1,35 +1,35 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import axiosApi from "../axiosApi";
-import { isAxiosError } from "axios";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import axiosApi from '../axiosApi';
+import { isAxiosError } from 'axios';
 
 // получение списка категориев
 export const getCategories = createAsyncThunk(
-  "data/getCategories",
+  'data/getCategories',
   async () => {
     try {
       const req = await axiosApi(`goods/products`);
       return req.data.map((category) => ({
-        name: category?.type || "-",
-        value: category?.translations?.ru || "-",
+        name: category?.type || '-',
+        value: category?.translations?.ru || '-',
       }));
     } catch (e) {
       throw e;
     }
-  },
+  }
 );
 
 // получает список товаров. использует пагинацию
 export const getGoods = createAsyncThunk(
-  "data/getGoods",
+  'data/getGoods',
   async (data, { getState, rejectWithValue }) => {
     try {
       const state = getState();
       const userRole = state.userState.user.role;
 
       const response = await axiosApi(
-        `${["admin", "Заведующий склада"].includes(userRole) ? (data?.sortByCategory === "deleted" ? "soft_deleted_goods" : data?.sortByCategory === "my-goods" ? "users/goods" : "goods") : "users/goods"}/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}&product_type=${["deleted", "my-goods"].includes(data?.sortByCategory) ? "" : data?.sortByCategory || ""}`,
+        `${['admin', 'Заведующий склада'].includes(userRole) ? (data?.sortByCategory === 'deleted' ? 'soft_deleted_goods' : data?.sortByCategory === 'my-goods' ? 'users/goods' : 'goods') : 'users/goods'}/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}&product_type=${['deleted', 'my-goods'].includes(data?.sortByCategory) ? '' : data?.sortByCategory || ''}`
       );
-      if (["admin"].includes(userRole) || data?.sortByCategory === "deleted") {
+      if (['admin'].includes(userRole) || data?.sortByCategory === 'deleted') {
         return response.data;
       } else return { data: response.data };
     } catch (e) {
@@ -38,22 +38,22 @@ export const getGoods = createAsyncThunk(
       }
       throw e;
     }
-  },
+  }
 );
 
 export const getAllGoods = createAsyncThunk(
-  "data/getAllGoods",
+  'data/getAllGoods',
   async (data, { getState, rejectWithValue }) => {
     try {
       const state = getState();
       const userRole = state.userState.user.role;
 
       const response = await axiosApi(
-        `${["admin", "Заведующий склада"].includes(userRole) ? (data?.sortByCategory === "deleted" ? "soft_deleted_goods" : data?.sortByCategory === "my-goods" ? "users/goods" : "goods") : "users/goods"}/?page=${data?.pageNumber || 1}&page_size=10000000&product_type=${["deleted", "my-goods"].includes(data?.sortByCategory) ? "" : data?.sortByCategory || ""}`,
+        `${['admin', 'Заведующий склада'].includes(userRole) ? (data?.sortByCategory === 'deleted' ? 'soft_deleted_goods' : data?.sortByCategory === 'my-goods' ? 'users/goods' : 'goods') : 'users/goods'}/?page=${data?.pageNumber || 1}&page_size=10000000&product_type=${['deleted', 'my-goods'].includes(data?.sortByCategory) ? '' : data?.sortByCategory || ''}`
       );
       if (
-        !["admin", "Заведующий склада"].includes(userRole) ||
-        data?.sortByCategory === "deleted"
+        !['admin', 'Заведующий склада'].includes(userRole) ||
+        data?.sortByCategory === 'deleted'
       ) {
         return {
           data: response.data,
@@ -65,27 +65,27 @@ export const getAllGoods = createAsyncThunk(
       }
       throw e;
     }
-  },
+  }
 );
 
 export const getGood = createAsyncThunk(
-  "data/getGood",
+  'data/getGood',
   async (id, { rejectWithValue }) => {
     try {
       const response = await axiosApi(`goods/${id}`);
       return response.data;
     } catch (e) {
       if (isAxiosError(e) && e.response && e.response.status === 404) {
-        return rejectWithValue("Товар не найден");
+        return rejectWithValue('Товар не найден');
       }
       throw e;
     }
-  },
+  }
 );
 
 // запрос на создание товара
 export const createGood = createAsyncThunk(
-  "data/createGood",
+  'data/createGood',
   async (data, { rejectWithValue }) => {
     try {
       const createItemForm = {
@@ -97,38 +97,38 @@ export const createGood = createAsyncThunk(
 
       const reqToModel = await axiosApi.post(
         `${data.product_type}/`,
-        createItemForm,
+        createItemForm
       );
       const resFromModel = await reqToModel.data;
 
-      createGoodForm.append("nazvanie_id", resFromModel?.id);
-      createGoodForm.append("barcode", data?.barcode);
-      createGoodForm.append("good_status_id", data?.good_status_id);
-      createGoodForm.append("product_type", data?.product_type);
+      createGoodForm.append('nazvanie_id', resFromModel?.id);
+      createGoodForm.append('barcode', data?.barcode);
+      createGoodForm.append('good_status_id', data?.good_status_id);
+      createGoodForm.append('product_type', data?.product_type);
       if (data?.photo_path) {
-        createGoodForm.append("photo_path", data.photo_path);
+        createGoodForm.append('photo_path', data.photo_path);
       }
 
       const reqToGoods = await axiosApi.post(`goods/`, createGoodForm);
       return await reqToGoods.data;
     } catch (e) {
       if (isAxiosError(e) && e.response && e.response.status === 422) {
-        return rejectWithValue("Ошибка при создании товара");
+        return rejectWithValue('Ошибка при создании товара');
       } else if (isAxiosError(e) && e.response && e.response.status === 401) {
         return rejectWithValue(
-          "Неправильные учётные данные, авторизуйтесь снова",
+          'Неправильные учётные данные, авторизуйтесь снова'
         );
       } else if (isAxiosError(e) && e.response && e.response.status === 403) {
-        return rejectWithValue("У вас нет прав на создание товара");
+        return rejectWithValue('У вас нет прав на создание товара');
       }
       throw e;
     }
-  },
+  }
 );
 
 // запрос на редактирование товара
 export const updateGood = createAsyncThunk(
-  "data/updateGood",
+  'data/updateGood',
   async (data, { rejectWithValue }) => {
     try {
       const editGoodForm = new FormData();
@@ -141,11 +141,11 @@ export const updateGood = createAsyncThunk(
         };
         const reqToModel = await axiosApi.post(
           `${data.product_type}/`,
-          createItemForm,
+          createItemForm
         );
         const resFromModel = await reqToModel.data;
 
-        editGoodForm.append("nazvanie_id", resFromModel?.id);
+        editGoodForm.append('nazvanie_id', resFromModel?.id);
       } else if (data.product_type_has_changed || data.good_data_has_changed) {
         const updateItemForm = {
           product_manufacture_id: data?.product_manufacture_id,
@@ -154,49 +154,49 @@ export const updateGood = createAsyncThunk(
         };
         const reqToModel = await axiosApi.put(
           `${data.product_type}/${data?.id}`,
-          updateItemForm,
+          updateItemForm
         );
         const resFromModel = await reqToModel.data;
 
-        editGoodForm.append("nazvanie_id", resFromModel?.id);
+        editGoodForm.append('nazvanie_id', resFromModel?.id);
       } else if (
         !data.product_type_has_changed &&
         !data.good_data_has_changed
       ) {
-        editGoodForm.append("nazvanie_id", data?.nazvanie_id);
+        editGoodForm.append('nazvanie_id', data?.nazvanie_id);
       }
-      editGoodForm.append("barcode", data?.barcode);
-      editGoodForm.append("user_id", data?.user_id);
-      editGoodForm.append("cost", data?.cost);
-      editGoodForm.append("good_status_id", data?.good_status_id);
-      editGoodForm.append("product_type", data?.product_type);
-      if (data?.photo_path && typeof data?.photo_path === "object") {
-        editGoodForm.append("photo_path", data.photo_path);
+      editGoodForm.append('barcode', data?.barcode);
+      editGoodForm.append('user_id', data?.user_id);
+      editGoodForm.append('cost', data?.cost);
+      editGoodForm.append('good_status_id', data?.good_status_id);
+      editGoodForm.append('product_type', data?.product_type);
+      if (data?.photo_path && typeof data?.photo_path === 'object') {
+        editGoodForm.append('photo_path', data.photo_path);
       }
 
       const reqToGoods = await axiosApi.patch(
         `goods/${data?.id}`,
-        editGoodForm,
+        editGoodForm
       );
       return await reqToGoods.data;
     } catch (e) {
       if (isAxiosError(e) && e.response && e.response.status === 422) {
-        return rejectWithValue("Ошибка при редактировании товара");
+        return rejectWithValue('Ошибка при редактировании товара');
       } else if (isAxiosError(e) && e.response && e.response.status === 401) {
         return rejectWithValue(
-          "Неправильные учётные данные, авторизуйтесь снова",
+          'Неправильные учётные данные, авторизуйтесь снова'
         );
       } else if (isAxiosError(e) && e.response && e.response.status === 403) {
-        return rejectWithValue("У вас нет прав на редактирование товара");
+        return rejectWithValue('У вас нет прав на редактирование товара');
       }
       throw e;
     }
-  },
+  }
 );
 
 // получение списка производителей товаров по типу товара
 export const getManufactures = createAsyncThunk(
-  "data/getManufactures",
+  'data/getManufactures',
   async (product_type) => {
     try {
       const req = await axiosApi(`${product_type}_manufactures/`);
@@ -204,12 +204,12 @@ export const getManufactures = createAsyncThunk(
     } catch (e) {
       throw e;
     }
-  },
+  }
 );
 
 // получение списка моделей товаров по типу товара
 export const getModels = createAsyncThunk(
-  "data/getModels",
+  'data/getModels',
   async (product_type) => {
     try {
       const req = await axiosApi(`${product_type}_models/`);
@@ -217,12 +217,12 @@ export const getModels = createAsyncThunk(
     } catch (e) {
       throw e;
     }
-  },
+  }
 );
 
 // создание производителя товара по типу товара
 export const createManufacture = createAsyncThunk(
-  "data/createManufacture",
+  'data/createManufacture',
   async (data, { rejectWithValue }) => {
     try {
       const req = await axiosApi.post(`${data?.product_type}_manufactures/`, {
@@ -232,21 +232,21 @@ export const createManufacture = createAsyncThunk(
     } catch (e) {
       if (isAxiosError(e) && e.response && e.response.status === 401) {
         return rejectWithValue(
-          "Неправильные учётные данные, авторизуйтесь снова",
+          'Неправильные учётные данные, авторизуйтесь снова'
         );
       } else if (isAxiosError(e) && e.response && e.response.status === 403) {
         return rejectWithValue(
-          "Нет разрешения на создание производителя товара",
+          'Нет разрешения на создание производителя товара'
         );
       }
       throw e;
     }
-  },
+  }
 );
 
 // создание модели товара по типу товара
 export const createModel = createAsyncThunk(
-  "data/createModel",
+  'data/createModel',
   async (data, { rejectWithValue }) => {
     try {
       const req = await axiosApi.post(`${data?.product_type}_models/`, {
@@ -256,20 +256,20 @@ export const createModel = createAsyncThunk(
     } catch (e) {
       if (isAxiosError(e) && e.response && e.response.status === 401) {
         return rejectWithValue(
-          "Неправильные учётные данные, авторизуйтесь снова",
+          'Неправильные учётные данные, авторизуйтесь снова'
         );
       } else if (isAxiosError(e) && e.response && e.response.status === 403) {
         return rejectWithValue(
-          "У вас нет разрешения на создание модели товара",
+          'У вас нет разрешения на создание модели товара'
         );
       }
       throw e;
     }
-  },
+  }
 );
 
 // удаление товара
-export const deleteGood = createAsyncThunk("data/deleteGood", async (id) => {
+export const deleteGood = createAsyncThunk('data/deleteGood', async (id) => {
   try {
     const reqToGoods = await axiosApi.delete(`goods/${id}`);
     return await reqToGoods.data;

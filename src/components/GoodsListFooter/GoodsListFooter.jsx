@@ -1,8 +1,8 @@
-import React, { useCallback } from "react";
-import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import "./goodsListFooter.css";
-import { useAppSelector } from "../../app/hooks";
-import { useLocation } from "react-router-dom";
+import React, { useCallback } from 'react';
+import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import './goodsListFooter.css';
+import { useAppSelector } from '../../app/hooks';
+import { useLocation } from 'react-router-dom';
 
 const GoodsListFooter = ({ paginationData, handlePaginationDataChange }) => {
   const location = useLocation().pathname;
@@ -11,11 +11,11 @@ const GoodsListFooter = ({ paginationData, handlePaginationDataChange }) => {
   const pagesArray = useCallback(() => {
     return Array.from(
       {
-        length: location.includes("goods")
+        length: location.includes('goods')
           ? goodsPagesAmount
           : tradesPagesAmount || 0,
       },
-      (_, index) => index,
+      (_, index) => index
     );
   }, [goodsPagesAmount, location, tradesPagesAmount]);
 

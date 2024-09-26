@@ -1,9 +1,9 @@
-import React from "react";
-import DeleteWarningImg from "../../assets/delete-warning.svg";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { deleteGood } from "../../features/dataThunk";
-import { useNavigate } from "react-router-dom";
-import { LoadingButton } from "@mui/lab";
+import React from 'react';
+import DeleteWarningImg from '../../assets/delete-warning.svg';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { deleteGood } from '../../features/dataThunk';
+import { useNavigate } from 'react-router-dom';
+import { LoadingButton } from '@mui/lab';
 
 const SingleGoodDeleteTab = ({ goodId }) => {
   const dispatch = useAppDispatch();
@@ -12,7 +12,7 @@ const SingleGoodDeleteTab = ({ goodId }) => {
 
   const onDelete = async () => {
     await dispatch(deleteGood(goodId));
-    navigate("/goods");
+    navigate('/goods');
   };
 
   return (
@@ -25,7 +25,7 @@ const SingleGoodDeleteTab = ({ goodId }) => {
         <h3>После удаления у вас больше не будет доступа к нему!</h3>
         <LoadingButton
           className="single-good-delete-tab-btn"
-          sx={{ mt: "20px" }}
+          sx={{ mt: '20px' }}
           variant="contained"
           color="error"
           onClick={onDelete}

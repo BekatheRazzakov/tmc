@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import {
   Autocomplete,
   Backdrop,
@@ -12,9 +12,9 @@ import {
   Snackbar,
   TextField,
   Typography,
-} from "@mui/material";
-import { LoadingButton } from "@mui/lab";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+} from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   createGood,
   createManufacture,
@@ -23,22 +23,22 @@ import {
   getManufactures,
   getModels,
   updateGood,
-} from "../../features/dataThunk";
-import { useNavigate, useParams } from "react-router-dom";
+} from '../../features/dataThunk';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   resetCreateGoodData,
   setGoodIsUpdated,
-} from "../../features/dataSlice";
-import { getUsers } from "../../features/userThunk";
+} from '../../features/dataSlice';
+import { getUsers } from '../../features/userThunk';
 
-const FileUpload = lazy(() => import("../../components/FileUpload/FileUpload"));
+const FileUpload = lazy(() => import('../../components/FileUpload/FileUpload'));
 
 const modalStyle = {
-  position: "absolute",
-  top: "40%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  backgroundColor: "background.paper",
+  position: 'absolute',
+  top: '40%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  backgroundColor: 'background.paper',
   boxShadow: 24,
   borderRadius: 4,
 };
@@ -229,9 +229,9 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
             editingGood?.product?.product_model_id !== state.product_model_id ||
             editingGood?.product?.cost !== state.cost,
           user_id: users?.filter(
-            (user) => user?.full_name === state?.user_id,
+            (user) => user?.full_name === state?.user_id
           )[0]?.id,
-        }),
+        })
       );
     } else dispatch(createGood(state));
   };
@@ -359,13 +359,13 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
           onChange={(_, value) => {
             handleChange({
               target: {
-                name: "user_id",
+                name: 'user_id',
                 value:
                   users?.find((user) => user?.full_name === value)?.id || null,
               },
             });
           }}
-          options={users?.map((user) => user?.full_name || "") || []}
+          options={users?.map((user) => user?.full_name || '') || []}
           loading={usersLoading}
           loadingText="Загрузка..."
           renderInput={(params) => (
@@ -377,14 +377,14 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
             label="фото товара"
             file={
               isEdit
-                ? typeof state?.photo_path === "string"
-                  ? "data:image/png;base64," + state?.photo_path
+                ? typeof state?.photo_path === 'string'
+                  ? 'data:image/png;base64,' + state?.photo_path
                   : state?.photo_path
                 : state?.photo_path || null
             }
             handleFileChange={handleFileChange}
             removeImage={removeImage}
-            isByte={typeof state?.photo_path === "string"}
+            isByte={typeof state?.photo_path === 'string'}
           />
         </Suspense>
         <LoadingButton
@@ -407,12 +407,12 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
           }
           loading={createGoodLoading || updateGoodLoading}
         >
-          {isEdit ? "Сохранить" : "Создать"}
+          {isEdit ? 'Сохранить' : 'Создать'}
         </LoadingButton>
         <Snackbar
           anchorOrigin={{
-            vertical: "top",
-            horizontal: "center",
+            vertical: 'top',
+            horizontal: 'center',
           }}
           open={snackBarOpen}
           onClose={handleSnackBarClose}
@@ -421,8 +421,8 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
             createGoodErrorMessage ||
             createManufactureErrorMessage ||
             createModelErrorMessage ||
-            (modelIsCreated && "модель товара создана") ||
-            (manufactureIsCreated && "производитель товара создан")
+            (modelIsCreated && 'модель товара создана') ||
+            (manufactureIsCreated && 'производитель товара создан')
           }
         />
       </Box>
@@ -449,7 +449,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
               component="h6"
               className="new-manufacture-model-form-modal-title"
             >
-              Создать {newManufactureModalOpen ? "производителя" : "модель"}
+              Создать {newManufactureModalOpen ? 'производителя' : 'модель'}
             </Typography>
             <Box
               className="new-good-form"
@@ -492,10 +492,10 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
                 id="outlined-basic"
                 label={
                   newManufactureModalOpen
-                    ? "производитель"
+                    ? 'производитель'
                     : newModelModalOpen
-                      ? "модель"
-                      : ""
+                      ? 'модель'
+                      : ''
                 }
                 variant="outlined"
                 name="name"
@@ -504,7 +504,7 @@ const CreateEditGoodForm = ({ isEdit, editingGood, changeTab }) => {
                     ? newManufactureData?.name
                     : newModelModalOpen
                       ? newModelData?.name
-                      : ""
+                      : ''
                 }
                 onChange={
                   newManufactureModalOpen

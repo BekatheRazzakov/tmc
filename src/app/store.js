@@ -1,4 +1,4 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import {
   FLUSH,
   PAUSE,
@@ -8,16 +8,16 @@ import {
   PURGE,
   REGISTER,
   REHYDRATE,
-} from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import { userReducer } from "../features/usersSlice";
-import { dataReducer } from "../features/dataSlice";
-import { tradeReducer } from "../features/tradeSlice";
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import { userReducer } from '../features/usersSlice';
+import { dataReducer } from '../features/dataSlice';
+import { tradeReducer } from '../features/tradeSlice';
 
 const usersPersistConfig = {
-  key: "skynetUser:user",
+  key: 'skynetUser:user',
   storage,
-  whitelist: ["user"],
+  whitelist: ['user'],
 };
 
 const rootReducer = combineReducers({

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 import {
   createGood,
   updateGood,
@@ -11,11 +11,11 @@ import {
   createModel,
   getCategories,
   getAllGoods,
-} from "./dataThunk";
+} from './dataThunk';
 
 const initialState = {
-  currentPage: "",
-  currentDrawer: "",
+  currentPage: '',
+  currentDrawer: '',
   goods: [],
   allGoods: [],
   good: null,
@@ -38,13 +38,13 @@ const initialState = {
   deleteGoodError: false,
   createManufactureError: false,
   createModelError: false,
-  goodsError: "",
-  goodError: "",
-  createGoodErrorMessage: "",
-  updateGoodErrorMessage: "",
-  deleteGoodErrorMessage: "",
-  createManufactureErrorMessage: "",
-  createModelErrorMessage: "",
+  goodsError: '',
+  goodError: '',
+  createGoodErrorMessage: '',
+  updateGoodErrorMessage: '',
+  deleteGoodErrorMessage: '',
+  createManufactureErrorMessage: '',
+  createModelErrorMessage: '',
   goodIsCreated: false,
   goodIsUpdated: false,
   goodIsDeleted: false,
@@ -54,7 +54,7 @@ const initialState = {
 };
 
 const DataSlice = createSlice({
-  name: "data",
+  name: 'data',
   initialState,
   reducers: {
     setCurrentPage: (state, action) => {
@@ -65,7 +65,7 @@ const DataSlice = createSlice({
     },
     setGoodSelected: (state, action) => {
       const selectedGood = state.goods?.filter(
-        (good) => good.id === action.payload.id,
+        (good) => good.id === action.payload.id
       )?.[0];
       if (selectedGood) selectedGood.selected = action.payload.status;
     },
@@ -77,22 +77,22 @@ const DataSlice = createSlice({
     },
     resetCreateGoodData: (state) => {
       state.createGoodError = false;
-      state.createGoodErrorMessage = "";
+      state.createGoodErrorMessage = '';
       state.goodIsCreated = false;
       state.manufactureIsCreated = false;
       state.modelIsCreated = false;
       state.createManufactureError = false;
       state.createModelError = false;
-      state.createManufactureErrorMessage = "";
-      state.createModelErrorMessage = "";
-      state.updateGoodError = "";
-      state.updateGoodErrorMessage = "";
+      state.createManufactureErrorMessage = '';
+      state.createModelErrorMessage = '';
+      state.updateGoodError = '';
+      state.updateGoodErrorMessage = '';
     },
     setGoodIsUpdated: (state, action) => {
       state.goodIsUpdated = action.payload;
     },
     resetGoodsError: (state) => {
-      state.goodsError = "";
+      state.goodsError = '';
     },
   },
   extraReducers: (builder) => {
@@ -116,7 +116,7 @@ const DataSlice = createSlice({
     });
     builder.addCase(getGoods.rejected, (state, { payload: error }) => {
       state.goodsLoading = false;
-      state.goodsError = error?.error || "Что-то пошло не так";
+      state.goodsError = error?.error || 'Что-то пошло не так';
     });
 
     builder.addCase(getAllGoods.pending, (state) => {
@@ -133,30 +133,30 @@ const DataSlice = createSlice({
     });
     builder.addCase(getAllGoods.rejected, (state, { payload: error }) => {
       state.allGoodsLoading = false;
-      state.goodsError = error?.error || "Что-то пошло не так";
+      state.goodsError = error?.error || 'Что-то пошло не так';
     });
 
     builder.addCase(getGood.pending, (state) => {
       state.goodLoading = true;
       state.goodNotFound = false;
-      state.goodError = "";
+      state.goodError = '';
     });
     builder.addCase(getGood.fulfilled, (state, { payload: res }) => {
       state.goodLoading = false;
       state.good = res || null;
       if (!res) {
         state.goodNotFound = true;
-        state.goodError = "Товар не найден";
+        state.goodError = 'Товар не найден';
       }
     });
     builder.addCase(getGood.rejected, (state, { payload: error }) => {
       state.goodLoading = false;
-      state.goodError = error || "Что-то пошло не так";
+      state.goodError = error || 'Что-то пошло не так';
     });
 
     builder.addCase(createGood.pending, (state) => {
       state.createGoodLoading = true;
-      state.createGoodErrorMessage = "";
+      state.createGoodErrorMessage = '';
       state.createGoodError = false;
     });
     builder.addCase(createGood.fulfilled, (state, { payload: res }) => {
@@ -167,14 +167,14 @@ const DataSlice = createSlice({
     builder.addCase(createGood.rejected, (state, { payload: error }) => {
       state.createGoodLoading = false;
       state.createGoodErrorMessage =
-        error || "Что-то пошло не так. Попробуйте позже";
+        error || 'Что-то пошло не так. Попробуйте позже';
       state.createGoodError = true;
       state.goodIsCreated = false;
     });
 
     builder.addCase(updateGood.pending, (state) => {
       state.updateGoodLoading = true;
-      state.updateGoodErrorMessage = "";
+      state.updateGoodErrorMessage = '';
       state.updateGoodError = false;
     });
     builder.addCase(updateGood.fulfilled, (state, { payload: res }) => {
@@ -185,7 +185,7 @@ const DataSlice = createSlice({
     builder.addCase(updateGood.rejected, (state, { payload: error }) => {
       state.updateGoodLoading = false;
       state.updateGoodErrorMessage =
-        error || "Что-то пошло не так. Попробуйте позже";
+        error || 'Что-то пошло не так. Попробуйте позже';
       state.updateGoodError = true;
       state.goodIsUpdated = false;
     });
@@ -203,7 +203,7 @@ const DataSlice = createSlice({
 
     builder.addCase(createManufacture.pending, (state) => {
       state.createManufactureLoading = true;
-      state.createManufactureErrorMessage = "";
+      state.createManufactureErrorMessage = '';
       state.createManufactureError = false;
     });
     builder.addCase(createManufacture.fulfilled, (state, { payload: res }) => {
@@ -217,12 +217,12 @@ const DataSlice = createSlice({
       state.createManufactureLoading = false;
       state.createManufactureError = true;
       state.createManufactureErrorMessage =
-        error || "Что-то пошло не так. Попробуйте позже";
+        error || 'Что-то пошло не так. Попробуйте позже';
     });
 
     builder.addCase(createModel.pending, (state) => {
       state.createModelLoading = true;
-      state.createModelErrorMessage = "";
+      state.createModelErrorMessage = '';
       state.createModelError = false;
     });
     builder.addCase(createModel.fulfilled, (state, { payload: res }) => {
@@ -236,7 +236,7 @@ const DataSlice = createSlice({
       state.createModelLoading = false;
       state.createModelError = true;
       state.createModelErrorMessage =
-        error || "Что-то пошло не так. Попробуйте позже";
+        error || 'Что-то пошло не так. Попробуйте позже';
     });
 
     builder.addCase(getManufactures.pending, (state) => {
@@ -253,7 +253,7 @@ const DataSlice = createSlice({
     builder.addCase(deleteGood.pending, (state) => {
       state.deleteGoodLoading = true;
       state.deleteGoodError = false;
-      state.deleteGoodErrorMessage = "";
+      state.deleteGoodErrorMessage = '';
     });
     builder.addCase(deleteGood.fulfilled, (state) => {
       state.deleteGoodLoading = false;
@@ -262,7 +262,7 @@ const DataSlice = createSlice({
       state.deleteGoodLoading = false;
       state.deleteGoodError = true;
       state.deleteGoodErrorMessage =
-        error || "Что-то пошло не так. Попробуйте позже";
+        error || 'Что-то пошло не так. Попробуйте позже';
     });
   },
 });

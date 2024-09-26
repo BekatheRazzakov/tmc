@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   ButtonGroup,
@@ -8,28 +8,28 @@ import {
   Snackbar,
   TextField,
   Typography,
-} from "@mui/material";
-import Skeleton from "@mui/material/Skeleton";
-import { formatDate, tradeStatuses } from "../../constants";
-import { LoadingButton } from "@mui/lab";
-import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { acceptTrade, deleteTrade, denyTrade } from "../../features/tradeThunk";
-import { useNavigate } from "react-router-dom";
+} from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
+import { formatDate, tradeStatuses } from '../../constants';
+import { LoadingButton } from '@mui/lab';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { acceptTrade, deleteTrade, denyTrade } from '../../features/tradeThunk';
+import { useNavigate } from 'react-router-dom';
 import {
   resetTradeAcceptDenyData,
   resetTradeAcceptedDeniedData,
-} from "../../features/tradeSlice";
+} from '../../features/tradeSlice';
 
 const denyModalStyle = {
-  position: "absolute",
-  top: "40%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute',
+  top: '40%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   maxWidth: 400,
-  width: "100%",
-  bgcolor: "background.paper",
+  width: '100%',
+  bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
   borderRadius: 2,
@@ -49,7 +49,7 @@ const TradeInfoTab = ({ trade, tradeLoading }) => {
   const { user } = useAppSelector((state) => state.userState);
   const [snackBarOpen, setSnackBarOpen] = useState(false);
   const [denyModalOpen, setDenyModalOpen] = useState(false);
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
 
   useEffect(() => {
     if (acceptTradeErrorMessage || denyTradeErrorMessage) {
@@ -58,7 +58,7 @@ const TradeInfoTab = ({ trade, tradeLoading }) => {
   }, [acceptTradeErrorMessage, denyTradeErrorMessage, dispatch]);
 
   useEffect(() => {
-    if (tradeIsAccepted || tradeIsDenied) navigate("/trades");
+    if (tradeIsAccepted || tradeIsDenied) navigate('/trades');
     return () => dispatch(resetTradeAcceptDenyData());
   }, [dispatch, navigate, tradeIsAccepted, tradeIsDenied]);
 
@@ -72,7 +72,7 @@ const TradeInfoTab = ({ trade, tradeLoading }) => {
       denyTrade({
         id: trade?.id,
         comment,
-      }),
+      })
     );
   };
 
@@ -85,14 +85,14 @@ const TradeInfoTab = ({ trade, tradeLoading }) => {
 
   const onDeleteTrade = async () => {
     await dispatch(deleteTrade(trade?.id));
-    navigate("/trades");
+    navigate('/trades');
   };
 
   return (
     <Paper
       className="single-good-outer-paper"
       elevation={3}
-      sx={{ maxWidth: "unset!important" }}
+      sx={{ maxWidth: 'unset!important' }}
     >
       <div className="single-good-info">
         {tradeLoading ? (
@@ -103,7 +103,7 @@ const TradeInfoTab = ({ trade, tradeLoading }) => {
               </Typography>
               <Skeleton
                 variant="text"
-                sx={{ fontSize: "1rem", width: "80px" }}
+                sx={{ fontSize: '1rem', width: '80px' }}
               />
             </div>
             <div className="single-good-info-divider"></div>
@@ -113,7 +113,7 @@ const TradeInfoTab = ({ trade, tradeLoading }) => {
               </Typography>
               <Skeleton
                 variant="text"
-                sx={{ fontSize: "1rem", width: "80px" }}
+                sx={{ fontSize: '1rem', width: '80px' }}
               />
             </div>
             <div className="single-good-info-divider"></div>
@@ -123,7 +123,7 @@ const TradeInfoTab = ({ trade, tradeLoading }) => {
               </Typography>
               <Skeleton
                 variant="text"
-                sx={{ fontSize: "1rem", width: "80px" }}
+                sx={{ fontSize: '1rem', width: '80px' }}
               />
             </div>
             <div className="single-good-info-divider"></div>
@@ -133,7 +133,7 @@ const TradeInfoTab = ({ trade, tradeLoading }) => {
               </Typography>
               <Skeleton
                 variant="text"
-                sx={{ fontSize: "1rem", width: "80px" }}
+                sx={{ fontSize: '1rem', width: '80px' }}
               />
             </div>
             <div className="single-good-info-divider"></div>
@@ -143,7 +143,7 @@ const TradeInfoTab = ({ trade, tradeLoading }) => {
               </Typography>
               <Skeleton
                 variant="text"
-                sx={{ fontSize: "1rem", width: "80px" }}
+                sx={{ fontSize: '1rem', width: '80px' }}
               />
             </div>
             <div className="single-good-info-divider"></div>
@@ -221,10 +221,10 @@ const TradeInfoTab = ({ trade, tradeLoading }) => {
                   <Chip
                     color={
                       tradeStatuses[trade?.trade_status_id - 1]?.color ||
-                      "default"
+                      'default'
                     }
                     label={
-                      tradeStatuses[trade?.trade_status_id - 1]?.value || "-"
+                      tradeStatuses[trade?.trade_status_id - 1]?.value || '-'
                     }
                     size="small"
                   />
@@ -233,7 +233,7 @@ const TradeInfoTab = ({ trade, tradeLoading }) => {
             </div>
             <div
               className="single-good-info-divider"
-              style={{ marginTop: "5px" }}
+              style={{ marginTop: '5px' }}
             ></div>
           </>
         )}
@@ -264,7 +264,7 @@ const TradeInfoTab = ({ trade, tradeLoading }) => {
             </LoadingButton>
           </ButtonGroup>
         )}
-      {user?.role === "admin" && (
+      {user?.role === 'admin' && (
         <ButtonGroup
           variant="outlined"
           aria-label="Loading button group"
@@ -281,7 +281,7 @@ const TradeInfoTab = ({ trade, tradeLoading }) => {
         </ButtonGroup>
       )}
       <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={snackBarOpen}
         onClose={handleSnackBarClose}
         message={acceptTradeErrorMessage || denyTradeErrorMessage}

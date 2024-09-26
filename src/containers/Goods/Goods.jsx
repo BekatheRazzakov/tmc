@@ -1,17 +1,17 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { resetGoodsError, setCurrentPage } from "../../features/dataSlice";
-import { getAllGoods, getCategories, getGoods } from "../../features/dataThunk";
-import { useAppSelector } from "../../app/hooks";
-import GoodsStatusPapers from "../../components/GoodsStatusPapers/GoodsStatusPapers";
-import GoodsList from "../../components/GoodsList/GoodsList";
-import { Snackbar } from "@mui/material";
-import "./goods.css";
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { resetGoodsError, setCurrentPage } from '../../features/dataSlice';
+import { getAllGoods, getCategories, getGoods } from '../../features/dataThunk';
+import { useAppSelector } from '../../app/hooks';
+import GoodsStatusPapers from '../../components/GoodsStatusPapers/GoodsStatusPapers';
+import GoodsList from '../../components/GoodsList/GoodsList';
+import { Snackbar } from '@mui/material';
+import './goods.css';
 
 const Goods = () => {
   const dispatch = useDispatch();
   const { goods, allGoods, goodsError } = useAppSelector(
-    (state) => state.dataState,
+    (state) => state.dataState
   );
   const [itemPaperStatus, setItemPaperStatus] = useState(1);
   const [snackBarOpen, setSnackBarOpen] = useState(false);
@@ -22,12 +22,12 @@ const Goods = () => {
     () =>
       allGoods?.filter((good) => good?.good_status?.id === itemPaperStatus)
         ?.length,
-    [allGoods, itemPaperStatus],
+    [allGoods, itemPaperStatus]
   );
   const getGoodsAmount = useCallback(() => allGoods?.length, [allGoods]);
 
   useEffect(() => {
-    dispatch(setCurrentPage("Товары"));
+    dispatch(setCurrentPage('Товары'));
     dispatch(getGoods());
     dispatch(getAllGoods());
     dispatch(getCategories());
@@ -53,7 +53,7 @@ const Goods = () => {
       />
       <GoodsList goods={[...goods] || []} />
       <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={snackBarOpen}
         onClose={handleClose}
         message={goodsError}

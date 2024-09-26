@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo } from 'react';
 import {
   Avatar,
   Box,
@@ -10,17 +10,17 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-} from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { setDrawer } from "../../features/dataSlice";
-import { logout } from "../../features/usersSlice";
-import CategoryIcon from "@mui/icons-material/Category";
-import SwapVertIcon from "@mui/icons-material/SwapVert";
-import AddBoxIcon from "@mui/icons-material/AddBox";
-import { useNavigate } from "react-router-dom";
-import PersonIcon from "@mui/icons-material/Person";
-import { deepPurple } from "@mui/material/colors";
-import "./rightDrawer.css";
+} from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { setDrawer } from '../../features/dataSlice';
+import { logout } from '../../features/usersSlice';
+import CategoryIcon from '@mui/icons-material/Category';
+import SwapVertIcon from '@mui/icons-material/SwapVert';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import { useNavigate } from 'react-router-dom';
+import PersonIcon from '@mui/icons-material/Person';
+import { deepPurple } from '@mui/material/colors';
+import './rightDrawer.css';
 
 const RightDrawer = memo(() => {
   const dispatch = useAppDispatch();
@@ -29,7 +29,7 @@ const RightDrawer = memo(() => {
   const { user } = useAppSelector((state) => state.userState);
 
   const onNavItemClick = (tabName) => {
-    dispatch(setDrawer(""));
+    dispatch(setDrawer(''));
     navigate(tabName);
   };
 
@@ -37,13 +37,13 @@ const RightDrawer = memo(() => {
     <Drawer
       className="right-drawer"
       anchor="right"
-      open={currentDrawer === "right"}
-      onClose={() => dispatch(setDrawer(""))}
+      open={currentDrawer === 'right'}
+      onClose={() => dispatch(setDrawer(''))}
     >
       {user && (
-        <ListItem sx={{ p: "0" }}>
+        <ListItem sx={{ p: '0' }}>
           <ListItemButton>
-            <Box sx={{ display: "flex", alignItems: "center", gap: "15px" }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
               <Avatar
                 className="right-drawer-avatar"
                 alt={user.username}
@@ -58,30 +58,30 @@ const RightDrawer = memo(() => {
         </ListItem>
       )}
       <List className="right-drawer-list">
-        <ListItem disablePadding onClick={() => onNavItemClick("/goods")}>
+        <ListItem disablePadding onClick={() => onNavItemClick('/goods')}>
           <ListItemButton>
-            <ListItemIcon style={{ minWidth: "45px" }}>
+            <ListItemIcon style={{ minWidth: '45px' }}>
               <CategoryIcon />
             </ListItemIcon>
             <ListItemText primary="ТМЦ" />
           </ListItemButton>
         </ListItem>
-        {["admin", "Заведующий склада"].includes(user?.role) && (
+        {['admin', 'Заведующий склада'].includes(user?.role) && (
           <ListItem
             disablePadding
-            onClick={() => onNavItemClick("/create-good")}
+            onClick={() => onNavItemClick('/create-good')}
           >
             <ListItemButton>
-              <ListItemIcon style={{ minWidth: "45px" }}>
+              <ListItemIcon style={{ minWidth: '45px' }}>
                 <AddBoxIcon />
               </ListItemIcon>
               <ListItemText primary="Создать ТМЦ" />
             </ListItemButton>
           </ListItem>
         )}
-        <ListItem disablePadding onClick={() => onNavItemClick("/trades")}>
+        <ListItem disablePadding onClick={() => onNavItemClick('/trades')}>
           <ListItemButton>
-            <ListItemIcon style={{ minWidth: "45px" }}>
+            <ListItemIcon style={{ minWidth: '45px' }}>
               <SwapVertIcon />
             </ListItemIcon>
             <ListItemText primary="Трейды" />
@@ -90,14 +90,14 @@ const RightDrawer = memo(() => {
         <ListItem
           className="right-drawer-logout-btn"
           disablePadding
-          onClick={() => dispatch(setDrawer(""))}
+          onClick={() => dispatch(setDrawer(''))}
         >
           <Button
-            sx={{ width: "100%" }}
+            sx={{ width: '100%' }}
             color="error"
             onClick={() => {
               dispatch(logout());
-              navigate("/sign-in");
+              navigate('/sign-in');
             }}
           >
             Выйти из аккаунта

@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Autocomplete,
   Box,
   FormControl,
   Modal,
   TextField,
-} from "@mui/material";
-import { LoadingButton } from "@mui/lab";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getUsers } from "../../features/userThunk";
-import { resetCreateGoodData } from "../../features/dataSlice";
-import { createTrades } from "../../features/tradeThunk";
+} from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { getUsers } from '../../features/userThunk';
+import { resetCreateGoodData } from '../../features/dataSlice';
+import { createTrades } from '../../features/tradeThunk';
 
 const bulkTradeModalStyle = {
-  position: "absolute",
-  top: "40%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute',
+  top: '40%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   maxWidth: 400,
-  width: "100%",
-  bgcolor: "background.paper",
+  width: '100%',
+  bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
   borderRadius: 2,
@@ -28,7 +28,7 @@ const bulkTradeModalStyle = {
 const BulkTrade = ({ open, toggleModal, selectedGoods }) => {
   const dispatch = useAppDispatch();
   const { users, usersLoading, user } = useAppSelector(
-    (state) => state.userState,
+    (state) => state.userState
   );
   const { createTradesLoading } = useAppSelector((state) => state.tradeState);
   const [state, setState] = useState(null);
@@ -41,7 +41,7 @@ const BulkTrade = ({ open, toggleModal, selectedGoods }) => {
   const handleChange = (e) => {
     const { innerText } = e.target;
     const selectedUser = users.filter(
-      (user) => user?.full_name === innerText,
+      (user) => user?.full_name === innerText
     )[0];
 
     setState(() => ({
@@ -61,7 +61,7 @@ const BulkTrade = ({ open, toggleModal, selectedGoods }) => {
     dispatch(
       createTrades({
         trades: readyForTrades,
-      }),
+      })
     );
   };
 
@@ -81,7 +81,7 @@ const BulkTrade = ({ open, toggleModal, selectedGoods }) => {
           <Autocomplete
             disablePortal
             id="combo-box-demo"
-            options={users.map((user) => user?.full_name || "") || []}
+            options={users.map((user) => user?.full_name || '') || []}
             value={state?.username}
             onChange={handleChange}
             renderInput={(params) => (

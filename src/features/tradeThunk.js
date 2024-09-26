@@ -1,64 +1,64 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import axiosApi from "../axiosApi";
-import { isAxiosError } from "axios";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import axiosApi from '../axiosApi';
+import { isAxiosError } from 'axios';
 
 // получение списка трейдов
 export const getTrades = createAsyncThunk(
-  "trades/getTrades",
+  'trades/getTrades',
   async (data, { getState, rejectWithValue }) => {
     try {
       const state = getState();
       const userRole = state.userState.user.role;
 
       const response = await axiosApi(
-        `trades${userRole === "admin" ? "" : "/user/story"}/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}`,
+        `trades${userRole === 'admin' ? '' : '/user/story'}/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}`
       );
       return response.data;
     } catch (e) {
       if (isAxiosError(e) && e.response && e.response.status === 400) {
-        return rejectWithValue("Что то пошло не так, попробуйте позже");
+        return rejectWithValue('Что то пошло не так, попробуйте позже');
       }
       throw e;
     }
-  },
+  }
 );
 
 export const getDeletedTrades = createAsyncThunk(
-  "trades/getDeletedTrades",
+  'trades/getDeletedTrades',
   async (data, { rejectWithValue }) => {
     try {
       const response = await axiosApi(
-        `trades/soft_deleted/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}`,
+        `trades/soft_deleted/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}`
       );
       return response.data;
     } catch (e) {
       if (isAxiosError(e) && e.response && e.response.status === 400) {
-        return rejectWithValue("Что то пошло не так, попробуйте позже");
+        return rejectWithValue('Что то пошло не так, попробуйте позже');
       }
       throw e;
     }
-  },
+  }
 );
 
 // получение одного трейда
 export const getTrade = createAsyncThunk(
-  "trades/getTrade",
+  'trades/getTrade',
   async (id, { rejectWithValue }) => {
     try {
       const response = await axiosApi(`trades/${id}`);
       return response.data;
     } catch (e) {
       if (isAxiosError(e) && e.response && e.response.status === 404) {
-        return rejectWithValue("Товар не найден");
+        return rejectWithValue('Товар не найден');
       }
       throw e;
     }
-  },
+  }
 );
 
 // создание трейда
 export const createTrade = createAsyncThunk(
-  "trades/createTrade",
+  'trades/createTrade',
   async (tradeData, { rejectWithValue }) => {
     try {
       const req = await axiosApi.post(`trades/`, tradeData);
@@ -66,25 +66,25 @@ export const createTrade = createAsyncThunk(
     } catch (e) {
       if (isAxiosError(e) && e.response && e.response.status === 400) {
         return rejectWithValue(
-          e.response.data?.detail === "Trade already exists"
-            ? "Трейд уже существует"
-            : e.response.data?.detail,
+          e.response.data?.detail === 'Trade already exists'
+            ? 'Трейд уже существует'
+            : e.response.data?.detail
         );
       } else if (isAxiosError(e) && e.response && e.response.status === 401) {
         return rejectWithValue(
-          "Неправильные учётные данные, авторизуйтесь снова",
+          'Неправильные учётные данные, авторизуйтесь снова'
         );
       } else if (isAxiosError(e) && e.response && e.response.status === 403) {
-        return rejectWithValue("У вас нет прав на создание трейда");
+        return rejectWithValue('У вас нет прав на создание трейда');
       }
       throw e;
     }
-  },
+  }
 );
 
 // создание трейдов одним запросом
 export const createTrades = createAsyncThunk(
-  "trades/createTrades",
+  'trades/createTrades',
   async (tradeData, { rejectWithValue }) => {
     try {
       const req = await axiosApi.post(`trades/multiple`, tradeData);
@@ -92,25 +92,25 @@ export const createTrades = createAsyncThunk(
     } catch (e) {
       if (isAxiosError(e) && e.response && e.response.status === 400) {
         return rejectWithValue(
-          e.response.data?.detail === "Trade already exists"
-            ? "Некоторые из выбранных материалов уже в процессе трейда"
-            : e.response.data?.detail,
+          e.response.data?.detail === 'Trade already exists'
+            ? 'Некоторые из выбранных материалов уже в процессе трейда'
+            : e.response.data?.detail
         );
       } else if (isAxiosError(e) && e.response && e.response.status === 401) {
         return rejectWithValue(
-          "Неправильные учётные данные, авторизуйтесь снова",
+          'Неправильные учётные данные, авторизуйтесь снова'
         );
       } else if (isAxiosError(e) && e.response && e.response.status === 403) {
-        return rejectWithValue("У вас нет прав на создание трейда");
+        return rejectWithValue('У вас нет прав на создание трейда');
       }
       throw e;
     }
-  },
+  }
 );
 
 // запрос на принятие запроса на трейд
 export const acceptTrade = createAsyncThunk(
-  "trades/acceptTrade",
+  'trades/acceptTrade',
   async (tradeId, { rejectWithValue }) => {
     try {
       const res = await axiosApi.post(`trades/${tradeId}/accept/`);
@@ -118,17 +118,17 @@ export const acceptTrade = createAsyncThunk(
     } catch (e) {
       if (isAxiosError(e) && e.response && e.response.status === 401) {
         return rejectWithValue(
-          "Неправильные учётные данные, авторизуйтесь снова",
+          'Неправильные учётные данные, авторизуйтесь снова'
         );
       }
       throw e;
     }
-  },
+  }
 );
 
 // запрос на отказ запроса на трейд
 export const denyTrade = createAsyncThunk(
-  "trades/denyTrade",
+  'trades/denyTrade',
   async (data, { rejectWithValue }) => {
     try {
       const res = await axiosApi.post(`trades/${data?.id}/deny/`, {
@@ -138,24 +138,24 @@ export const denyTrade = createAsyncThunk(
     } catch (e) {
       if (isAxiosError(e) && e.response && e.response.status === 401) {
         return rejectWithValue(
-          "Неправильные учётные данные, авторизуйтесь снова",
+          'Неправильные учётные данные, авторизуйтесь снова'
         );
       }
       throw e;
     }
-  },
+  }
 );
 
 export const deleteTrade = createAsyncThunk(
-  "trades/deleteTrade",
+  'trades/deleteTrade',
   async (id, { rejectWithValue }) => {
     try {
       await axiosApi.delete(`trades/${id}/`);
     } catch (e) {
       if (isAxiosError(e) && e.response && e.response.status === 400) {
-        return rejectWithValue(e.response.data?.detail || "");
+        return rejectWithValue(e.response.data?.detail || '');
       }
       throw e;
     }
-  },
+  }
 );

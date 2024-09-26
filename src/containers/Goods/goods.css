@@ -71,7 +71,7 @@
 }
 
 .goods
-  .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input[aria-expanded="true"]
+  .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input[aria-expanded='true']
   ~ .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
   border-width: 2px;
   border-color: rgba(255, 255, 255, 0.5) !important;
@@ -82,7 +82,7 @@
 }
 
 .goods
-  .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input[aria-expanded="true"]
+  .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input[aria-expanded='true']
   ~ .css-bpeome-MuiSvgIcon-root-MuiSelect-icon {
   color: rgba(255, 255, 255) !important;
 }

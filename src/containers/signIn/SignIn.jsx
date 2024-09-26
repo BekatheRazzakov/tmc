@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   Avatar,
@@ -11,15 +11,15 @@ import {
   OutlinedInput,
   TextField,
   Typography,
-} from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { signIn } from "../../features/userThunk";
-import { useLocation, useNavigate } from "react-router-dom";
-import { LoadingButton } from "@mui/lab";
-import { setCurrentPage } from "../../features/dataSlice";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import "./sign-in.css";
+} from '@mui/material';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { signIn } from '../../features/userThunk';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { LoadingButton } from '@mui/lab';
+import { setCurrentPage } from '../../features/dataSlice';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import './sign-in.css';
 
 const SignIn = () => {
   const dispatch = useAppDispatch();
@@ -27,21 +27,21 @@ const SignIn = () => {
   const location = useLocation();
   const user = useAppSelector((state) => state.userState.user);
   const authError = useAppSelector(
-    (state) => state.userState.authorizationError,
+    (state) => state.userState.authorizationError
   );
   const authLoading = useAppSelector((state) => state.userState.signInLoading);
   const [state, setState] = useState({
-    username: "",
-    password: "",
+    username: '',
+    password: '',
   });
   const [showPassword, setShowPassword] = React.useState(false);
 
   useEffect(() => {
-    dispatch(setCurrentPage("Логин"));
+    dispatch(setCurrentPage('Логин'));
   }, [dispatch]);
 
   useEffect(() => {
-    if (user) navigate("/goods");
+    if (user) navigate('/goods');
   }, [navigate, user, location.pathname]);
 
   const inputChangeHandler = (event) => {
@@ -64,15 +64,15 @@ const SignIn = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs" style={{ paddingTop: "5%" }}>
+    <Container component="main" maxWidth="xs" style={{ paddingTop: '5%' }}>
       <Box
         style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
@@ -90,7 +90,7 @@ const SignIn = () => {
             value={state.username}
             onChange={inputChangeHandler}
             required
-            autoComplete={""}
+            autoComplete={''}
           />
           <FormControl variant="outlined" required>
             <InputLabel htmlFor="outlined-adornment-password">
@@ -98,7 +98,7 @@ const SignIn = () => {
             </InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton

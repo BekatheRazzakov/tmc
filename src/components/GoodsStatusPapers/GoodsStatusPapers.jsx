@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo } from 'react';
 import {
   Box,
   FormControl,
@@ -6,15 +6,15 @@ import {
   Paper,
   Select,
   Typography,
-} from "@mui/material";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import CategoryIcon from "@mui/icons-material/Category";
-import WarehouseIcon from "@mui/icons-material/Warehouse";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import EngineeringIcon from "@mui/icons-material/Engineering";
-import { useAppSelector } from "../../app/hooks";
-import Skeleton from "@mui/material/Skeleton";
-import { goodStatuses } from "../../constants";
+} from '@mui/material';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import CategoryIcon from '@mui/icons-material/Category';
+import WarehouseIcon from '@mui/icons-material/Warehouse';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import EngineeringIcon from '@mui/icons-material/Engineering';
+import { useAppSelector } from '../../app/hooks';
+import Skeleton from '@mui/material/Skeleton';
+import { goodStatuses } from '../../constants';
 
 const GoodsStatusPapers = memo(
   ({
@@ -32,11 +32,11 @@ const GoodsStatusPapers = memo(
           className="goods-status-paper"
           elevation={3}
           sx={{
-            bgcolor: "#eee6ff",
-            color: "#6c39d2",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
+            bgcolor: '#eee6ff',
+            color: '#6c39d2',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
           }}
         >
           <Box className="goods-paper-title">
@@ -49,10 +49,10 @@ const GoodsStatusPapers = memo(
             <Skeleton
               variant="text"
               sx={{
-                fontSize: "1rem",
-                maxWidth: "120px",
-                transform: "unset",
-                mt: "20px",
+                fontSize: '1rem',
+                maxWidth: '120px',
+                transform: 'unset',
+                mt: '20px',
               }}
             />
           ) : (
@@ -70,11 +70,11 @@ const GoodsStatusPapers = memo(
           className="goods-status-paper"
           elevation={3}
           sx={{
-            bgcolor: "rgba(92, 125, 252, 0.15)",
-            color: "#485fb3",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
+            bgcolor: 'rgba(92, 125, 252, 0.15)',
+            color: '#485fb3',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
           }}
         >
           <Box className="goods-paper-title">
@@ -87,10 +87,10 @@ const GoodsStatusPapers = memo(
             <Skeleton
               variant="text"
               sx={{
-                fontSize: "1rem",
-                maxWidth: "120px",
-                transform: "unset",
-                mt: "20px",
+                fontSize: '1rem',
+                maxWidth: '120px',
+                transform: 'unset',
+                mt: '20px',
               }}
             />
           ) : (
@@ -107,11 +107,11 @@ const GoodsStatusPapers = memo(
           className="goods-status-paper"
           elevation={3}
           sx={{
-            bgcolor: "#fff4de",
-            color: "#feaf19",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
+            bgcolor: '#fff4de',
+            color: '#feaf19',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
           }}
         >
           <Box className="goods-paper-title">
@@ -145,10 +145,10 @@ const GoodsStatusPapers = memo(
             <Skeleton
               variant="text"
               sx={{
-                fontSize: "1rem",
-                maxWidth: "120px",
-                transform: "unset",
-                mt: "20px",
+                fontSize: '1rem',
+                maxWidth: '120px',
+                transform: 'unset',
+                mt: '20px',
               }}
             />
           ) : (
@@ -163,7 +163,7 @@ const GoodsStatusPapers = memo(
         </Paper>
       </div>
     );
-  },
+  }
 );
 
 export default GoodsStatusPapers;

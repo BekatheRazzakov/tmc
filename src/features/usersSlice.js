@@ -1,42 +1,42 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { getUsers, signIn } from "./userThunk";
+import { createSlice } from '@reduxjs/toolkit';
+import { getUsers, signIn } from './userThunk';
 
 const initialState = {
-  user: "",
+  user: '',
   users: [],
   signInLoading: false,
   usersLoading: false,
-  usersErrorMessage: "",
-  authorizationError: "",
-  authorizationMessage: "",
+  usersErrorMessage: '',
+  authorizationError: '',
+  authorizationMessage: '',
 };
 
 const UsersSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
     logout: (state) => {
-      state.user = "";
+      state.user = '';
     },
     resetGetUserData: (state) => {
-      state.usersErrorMessage = "";
+      state.usersErrorMessage = '';
     },
   },
   extraReducers: (builder) => {
     builder.addCase(signIn.pending, (state) => {
       state.user = null;
-      state.authorizationError = "";
-      state.authorizationMessage = "";
+      state.authorizationError = '';
+      state.authorizationMessage = '';
       state.signInLoading = true;
     });
     builder.addCase(signIn.fulfilled, (state, { payload: res }) => {
       state.signInLoading = false;
       state.user = res || null;
-      state.authorizationMessage = res?.message || "Вы вошли в аккаунт";
+      state.authorizationMessage = res?.message || 'Вы вошли в аккаунт';
     });
     builder.addCase(signIn.rejected, (state, { payload: error }) => {
       state.signInLoading = false;
-      state.authorizationError = error || "Произошла ошибка. Попробуйте позже";
+      state.authorizationError = error || 'Произошла ошибка. Попробуйте позже';
     });
 
     builder.addCase(getUsers.pending, (state) => {
@@ -48,7 +48,7 @@ const UsersSlice = createSlice({
     });
     builder.addCase(getUsers.rejected, (state, { payload: error }) => {
       state.usersLoading = false;
-      state.authorizationError = error || "Произошла ошибка. Попробуйте позже";
+      state.authorizationError = error || 'Произошла ошибка. Попробуйте позже';
     });
   },
 });

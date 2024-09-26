@@ -1,13 +1,13 @@
-import React, { memo } from "react";
+import React, { memo } from 'react';
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-} from "@mui/material";
-import Skeleton from "@mui/material/Skeleton";
-import { useNavigate } from "react-router-dom";
+} from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
+import { useNavigate } from 'react-router-dom';
 
 const GoodsListTable = memo(
   ({
@@ -23,7 +23,7 @@ const GoodsListTable = memo(
         <TableHead>
           <TableRow>
             {[
-              checkBoxColumn && currentCategory !== "deleted"
+              checkBoxColumn && currentCategory !== 'deleted'
                 ? checkBoxColumn()
                 : [],
               ...columns,
@@ -40,11 +40,11 @@ const GoodsListTable = memo(
         </TableHead>
         {goodsLoading ? (
           <>
-            {["", "", ""].map((_, i) => (
+            {['', '', ''].map((_, i) => (
               <TableRow key={i}>
-                {["", "", "", "", "", ""].map((_, i) => (
+                {['', '', '', '', '', ''].map((_, i) => (
                   <TableCell key={i}>
-                    <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+                    <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
                   </TableCell>
                 ))}
               </TableRow>
@@ -60,14 +60,14 @@ const GoodsListTable = memo(
                   tabIndex={-1}
                   key={row?.id}
                   onClick={() => {
-                    if (currentCategory !== "deleted" || row?.is_deleted)
+                    if (currentCategory !== 'deleted' || row?.is_deleted)
                       navigate(
-                        `/${row?.destination_user_id ? "trades" : "goods"}/${row?.id}`,
+                        `/${row?.destination_user_id ? 'trades' : 'goods'}/${row?.id}`
                       );
                   }}
                 >
                   {[
-                    checkBoxColumn && currentCategory !== "deleted"
+                    checkBoxColumn && currentCategory !== 'deleted'
                       ? checkBoxColumn(row.id)
                       : [],
                     ...columns,
@@ -86,7 +86,7 @@ const GoodsListTable = memo(
         )}
       </Table>
     );
-  },
+  }
 );
 
 export default GoodsListTable;

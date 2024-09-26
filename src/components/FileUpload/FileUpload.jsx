@@ -1,6 +1,6 @@
-import React, { useRef } from "react";
-import { Box, Button, Grid, Typography } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import React, { useRef } from 'react';
+import { Box, Button, Grid, Typography } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const FileUpload = ({ handleFileChange, removeImage, file, label, isByte }) => {
   const inputRef = useRef(null);
@@ -21,7 +21,7 @@ const FileUpload = ({ handleFileChange, removeImage, file, label, isByte }) => {
     <>
       <input
         type="file"
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
         ref={inputRef}
         onChange={onFileChange}
       />
@@ -45,17 +45,17 @@ const FileUpload = ({ handleFileChange, removeImage, file, label, isByte }) => {
         <Grid
           item
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-            alignItems: "stretch",
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px',
+            alignItems: 'stretch',
           }}
         >
           {!file ? (
             <Button
               variant="contained"
               onClick={activateInput}
-              style={{ fontSize: "10px" }}
+              style={{ fontSize: '10px' }}
             >
               Загрузить
             </Button>
@@ -67,7 +67,7 @@ const FileUpload = ({ handleFileChange, removeImage, file, label, isByte }) => {
               onClick={() => {
                 if (removeImage && inputRef.current) {
                   removeImage();
-                  inputRef.current.value = "";
+                  inputRef.current.value = '';
                 }
               }}
             />

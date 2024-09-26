@@ -1,8 +1,8 @@
-import React from "react";
-import { Box, Chip, Paper, Typography } from "@mui/material";
-import Skeleton from "@mui/material/Skeleton";
-import notFoundImage from "../../assets/not-found-img.png";
-import { goodStatuses, tradeStatuses } from "../../constants";
+import React from 'react';
+import { Box, Chip, Paper, Typography } from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
+import notFoundImage from '../../assets/not-found-img.png';
+import { goodStatuses, tradeStatuses } from '../../constants';
 
 const GoodInfoTab = ({ good, goodLoading }) => {
   return (
@@ -13,17 +13,17 @@ const GoodInfoTab = ({ good, goodLoading }) => {
             <Skeleton
               variant="text"
               className="single-good-info-skeleton"
-              sx={{ fontSize: "8rem" }}
+              sx={{ fontSize: '8rem' }}
             />
             <Skeleton
               variant="text"
               className="single-good-info-skeleton"
-              sx={{ fontSize: "1.2rem" }}
+              sx={{ fontSize: '1.2rem' }}
             />
             <Skeleton
               variant="text"
               className="single-good-info-skeleton"
-              sx={{ fontSize: "1rem" }}
+              sx={{ fontSize: '1rem' }}
             />
           </>
         ) : (
@@ -32,10 +32,10 @@ const GoodInfoTab = ({ good, goodLoading }) => {
               className="single-good-img"
               src={
                 good?.photo_path
-                  ? "data:image/png;base64," + good?.photo_path
+                  ? 'data:image/png;base64,' + good?.photo_path
                   : notFoundImage
               }
-              alt={"image"}
+              alt={'image'}
               loading="lazy"
             />
             <Box sx={{ mt: 1 }}>
@@ -67,7 +67,7 @@ const GoodInfoTab = ({ good, goodLoading }) => {
                 </Typography>
                 <Skeleton
                   variant="text"
-                  sx={{ fontSize: "1rem", width: "80px" }}
+                  sx={{ fontSize: '1rem', width: '80px' }}
                 />
               </div>
               <div className="single-good-info-divider"></div>
@@ -77,7 +77,7 @@ const GoodInfoTab = ({ good, goodLoading }) => {
                 </Typography>
                 <Skeleton
                   variant="text"
-                  sx={{ fontSize: "1rem", width: "80px" }}
+                  sx={{ fontSize: '1rem', width: '80px' }}
                 />
               </div>
               <div className="single-good-info-divider"></div>
@@ -87,7 +87,7 @@ const GoodInfoTab = ({ good, goodLoading }) => {
                 </Typography>
                 <Skeleton
                   variant="text"
-                  sx={{ fontSize: "1rem", width: "80px" }}
+                  sx={{ fontSize: '1rem', width: '80px' }}
                 />
               </div>
               <div className="single-good-info-divider"></div>
@@ -97,7 +97,7 @@ const GoodInfoTab = ({ good, goodLoading }) => {
                 </Typography>
                 <Skeleton
                   variant="text"
-                  sx={{ fontSize: "1rem", width: "80px" }}
+                  sx={{ fontSize: '1rem', width: '80px' }}
                 />
               </div>
               <div className="single-good-info-divider"></div>
@@ -107,7 +107,7 @@ const GoodInfoTab = ({ good, goodLoading }) => {
                 </Typography>
                 <Skeleton
                   variant="text"
-                  sx={{ fontSize: "1rem", width: "80px" }}
+                  sx={{ fontSize: '1rem', width: '80px' }}
                 />
               </div>
               <div className="single-good-info-divider"></div>
@@ -117,7 +117,7 @@ const GoodInfoTab = ({ good, goodLoading }) => {
                 </Typography>
                 <Skeleton
                   variant="text"
-                  sx={{ fontSize: "1rem", width: "80px" }}
+                  sx={{ fontSize: '1rem', width: '80px' }}
                 />
               </div>
               <div className="single-good-info-divider"></div>
@@ -127,7 +127,7 @@ const GoodInfoTab = ({ good, goodLoading }) => {
                 </Typography>
                 <Skeleton
                   variant="text"
-                  sx={{ fontSize: "1rem", width: "80px" }}
+                  sx={{ fontSize: '1rem', width: '80px' }}
                 />
               </div>
               <div className="single-good-info-divider"></div>
@@ -188,10 +188,10 @@ const GoodInfoTab = ({ good, goodLoading }) => {
                     <Chip
                       color={
                         goodStatuses[good?.good_status?.id - 1]?.color ||
-                        "default"
+                        'default'
                       }
                       label={
-                        goodStatuses[good?.good_status?.id - 1]?.value || "-"
+                        goodStatuses[good?.good_status?.id - 1]?.value || '-'
                       }
                       size="small"
                     />
@@ -200,7 +200,7 @@ const GoodInfoTab = ({ good, goodLoading }) => {
               </div>
               <div
                 className="single-good-info-divider"
-                style={{ marginTop: "5px" }}
+                style={{ marginTop: '5px' }}
               ></div>
               <div className="single-good-info-row">
                 <Typography component="span" variant="body1">
@@ -212,12 +212,12 @@ const GoodInfoTab = ({ good, goodLoading }) => {
                       color={
                         good?.trade_status
                           ? tradeStatuses[good?.trade_status?.id - 1]?.color
-                          : "default"
+                          : 'default'
                       }
                       label={
                         good?.trade_status
                           ? tradeStatuses[good?.trade_status?.id - 1]?.value
-                          : "-"
+                          : '-'
                       }
                       size="small"
                     />
@@ -226,7 +226,7 @@ const GoodInfoTab = ({ good, goodLoading }) => {
               </div>
               <div
                 className="single-good-info-divider"
-                style={{ marginTop: "5px" }}
+                style={{ marginTop: '5px' }}
               ></div>
             </>
           )}

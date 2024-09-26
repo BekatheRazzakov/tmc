@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useEffect,
   useState,
-} from "react";
+} from 'react';
 import {
   AppBar,
   Box,
@@ -19,59 +19,59 @@ import {
   TableContainer,
   Toolbar,
   Typography,
-} from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import { alpha, styled } from "@mui/material/styles";
-import InputBase from "@mui/material/InputBase";
-import { useDispatch, useSelector } from "react-redux";
-import { setAllGoodsSelected, setGoodSelected } from "../../features/dataSlice";
-import AddIcon from "@mui/icons-material/Add";
-import { goodStatuses, productTypes, tradeStatuses } from "../../constants";
-import { useNavigate } from "react-router-dom";
-import GoodsListFooter from "../GoodsListFooter/GoodsListFooter";
-import { getGoods } from "../../features/dataThunk";
-import BulkTrade from "../BulkTrade/BulkTrade";
-import { resetCreateTradesData } from "../../features/tradeSlice";
-import { useAppSelector } from "../../app/hooks";
+} from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { alpha, styled } from '@mui/material/styles';
+import InputBase from '@mui/material/InputBase';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAllGoodsSelected, setGoodSelected } from '../../features/dataSlice';
+import AddIcon from '@mui/icons-material/Add';
+import { goodStatuses, productTypes, tradeStatuses } from '../../constants';
+import { useNavigate } from 'react-router-dom';
+import GoodsListFooter from '../GoodsListFooter/GoodsListFooter';
+import { getGoods } from '../../features/dataThunk';
+import BulkTrade from '../BulkTrade/BulkTrade';
+import { resetCreateTradesData } from '../../features/tradeSlice';
+import { useAppSelector } from '../../app/hooks';
 
-const GoodsListTable = lazy(() => import("../GoodListTable/GoodsListTable"));
+const GoodsListTable = lazy(() => import('../GoodListTable/GoodsListTable'));
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
+  '&:hover': {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(1),
-    width: "auto",
+    width: 'auto',
   },
 }));
 
-const SearchIconWrapper = styled("div")(({ theme }) => ({
+const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  width: "100%",
-  "& .MuiInputBase-input": {
+  color: 'inherit',
+  width: '100%',
+  '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    [theme.breakpoints.up("sm")]: {
-      width: "13ch",
-      "&:focus": {
-        width: "25ch",
+    transition: theme.transitions.create('width'),
+    [theme.breakpoints.up('sm')]: {
+      width: '13ch',
+      '&:focus': {
+        width: '25ch',
       },
     },
   },
@@ -79,74 +79,74 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const columns = [
   {
-    id: "product_type",
-    label: "Категорий",
+    id: 'product_type',
+    label: 'Категорий',
     minWidth: 70,
-    align: "center",
+    align: 'center',
     format: (value) =>
       productTypes.filter(
-        (productType) => productType.en.toLowerCase() === value,
+        (productType) => productType.en.toLowerCase() === value
       )[0]?.ru,
   },
   {
-    id: "product",
-    label: "Производитель",
+    id: 'product',
+    label: 'Производитель',
     minWidth: 70,
-    align: "center",
+    align: 'center',
     format: (value) => value?.manufacture?.name,
   },
   {
-    id: "product",
-    label: "Модель",
+    id: 'product',
+    label: 'Модель',
     minWidth: 170,
-    align: "center",
+    align: 'center',
     format: (value) => value?.model?.name,
   },
   {
-    id: "product",
-    label: "Цена",
+    id: 'product',
+    label: 'Цена',
     minWidth: 100,
-    align: "center",
+    align: 'center',
     format: (value) => (
       <span>
         {value?.cost}
-        <span style={{ textDecoration: "underline" }}>c</span>
+        <span style={{ textDecoration: 'underline' }}>c</span>
       </span>
     ),
   },
   {
-    id: "good_status",
-    label: "Статус ТМЦ",
+    id: 'good_status',
+    label: 'Статус ТМЦ',
     minWidth: 200,
-    align: "center",
+    align: 'center',
     format: (value) => (
       <Chip
-        label={goodStatuses[value?.id - 1].value || ""}
-        color={goodStatuses[value?.id - 1].color || "default"}
-        sx={{ height: "22px", fontSize: "12px", lineHeight: "12px" }}
+        label={goodStatuses[value?.id - 1].value || ''}
+        color={goodStatuses[value?.id - 1].color || 'default'}
+        sx={{ height: '22px', fontSize: '12px', lineHeight: '12px' }}
       />
     ),
   },
   {
-    id: "trade_status",
-    label: "Статус трейда",
+    id: 'trade_status',
+    label: 'Статус трейда',
     minWidth: 200,
-    align: "center",
+    align: 'center',
     format: (value) => (
       <Chip
-        label={value?.id ? tradeStatuses[value?.id - 1].value : "-"}
-        color={value?.id ? tradeStatuses[value?.id - 1].color : "default"}
-        sx={{ height: "22px", fontSize: "12px", lineHeight: "12px" }}
+        label={value?.id ? tradeStatuses[value?.id - 1].value : '-'}
+        color={value?.id ? tradeStatuses[value?.id - 1].color : 'default'}
+        sx={{ height: '22px', fontSize: '12px', lineHeight: '12px' }}
       />
     ),
   },
-  { id: "barcode", label: "Штрих код", minWidth: 120, align: "center" },
+  { id: 'barcode', label: 'Штрих код', minWidth: 120, align: 'center' },
 ];
 
 const CustomIconButton = styled(IconButton)({
-  color: "white",
-  "&:hover": {
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
+  color: 'white',
+  '&:hover': {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
   },
 });
 
@@ -156,17 +156,17 @@ const GoodsList = memo(({ goods }) => {
   const { goodsLoading, categories } = useSelector((state) => state.dataState);
   const { user } = useSelector((state) => state.userState);
   const { createTradesErrorMessage, tradesCreated } = useAppSelector(
-    (state) => state.tradeState,
+    (state) => state.tradeState
   );
-  const [searchWord, setSearchWord] = useState("");
-  const [sortBy, setSortBy] = useState("none");
+  const [searchWord, setSearchWord] = useState('');
+  const [sortBy, setSortBy] = useState('none');
   const [paginationData, setPaginationData] = useState({
     pageSize: 20,
     pageNumber: 1,
     sortByCategory: 0,
   });
   const [bulkTradeModalOpen, setBulkTradeModalOpen] = useState(false);
-  const [currentAction, setCurrentAction] = useState("");
+  const [currentAction, setCurrentAction] = useState('');
   const [snackBarOpen, setSnackBarOpen] = useState(false);
 
   const handleSortByChange = (e) => {
@@ -188,11 +188,11 @@ const GoodsList = memo(({ goods }) => {
   const toggleBulkTradeModal = useCallback(
     (value) => {
       if (!value) {
-        setCurrentAction("");
+        setCurrentAction('');
       }
       setBulkTradeModalOpen(value || !bulkTradeModalOpen);
     },
-    [bulkTradeModalOpen],
+    [bulkTradeModalOpen]
   );
 
   useEffect(() => {
@@ -200,7 +200,7 @@ const GoodsList = memo(({ goods }) => {
   }, [dispatch, paginationData]);
 
   useEffect(() => {
-    if (currentAction === "trade") setBulkTradeModalOpen(true);
+    if (currentAction === 'trade') setBulkTradeModalOpen(true);
   }, [currentAction]);
 
   useEffect(() => {
@@ -219,14 +219,14 @@ const GoodsList = memo(({ goods }) => {
   const sortedByManufacture = useCallback(() => {
     return (goods || []).sort((a, b) =>
       a?.product?.manufacture?.name?.localeCompare(
-        b?.product?.manufacture?.name,
-      ),
+        b?.product?.manufacture?.name
+      )
     );
   }, [goods]);
 
   const sortedByModel = useCallback(() => {
     return (goods || []).sort((a, b) =>
-      a?.product?.model?.name?.localeCompare(b?.product?.model?.name),
+      a?.product?.model?.name?.localeCompare(b?.product?.model?.name)
     );
   }, [goods]);
 
@@ -252,23 +252,23 @@ const GoodsList = memo(({ goods }) => {
 
   const filteredGoodsList = useCallback(() => {
     const sortedGoods =
-      sortBy === "manufacture"
+      sortBy === 'manufacture'
         ? sortedByManufacture()
-        : sortBy === "model"
+        : sortBy === 'model'
           ? sortedByModel()
-          : sortBy === "cost-increase"
+          : sortBy === 'cost-increase'
             ? sortedByCost()
-            : sortBy === "cost-decrease"
+            : sortBy === 'cost-decrease'
               ? sortedByCost().reverse()
-              : sortBy === "status-in-storage"
+              : sortBy === 'status-in-storage'
                 ? sortedByStatusInStorage()
-                : sortBy === "status-nu"
+                : sortBy === 'status-nu'
                   ? sortedByStatusNU()
-                  : sortBy === "status-si"
+                  : sortBy === 'status-si'
                     ? sortedByStatusSI()
-                    : sortBy === "status-at-abon"
+                    : sortBy === 'status-at-abon'
                       ? sortedByStatusAtAbon()
-                      : sortBy === "none"
+                      : sortBy === 'none'
                         ? goods
                         : [];
     return sortedGoods.filter(
@@ -279,7 +279,7 @@ const GoodsList = memo(({ goods }) => {
         good?.product?.model?.name
           .toLowerCase()
           .includes(searchWord?.toLowerCase()) ||
-        good?.product?.cost?.toString().includes(searchWord),
+        good?.product?.cost?.toString().includes(searchWord)
     );
   }, [
     goods,
@@ -304,7 +304,7 @@ const GoodsList = memo(({ goods }) => {
         filteredGoodsList().filter((good) => good.selected === 1).length ===
         filteredGoodsList().length;
       return {
-        id: "selected",
+        id: 'selected',
         label: (
           <Checkbox
             color="primary"
@@ -314,12 +314,12 @@ const GoodsList = memo(({ goods }) => {
               dispatch(setAllGoodsSelected({ status: allChecked ? 0 : 1 }));
             }}
             inputProps={{
-              "aria-label": "Выбрать все",
+              'aria-label': 'Выбрать все',
             }}
           />
         ),
         minWidth: 70,
-        align: "center",
+        align: 'center',
         format: (value) => (
           <Checkbox
             onClick={(e) => e.stopPropagation()}
@@ -329,42 +329,42 @@ const GoodsList = memo(({ goods }) => {
               dispatch(setGoodSelected({ id, status: value === 1 ? 0 : 1 }));
             }}
             inputProps={{
-              "aria-label": "Выбрать",
+              'aria-label': 'Выбрать',
             }}
           />
         ),
       };
     },
-    [dispatch, filteredGoodsList, goods, goodsLoading],
+    [dispatch, filteredGoodsList, goods, goodsLoading]
   );
 
   return (
     <Paper
       elevation={4}
-      sx={{ m: "30px 10px 0", borderRadius: "10px", overflow: "hidden" }}
+      sx={{ m: '30px 10px 0', borderRadius: '10px', overflow: 'hidden' }}
     >
       <Box sx={{ flexGrow: 1 }}>
         <AppBar
           className="goods-list-toolbar"
           position="static"
           sx={{
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            flexWrap: "wrap",
-            p: "10px 0",
-            gap: "10px",
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            p: '10px 0',
+            gap: '10px',
           }}
         >
           {selectedGoods().length > 0 ? (
             <Box
               sx={{
-                display: "flex",
-                alignItems: "center",
-                flexWrap: "no-wrap",
+                display: 'flex',
+                alignItems: 'center',
+                flexWrap: 'no-wrap',
               }}
             >
-              <Typography variant="body1" component="span" sx={{ mr: "10px" }}>
+              <Typography variant="body1" component="span" sx={{ mr: '10px' }}>
                 Выбрать действие:
               </Typography>
               <Select
@@ -373,7 +373,7 @@ const GoodsList = memo(({ goods }) => {
                 name="sortByCategory"
                 value={currentAction}
                 onChange={handleActionChange}
-                sx={{ color: "#FFFFFF", minWidth: "175px" }}
+                sx={{ color: '#FFFFFF', minWidth: '175px' }}
               >
                 <MenuItem value="trade">Трейд нескольких товаров</MenuItem>
               </Select>
@@ -383,33 +383,33 @@ const GoodsList = memo(({ goods }) => {
               <Toolbar
                 className="goods-search-toolbar"
                 sx={{
-                  p: "0px!important",
-                  minHeight: "unset!important",
-                  mr: "auto",
+                  p: '0px!important',
+                  minHeight: 'unset!important',
+                  mr: 'auto',
                 }}
               >
-                <Search sx={{ m: "0!important" }}>
+                <Search sx={{ m: '0!important' }}>
                   <SearchIconWrapper>
                     <SearchIcon />
                   </SearchIconWrapper>
                   <StyledInputBase
                     placeholder="Найти товар…"
-                    inputProps={{ "aria-label": "search" }}
+                    inputProps={{ 'aria-label': 'search' }}
                     onChange={(e) => setSearchWord(e.target.value)}
                   />
                 </Search>
               </Toolbar>
               <Box
                 sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexWrap: "no-wrap",
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexWrap: 'no-wrap',
                 }}
               >
                 <Typography
                   variant="body1"
                   component="span"
-                  sx={{ mr: "10px" }}
+                  sx={{ mr: '10px' }}
                 >
                   категории:
                 </Typography>
@@ -419,10 +419,10 @@ const GoodsList = memo(({ goods }) => {
                   name="sortByCategory"
                   value={paginationData.sortByCategory}
                   onChange={handlePaginationDataChange}
-                  sx={{ color: "#FFFFFF", minWidth: "175px" }}
+                  sx={{ color: '#FFFFFF', minWidth: '175px' }}
                 >
                   <MenuItem value={0}>Все</MenuItem>
-                  {["Заведующий склада"].includes(user?.role) && (
+                  {['Заведующий склада'].includes(user?.role) && (
                     <MenuItem value="my-goods">Мои товары</MenuItem>
                   )}
                   {categories.map((category) => (
@@ -430,22 +430,22 @@ const GoodsList = memo(({ goods }) => {
                       статус: {category.value}
                     </MenuItem>
                   ))}
-                  {user?.role === "admin" && (
+                  {user?.role === 'admin' && (
                     <MenuItem value="deleted">Удалённые</MenuItem>
                   )}
                 </Select>
               </Box>
               <Box
                 sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexWrap: "no-wrap",
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexWrap: 'no-wrap',
                 }}
               >
                 <Typography
                   variant="body1"
                   component="span"
-                  sx={{ mr: "10px" }}
+                  sx={{ mr: '10px' }}
                 >
                   Сортировка по:
                 </Typography>
@@ -454,7 +454,7 @@ const GoodsList = memo(({ goods }) => {
                   id="demo-simple-select-filled"
                   value={sortBy}
                   onChange={handleSortByChange}
-                  sx={{ color: "#FFFFFF", minWidth: "175px" }}
+                  sx={{ color: '#FFFFFF', minWidth: '175px' }}
                 >
                   <MenuItem value="none">без сортировки</MenuItem>
                   <MenuItem value="manufacture">производитель (А-Я)</MenuItem>
@@ -472,12 +472,12 @@ const GoodsList = memo(({ goods }) => {
                     ))}
                 </Select>
               </Box>
-              {["admin", "Заведующий склада"].includes(user?.role) && (
-                <Box className="goods-list-tools" sx={{ width: "100%" }}>
+              {['admin', 'Заведующий склада'].includes(user?.role) && (
+                <Box className="goods-list-tools" sx={{ width: '100%' }}>
                   <CustomIconButton
                     size="large"
-                    onClick={() => navigate("/create-good")}
-                    sx={{ ml: "auto" }}
+                    onClick={() => navigate('/create-good')}
+                    sx={{ ml: 'auto' }}
                   >
                     <AddIcon />
                   </CustomIconButton>
@@ -508,11 +508,11 @@ const GoodsList = memo(({ goods }) => {
         selectedGoods={selectedGoods()}
       />
       <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={snackBarOpen}
         onClose={handleSnackBarClose}
         message={
-          tradesCreated ? "Трейды созданы" : "" || createTradesErrorMessage
+          tradesCreated ? 'Трейды созданы' : '' || createTradesErrorMessage
         }
       />
     </Paper>

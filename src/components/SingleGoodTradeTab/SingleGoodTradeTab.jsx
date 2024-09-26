@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useNavigate } from 'react-router-dom';
 import {
   Autocomplete,
   Box,
   FormControl,
   Snackbar,
   TextField,
-} from "@mui/material";
-import { LoadingButton } from "@mui/lab";
-import { getUsers } from "../../features/userThunk";
-import { resetCreateGoodData } from "../../features/dataSlice";
-import { resetCreateTradeData } from "../../features/tradeSlice";
-import { createTrade } from "../../features/tradeThunk";
+} from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { getUsers } from '../../features/userThunk';
+import { resetCreateGoodData } from '../../features/dataSlice';
+import { resetCreateTradeData } from '../../features/tradeSlice';
+import { createTrade } from '../../features/tradeThunk';
 
 const SingleGoodTrageTab = ({ goodId }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { users, usersLoading, usersErrorMessage, user } = useAppSelector(
-    (state) => state.userState,
+    (state) => state.userState
   );
   const { trade, createTradeLoading, tradeIsCreated, createTradeErrorMessage } =
     useAppSelector((state) => state.tradeState);
@@ -45,7 +45,7 @@ const SingleGoodTrageTab = ({ goodId }) => {
   const handleChange = (e) => {
     const { innerText } = e.target;
     const selectedUser = users.filter(
-      (user) => user?.full_name === innerText,
+      (user) => user?.full_name === innerText
     )[0];
 
     setState(() => ({
@@ -67,12 +67,12 @@ const SingleGoodTrageTab = ({ goodId }) => {
         source_user_id: user?.id,
         destination_user_id: state?.id,
         trade_status_id: 1,
-      }),
+      })
     );
   };
 
   return (
-    <div className="single-good-delete-tab" style={{ flexDirection: "column" }}>
+    <div className="single-good-delete-tab" style={{ flexDirection: 'column' }}>
       <div className="single-good-delete-tab-right">
         <h1>Выберите пользователя для передачи товара</h1>
         <h3>
@@ -88,7 +88,7 @@ const SingleGoodTrageTab = ({ goodId }) => {
           <Autocomplete
             disablePortal
             id="combo-box-demo"
-            options={users.map((user) => user?.full_name || "") || []}
+            options={users.map((user) => user?.full_name || '') || []}
             value={state?.username}
             onChange={handleChange}
             renderInput={(params) => (
@@ -108,7 +108,7 @@ const SingleGoodTrageTab = ({ goodId }) => {
         </FormControl>
       </Box>
       <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={snackBarOpen}
         onClose={handleSnackBarClose}
         message={usersErrorMessage || createTradeErrorMessage}
