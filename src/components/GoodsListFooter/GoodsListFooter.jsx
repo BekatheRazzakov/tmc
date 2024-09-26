@@ -4,19 +4,28 @@ import './goodsListFooter.css';
 import { useAppSelector } from "../../app/hooks";
 import { useLocation } from "react-router-dom";
 
-const GoodsListFooter = ({ paginationData, handlePaginationDataChange }) => {
+const GoodsListFooter = ({
+  paginationData,
+  handlePaginationDataChange
+}) => {
   const location = useLocation().pathname;
   const { goodsPagesAmount } = useAppSelector(state => state.dataState);
   const { tradesPagesAmount } = useAppSelector(state => state.tradeState);
   const pagesArray = useCallback(() => {
     return Array.from({ length: location.includes('goods') ? goodsPagesAmount : tradesPagesAmount || 0 }, (_, index) => index);
-  }, [goodsPagesAmount, location, tradesPagesAmount]);
+  }, [
+    goodsPagesAmount,
+    location,
+    tradesPagesAmount
+  ]);
   
   return (
     <Box className='goods-list-footer'>
       <FormControl className='goods-list-footer-page-size'>
-        <InputLabel id='demo-simple-select-label'
-          variant='standard'>страница</InputLabel>
+        <InputLabel
+          id='demo-simple-select-label'
+          variant='standard'
+        >страница</InputLabel>
         <Select
           labelId='demo-simple-select-label'
           id='demo-simple-select'
@@ -27,13 +36,18 @@ const GoodsListFooter = ({ paginationData, handlePaginationDataChange }) => {
           variant='standard'
         >
           {pagesArray().map(page => (
-            <MenuItem value={page + 1} key={page}>{page + 1}</MenuItem>
+            <MenuItem
+              value={page + 1}
+              key={page}
+            >{page + 1}</MenuItem>
           ))}
         </Select>
       </FormControl>
       <FormControl className='goods-list-footer-page-size'>
-        <InputLabel id='demo-simple-select-label'
-          variant='standard'>товаров на страницу</InputLabel>
+        <InputLabel
+          id='demo-simple-select-label'
+          variant='standard'
+        >товаров на страницу</InputLabel>
         <Select
           labelId='demo-simple-select-label'
           id='demo-simple-select'
