@@ -5,11 +5,14 @@ import { isAxiosError } from 'axios';
 // получение списка трейдов
 export const getTrades = createAsyncThunk(
   'trades/getTrades',
-  async (data, { getState, rejectWithValue }) => {
+  async (data, {
+    getState,
+    rejectWithValue
+  }) => {
     try {
       const state = getState();
       const userRole = state.userState.user.role;
-
+      
       const response = await axiosApi(
         `trades${userRole === 'admin' ? '' : '/user/story'}/?page=${data?.pageNumber || 1}&page_size=${data?.pageSize || 20}`
       );
@@ -76,6 +79,10 @@ export const createTrade = createAsyncThunk(
         );
       } else if (isAxiosError(e) && e.response && e.response.status === 403) {
         return rejectWithValue('У вас нет прав на создание трейда');
+      } else if (isAxiosError(e) && e.response && e.response.status === 500) {
+        return rejectWithValue(
+          e.response.data?.detail || ''
+        );
       }
       throw e;
     }

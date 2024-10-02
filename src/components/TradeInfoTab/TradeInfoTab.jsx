@@ -239,7 +239,7 @@ const TradeInfoTab = ({ trade, tradeLoading }) => {
         )}
       </div>
       {trade?.trade_status?.id === 1 &&
-        trade?.destination_user_name?.full_name === user?.fullname && (
+        trade?.destination_user_name?.id === user?.id && (
           <ButtonGroup
             variant="outlined"
             aria-label="Loading button group"
