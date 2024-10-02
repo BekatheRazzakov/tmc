@@ -42,7 +42,7 @@ const GoodsListTable = memo(
           <>
             {['', '', ''].map((_, i) => (
               <TableRow key={i}>
-                {['', '', '', '', '', ''].map((_, i) => (
+                {['', '', '', '', '', '', '', ''].map((_, i) => (
                   <TableCell key={i}>
                     <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
                   </TableCell>
